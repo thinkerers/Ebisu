@@ -1,4 +1,5 @@
 <?php
+require('../model/model.php');
 session_start();
 if($_SESSION['auth'] == false){
     //redirection page de connexion
