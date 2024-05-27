@@ -1,16 +1,8 @@
 <?php
-// Cette page permet de créer un compte utilisateur
+// Ce formulaire permet de créer un compte utilisateur
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Création de compte</title>
-    <link rel="stylesheet" href="form.css">
-</head>
-<body>
 <!-- https://www.nngroup.com/articles/form-design-placeholders -->
+<style>@import url(./vue/form.css);</style>
 <form method="post" action="" >
     <fieldset>
         <legend>Création de compte</legend>
@@ -42,5 +34,3 @@
         <input name="submit" type="submit"/>
     </fieldset>
 </form>
-</body>
-</html>
