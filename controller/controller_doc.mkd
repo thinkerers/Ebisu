@@ -1,3 +1,1 @@
-Dans les fichiers de contrôleur, on a les fichiers qui permettent de gérer les requêtes HTTP, valider et assainir les entrées utilisateur, appeler les méthodes appropriées dans le modèle, passer les données à la vue pour le rendu, déterminer quelle vue afficher en fonction de la requête.
-
-TL;DR: Gere les données entrante et travail avec la vue.
+Gestion des requêtes HTTP, validation et nettoyage des entrées utilisateur, appelle des méthodes appropriées dans le modèle, transmition des données à la vue pour le rendu, et détermination de la vue à afficher en fonction de la requête.
