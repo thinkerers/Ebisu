@@ -1,6 +1,6 @@
 <?php
 try{
-    $dbname = '';//Nom de la base de donnée
+    $dbname = 'ebisu db';//Nom de la base de donnée
     $bdd = new PDO('mysql:host=localhost;dbname='.$dbname.';charset=utf8','root','');
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     global $bdd;
