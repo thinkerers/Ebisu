@@ -1,13 +1,13 @@
 {
   "author": "Unnamed",
   "title": "ebisu db",
-  "date": "2024-05-25T13:52:28.817Z",
+  "date": "2024-05-27T14:18:51.344Z",
   "tables": [
     {
       "id": 0,
       "name": "tasks",
-      "x": 31.46999999999997,
-      "y": 203.7475,
+      "x": -164.75140784067878,
+      "y": -301.5197317554906,
       "fields": [
         {
           "name": "id",
@@ -22,6 +22,20 @@
           "id": 0
         },
         {
+          "name": "userId",
+          "type": "INT",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "",
+          "id": 1,
+          "size": "",
+          "values": []
+        },
+        {
           "name": "name",
           "type": "VARCHAR",
           "default": "",
@@ -31,25 +45,12 @@
           "notNull": true,
           "increment": false,
           "comment": "",
-          "id": 1,
-          "size": 255
-        },
-        {
-          "name": "urgency",
-          "type": "BOOLEAN",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": false,
-          "increment": false,
-          "comment": "",
           "id": 2,
-          "size": "",
+          "size": 255,
           "values": []
         },
         {
-          "name": "priority",
+          "name": "urgency",
           "type": "BOOLEAN",
           "default": "",
           "check": "",
@@ -63,6 +64,20 @@
           "values": []
         },
         {
+          "name": "priority",
+          "type": "BOOLEAN",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "",
+          "id": 4,
+          "size": "",
+          "values": []
+        },
+        {
           "name": "state",
           "type": "SMALLINT",
           "default": "",
@@ -72,7 +87,7 @@
           "notNull": false,
           "increment": false,
           "comment": "",
-          "id": 4,
+          "id": 5,
           "size": "",
           "values": []
         },
@@ -86,7 +101,7 @@
           "notNull": false,
           "increment": false,
           "comment": "",
-          "id": 5,
+          "id": 6,
           "size": "",
           "values": []
         }
@@ -99,8 +114,8 @@
     {
       "id": 1,
       "name": "user",
-      "x": 266,
-      "y": -12,
+      "x": 66.04187486700266,
+      "y": -154.97804122061012,
       "fields": [
         {
           "name": "id",
@@ -162,8 +177,8 @@
     {
       "id": 2,
       "name": "pomodoro",
-      "x": 267.1874999999999,
-      "y": 204.03000000000003,
+      "x": 296.36359785341097,
+      "y": -112.74739303423019,
       "fields": [
         {
           "name": "id",
@@ -178,13 +193,13 @@
           "id": 0
         },
         {
-          "name": "breakTime",
-          "type": "TIME",
+          "name": "userId",
+          "type": "INT",
           "default": "",
           "check": "",
           "primary": false,
           "unique": false,
-          "notNull": true,
+          "notNull": false,
           "increment": false,
           "comment": "",
           "id": 1,
@@ -206,13 +221,13 @@
           "values": []
         },
         {
-          "name": "endTime",
-          "type": "TIMESTAMP",
+          "name": "breakTime",
+          "type": "TIME",
           "default": "",
           "check": "",
           "primary": false,
           "unique": false,
-          "notNull": false,
+          "notNull": true,
           "increment": false,
           "comment": "",
           "id": 3,
@@ -232,6 +247,20 @@
           "id": 4,
           "size": "",
           "values": []
+        },
+        {
+          "name": "endTime",
+          "type": "TIMESTAMP",
+          "default": "",
+          "check": "",
+          "primary": false,
+          "unique": false,
+          "notNull": false,
+          "increment": false,
+          "comment": "",
+          "id": 5,
+          "size": "",
+          "values": []
         }
       ],
       "comment": "",
@@ -241,9 +270,9 @@
     },
     {
       "id": 3,
-      "name": "fishes",
-      "x": 510.9449999999996,
-      "y": -13.899999999999949,
+      "name": "compendium",
+      "x": 521.2792869342436,
+      "y": -180.99020921841395,
       "fields": [
         {
           "name": "id",
@@ -266,7 +295,7 @@
           "unique": false,
           "notNull": true,
           "increment": false,
-          "comment": "",
+          "comment": "L'importance d'une tâche et son urgence détermine la rareté du poisson pêché une fois la tâche accomplie. Le système de point reprend le principe scrum - une tâche difficile et importante qui a pris beaucoup de temps vaudra beaucoup de points, pour un maximum de 20. Les poissons pouvant être pêchés iront jusqu'au niveau 20 (prises légendaires)",
           "id": 1
         },
         {
@@ -309,16 +338,16 @@
           "size": 255
         }
       ],
-      "comment": "",
+      "comment": "Le compendium contient la liste des types de poissons pouvant être pêchés ainsi que leur propriétés",
       "indices": [],
       "color": "#175e7a",
       "key": 1716643636918
     },
     {
       "id": 4,
-      "name": "collection",
-      "x": 774.4425,
-      "y": -6.182500000000061,
+      "name": "catch",
+      "x": 287.6706974277615,
+      "y": -302.0998583530944,
       "fields": [
         {
           "name": "userId",
@@ -345,19 +374,7 @@
           "id": 1
         },
         {
-          "name": "count",
-          "type": "INT",
-          "default": "",
-          "check": "",
-          "primary": false,
-          "unique": false,
-          "notNull": false,
-          "increment": false,
-          "comment": "",
-          "id": 2
-        },
-        {
-          "name": "found",
+          "name": "caughtTime",
           "type": "TIMESTAMP",
           "default": "",
           "check": "",
@@ -366,23 +383,68 @@
           "notNull": false,
           "increment": false,
           "comment": "",
-          "id": 3,
+          "id": 2,
           "size": "",
           "values": []
         }
       ],
-      "comment": "",
+      "comment": "Contient les poissons pêchés pour un utilisateur et indique la date à laquelle le poisson a été pêché.",
       "indices": [],
       "color": "#175e7a",
       "key": 1716644941391
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "startTableId": 0,
+      "startFieldId": 1,
+      "endTableId": 1,
+      "endFieldId": 0,
+      "cardinality": "Many to one",
+      "updateConstraint": "No action",
+      "deleteConstraint": "No action",
+      "name": "tasks_userId_fk",
+      "id": 0
+    },
+    {
+      "startTableId": 2,
+      "startFieldId": 1,
+      "endTableId": 1,
+      "endFieldId": 0,
+      "cardinality": "Many to one",
+      "updateConstraint": "No action",
+      "deleteConstraint": "No action",
+      "name": "pomodoro_userId_fk",
+      "id": 1
+    },
+    {
+      "startTableId": 4,
+      "startFieldId": 0,
+      "endTableId": 1,
+      "endFieldId": 0,
+      "cardinality": "Many to one",
+      "updateConstraint": "No action",
+      "deleteConstraint": "No action",
+      "name": "aquarium_userId_fk",
+      "id": 2
+    },
+    {
+      "startTableId": 4,
+      "startFieldId": 1,
+      "endTableId": 3,
+      "endFieldId": 0,
+      "cardinality": "Many to one",
+      "updateConstraint": "No action",
+      "deleteConstraint": "No action",
+      "name": "aquarium_fishId_fk",
+      "id": 3
+    }
+  ],
   "notes": [
     {
       "id": 0,
-      "x": 28.84499999999997,
-      "y": -11.844999999999999,
+      "x": 77.51232427442028,
+      "y": -353.13925714831703,
       "title": "note_0",
       "content": "Le hash token est le lien magique temporaire.\nLe hash password est le password user hashé.",
       "color": "#fcf7ac",
