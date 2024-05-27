@@ -1,1 +1,3 @@
 Dans les fichiers de modèles, on définit les propriétés et les types des objets de données, les méthodes pour récupérer, insérer, mettre à jour et supprimer des données de la base de données, les règles métier et les validations, l'état des données de l'application.
+
+TL;DR: tout ce qui est en rapport avec la structure des données de l'app

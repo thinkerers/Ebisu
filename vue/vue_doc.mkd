@@ -1,1 +1,3 @@
 Dans les fichiers de vues, on a tout ce qui affiche les données à l'utilisateur et gère la logique de l'interface utilisateur: UI en HTML/CSS, et le PHP/JS strictement nécessaire pour gérer l'UI
+
+TL;DR: HTML/CSS
