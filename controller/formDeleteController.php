@@ -4,9 +4,10 @@ session_start();
 if($_SESSION['auth'] == false){
     //redirection page de connexion
 }else{
-
-if(isset($_GET['id']) &&!empty($_GET['id'])){
-    $idUser = $_GET['id'];
+    
+if(isset($_POST['btnSuppUser'])){
+    $idUser = $_SESSION['id'];
+    $emailUser = $_POST['emailToConfirm'];
 
     $checkifUserExists = $bdd->prepare('SELECT * FROM user WHERE id = :id');
     $checkifUserExists->bindParam(':id', $idUser);
@@ -14,7 +15,7 @@ if(isset($_GET['id']) &&!empty($_GET['id'])){
 
     if($checkifUserExists->rowCount() > 0){
         $userInfos = $checkifQuestionExists->fetch();
-        if($userInfos['id'] == $_SESSION['id']){
+        if($userInfos['id'] == $_SESSION['id'] && $userInfos['email'] == $_POST['emailToConfirm']){
 
             deleteUser($idUser);
             //redirection vers la page d'inscription
@@ -26,10 +27,6 @@ if(isset($_GET['id']) &&!empty($_GET['id'])){
         }else{
             $errorMsg = "Aucun compte n'a été trouvé";
         }
-    
-
-    }else{
-        $errorMsg = "Aucune compte n'a été trouvé";
     }
 }
 ?>

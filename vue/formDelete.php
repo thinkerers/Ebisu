@@ -6,10 +6,13 @@
 }*/
 ?>
 <dialog>
-  <form method="dialog">
-  <p>Voulez-vous vraiment supprimer votre compte ?</p>
-  <button>Annuler</button>
-  <button>Supprimer</button>
+  <form method="dialog" >
+    <form method="post" action="../controller/formDeleteController.php">
+  <p>Veillez écrire votre adresse email pour confirmé la suppression du compte :</p>
+  <input type="text" name="emailToConfirm" required>
+  <a href="" class="btnReturn">Annuler</a>
+  <input type="submit" name="btnSuppUser" value="Supprimer">
+  </form>
   </form>
 </dialog>
 <button onclick="document.querySelector('dialog').showModal();">Supprimer le compte</button>
