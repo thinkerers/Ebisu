@@ -11,12 +11,12 @@
 </head>
 <body>
 <!-- https://www.nngroup.com/articles/form-design-placeholders -->
-<form method="post" action="self" >
+<form method="post" action="" >
     <fieldset>
-        <legend>Connexion</legend>
+        <legend>Création de compte</legend>
         <label>
             Email
-            <small id="emailHint">Veuillez entrer un email valide"</small>
+            <small id="emailHint">Veuillez entrer un email valide</small>
             <input 
               name="email" 
               type="email" 
