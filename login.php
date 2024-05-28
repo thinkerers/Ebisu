@@ -4,27 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="vue/styles.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="./vue/form.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Login</h1>
-        <?php if (isset($error)) { ?>
-            <p style="color: red;"><?php echo $error; ?></p>
-        <?php } ?>
-        <form method="post" action="authenticate.php">
-            <label>
-                Email:
-                <input type="email" name="email" required>
-            </label>
-            <br>
-            <label>
-                Password:
-                <input type="password" name="password" required>
-            </label>
-            <br>
-            <input type="submit" value="Login">
-        </form>
-    </div>
+<form method="post" action="authenticate.php">
+  <fieldset>
+    <legend>Login</legend>
+    <label>
+      Email
+      <input name="email" type="email" required>
+    </label>
+    <label>
+      Mot de passe
+      <input name="password" type="password">
+    </label>
+    <input type="submit" value="Login"/>
+  </fieldset>
+</form>
 </body>
 </html>
