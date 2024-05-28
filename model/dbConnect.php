@@ -23,4 +23,3 @@ class dbConnect extends SQLite3 {
 // $result = $db->query('SELECT bar FROM foo');
 // var_dump($result->fetchArray());
 
-?>
