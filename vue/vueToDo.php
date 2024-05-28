@@ -3,6 +3,7 @@
     <h1>To-Do List</h1>
     
     <!-- formulaire de nouvelle tâche -->
+    <script src="./vue/toDo.js"></script>
     <form action="?" method="post" class="toDoForm">
         <small>Titre de la tâche</small></br>
         <input type="text" name="toDoTitleInput" required></br>
