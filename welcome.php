@@ -10,6 +10,7 @@ include_once './vue/head.php';
 ?>
 
 
-<h1>Bienvenue sur Ebisu 🐠</h1>
+<h1>Bienvenue sur Ebisu !</h1>
+<p><a href="vue/formDelete.php">Supprimer mon compte</a></p>
 
 <?php include_once './vue/footer.php'; ?>
