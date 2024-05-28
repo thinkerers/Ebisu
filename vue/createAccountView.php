@@ -1,4 +1,7 @@
-<?php if (isset($error)) { ?>
+<?php 
+include_once './vue/head.php';
+
+if (isset($error)) { ?>
   <p style="color: red;"><?php echo $error; ?></p>
 <?php } ?>
 <!-- https://www.nngroup.com/articles/form-design-placeholders -->
@@ -21,3 +24,4 @@
     <input name="submit" type="submit" />
   </fieldset>
 </form>
+<?php include_once './vue/footer.php'; ?>
