@@ -2,7 +2,7 @@
 class dbConnect extends SQLite3 {
     function __construct() {
         try {
-            $this->open('ebisu.sqlite');
+            $this->open('./model/ebisu.sqlite');
         } catch (Exception $e) {
             // Log the error to a file (replace 'error_log.txt' with your desired path)
             error_log(
@@ -22,6 +22,5 @@ class dbConnect extends SQLite3 {
 
 // $result = $db->query('SELECT bar FROM foo');
 // var_dump($result->fetchArray());
-
 
 ?>
