@@ -1,3 +1,3 @@
-Dans les fichiers de vues, on a tout ce qui affiche les données à l'utilisateur et gère la logique de l'interface utilisateur: UI en HTML/CSS, et le PHP/JS strictement nécessaire pour gérer l'UI
+Vue : cette partie se concentre sur l'affichage. Elle ne fait presque aucun calcul et se contente de récupérer des variables pour savoir ce qu'elle doit afficher. On y trouve essentiellement du code HTML mais aussi quelques boucles et conditions PHP très simples, pour afficher par exemple une liste de messages.
 
-TL;DR: HTML/CSS
+[openclassrooms](https://openclassrooms.com/fr/courses/4670706-adoptez-une-architecture-mvc-en-php/7847928-decouvrez-comment-fonctionne-une-architecture-mvc)
