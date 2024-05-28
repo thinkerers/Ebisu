@@ -34,4 +34,3 @@ class AccountController {
         require_once './vue/createAccountView.php';
     }
 }
-?>

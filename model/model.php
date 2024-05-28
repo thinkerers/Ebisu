@@ -6,4 +6,3 @@ function deleteUser($idUser){
     $deleteUser->execute();
     //$deleteUser->closeCursor();
 }
-?>

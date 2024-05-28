@@ -19,4 +19,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         require 'login.php'; // Include the login form with the error message
     }
 }
-?>
