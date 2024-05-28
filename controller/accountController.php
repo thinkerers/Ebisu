@@ -1,33 +1,37 @@
 <?php
+
 require_once './model/dbConnect.php'; // Inclure le fichier de connexion à la base de données
 require_once './model/accountModel.php'; // Inclure le fichier du modèle
 
 class AccountController {
     public function createAccount() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Récupérer les données du formulaire
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-
-            // Valider les données (ajouter des contrôles de sécurité)
-
-            // Créer une instance du modèle AccountModel
-            $accountModel = new AccountModel();
-
-            // Appeler la méthode du modèle pour insérer l'utilisateur
-            if ($accountModel->createUser($email, $password)) {
-                // Rediriger vers une page de succès
-                header('Location: success.php');
-                exit;
-            } else {
-                // Afficher un message d'erreur
-                $error = "Erreur lors de la création du compte.";
-                require_once './vue/createAccountView.php';
-            }
+            $this->handlePostRequest();
         } else {
-            // Afficher le formulaire de création de compte
-            require_once './vue/createAccountView.php';
+            $this->showCreateAccountForm();
         }
+    }
+
+    private function handlePostRequest() {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        
+        $accountModel = new AccountModel();
+
+        if ($accountModel->createUser($email, $password)) {
+            header('Location: success.php');
+            exit;
+        } else {
+            $this->showError("Erreur lors de la création du compte.");
+        }
+    }
+
+    private function showCreateAccountForm() {
+        require_once './vue/createAccountView.php';
+    }
+
+    private function showError($error) {
+        require_once './vue/createAccountView.php';
     }
 }
 ?>
