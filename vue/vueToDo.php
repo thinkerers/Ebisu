@@ -3,8 +3,8 @@
 <h1>To-Do List</h1>
 
 <!-- formulaire de nouvelle tâche -->
+<script defer src="toDo.js"></script>
 <form action="self" method="post" class="taskForm">
-    
     <fieldset id="taskContainer">
         <ul >
             <li>
@@ -28,4 +28,3 @@
 <h2>Tâches à réaliser :</h2>
 
 <?php include("footer.php") ?>
-<script src="toDo.js"></script>
