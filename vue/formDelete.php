@@ -8,7 +8,7 @@
 <dialog>
   <form method="dialog" >
     <form method="post" action="../controller/formDeleteController.php">
-  <p>Veillez écrire votre adresse email pour confirmé la suppression du compte :</p>
+  <p>Veuillez écrire votre adresse email pour confirmé la suppression du compte :</p>
   <input type="text" name="emailToConfirm" required>
   <a href="" class="btnReturn">Annuler</a>
   <input type="submit" name="btnSuppUser" value="Supprimer">
