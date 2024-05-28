@@ -1,3 +1,4 @@
+</main>
 <footer>
     <a href="/">accueil</a>
     <a href="http://ebisu.test/model/adminer/sqlite.php?sqlite=&username=&db=..%2Febisu.sqlite&select=users">adminer</a>
