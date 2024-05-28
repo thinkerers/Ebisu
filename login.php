@@ -1,5 +1,7 @@
 <?php include_once './vue/head.php'; ?>
-
+<style>
+  @import url(./vue/form.css);
+</style>
 <form method="post" action="authenticate.php">
   <fieldset>
     <legend>Login</legend>
