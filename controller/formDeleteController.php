@@ -19,6 +19,7 @@ if(isset($_POST['btnSuppUser'])){
 
             deleteUser($idUser);
             //redirection vers la page d'inscription
+            header('Location: ../vue/createAccountView.php');
 
         }else{
             $errorMsg = "Vous n'avez pas le droit de supprimer ce compte.";
