@@ -9,9 +9,13 @@ if (!isset($_SESSION['user'])) {
 include_once './vue/head.php';
 ?>
 
-
-<h1>Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</h1>
-<p>You have successfully logged in.</p>
-<a href="logout.php">Logout</a>
+<header>
+    <nav>
+       <a href="profil.php"><?= htmlspecialchars($_SESSION['user']); ?></span><a href="logout.php">Déconnection</a>
+    </nav>
+</header>
+<main>
+    <h1>Bienvenue sur Ebisu 🐠</h1>
+</main>
 
 <?php include_once './vue/footer.php'; ?>

@@ -5,7 +5,26 @@ width: 100vw;
 display: grid;
 place-items: center;
 grid-template: 
+"header" max-content
 "content" 1fr
 "footer" auto;
 }
 
+header{
+grid-area: header;
+width: 100%;
+nav{
+display: flex;
+justify-content: space-between;
+align-items: center;
+>*{
+    padding: 1rem;
+}
+}
+}
+main{
+grid-area: content;
+}
+footer{
+grid-area: footer;
+}

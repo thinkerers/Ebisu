@@ -10,7 +10,7 @@ if (isset($error)) { ?>
 </style>
 <form method="post">
   <fieldset>
-    <legend>Création de compte</legend>
+    <legend>Créez un compte (ou <a href="/login.php">connectez vous</a>)</legend>
     <label>
       Email
       <small id="emailHint">Veuillez entrer un email valide</small>
