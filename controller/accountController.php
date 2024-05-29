@@ -11,25 +11,43 @@ class AccountController {
             $this->showCreateAccountForm();
         }
     }
+    public function deleteAccount() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handlePostRequest();
+        } else {
+            $this->showDeleteAccountForm();
+        }
+    }
 
-    private function handlePostRequest() {
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        
+    private function handlePostRequest($_POST['request']) {
         $accountModel = new AccountModel();
 
-        if ($accountModel->createUser($email, $password)) {
-            header('Location: success.php');
-            exit;
-        } else {
-            $this->showError("Erreur lors de la création du compte.");
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        if ($_POST['request'] == 'create') {
+            if ($accountModel->createUser($email, $password)) {
+                header('Location: success.php');
+                exit;
+            } else {
+                $this->showError("Erreur lors de la création du compte.");
+            }
+        } else if ($_POST['request'] == 'delete') {
+            if ($accountModel->deleteUser($idUser, $email)) {
+                header('Location: ./vue/createAccountView.php');
+                exit;
+            } else {
+                $this->showError($errorMsg);
+            }
         }
     }
 
     private function showCreateAccountForm() {
         require_once './vue/createAccountView.php';
     }
-
+    private function showDeleteAccountForm() {
+        require_once './vue/formDelete.php';
+    }
     private function showError($error) {
         require_once './vue/createAccountView.php';
     }
