@@ -1,10 +1,7 @@
 <?php 
-include_once './vue/head.php';
-
-if (isset($error)) { ?>
-  <p style="color: red;"><?php echo $error; ?></p>
-<?php } ?>
-<!-- https://www.nngroup.com/articles/form-design-placeholders -->
+$title = 'Créer un compte';
+ob_start(); 
+?>
 <style>
   @import url(./vue/form.css);
 </style>
@@ -24,4 +21,7 @@ if (isset($error)) { ?>
     <input name="submit" type="submit" />
   </fieldset>
 </form>
-<?php include_once './vue/footer.php'; ?>
+<?php 
+$content = ob_get_clean();
+require('vue/layout.php');
+?>
