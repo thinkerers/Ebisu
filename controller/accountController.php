@@ -42,7 +42,9 @@ class AccountController {
             #echo 'test';
             if ($accountModel->deleteUser($email)) {
                 echo "on a supp le compte";
-                header('Location: ../index.php');
+
+                header('Location: ../logout.php');
+                
                 exit;
             } else {
                 $this->showError("Erreur lors de la suppression du compte.");
@@ -57,6 +59,7 @@ class AccountController {
         require_once dirname(dirname(__FILE__)).'/vue/formDelete.php';
     }
     private function showError($error) {
-        require_once dirname(dirname(__FILE__)).'/vue/createAccountView.php';
+        echo $error;
+        #require_once dirname(dirname(__FILE__)).'/vue/createAccountView.php';
     }
 }
