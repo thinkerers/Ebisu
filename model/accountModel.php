@@ -1,5 +1,6 @@
 <?php
-require_once 'dbConnect.php';
+require_once __ROOT__.'/model/dbConnect.php';
+
 
 class AccountModel {
     private $db;
@@ -27,6 +28,7 @@ class AccountModel {
     }
     public function deleteUser($idUser, $email) {
         try{
+        echo "rentre dans deleteUser";
         $statement = $this->db->prepare('DELETE FROM user WHERE id = :id and email = :email');
         $statement->bindParam(':id', $idUser);
         $statement->bindParam(':email', $email);
