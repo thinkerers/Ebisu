@@ -1,11 +1,16 @@
+<?php
+require_once 'controller/accountController.php';
 
+$controller = new AccountController();
+$controller->deleteAccount();
+?>
 <dialog>
   <form method="dialog" >
-    <form method="post" action="../controller/formDeleteController.php">
+    <form method="post">
   <p>Veuillez écrire votre adresse email pour confirmé la suppression du compte :</p>
   <input type="text" name="emailToConfirm" required>
   <a href="" class="btnReturn">Annuler</a>
-  <input type="submit" name="btnSuppUser" value="Supprimer">
+  <input name="request" type="submit" value="delete" />
   </form>
   </form>
 </dialog>

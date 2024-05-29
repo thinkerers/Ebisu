@@ -19,7 +19,7 @@ class AccountController {
         }
     }
 
-    private function handlePostRequest($_POST['request']) {
+    private function handlePostRequest() {
         $accountModel = new AccountModel();
 
         $email = $_POST['email'];
