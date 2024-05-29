@@ -1,4 +1,7 @@
-<?php include("head.php"); ?>
+<?php 
+$title = 'Créer un compte';
+ob_start(); 
+?>
 
 <h1>To-Do List</h1>
 
@@ -27,4 +30,7 @@
 <!-- affichage des tâches -->
 <h2>Tâches à réaliser :</h2>
 
-<?php include("footer.php") ?>
+<?php
+$content = ob_get_clean();
+require('layout.php');
+?>
