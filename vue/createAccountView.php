@@ -23,5 +23,5 @@ ob_start();
 </form>
 <?php 
 $content = ob_get_clean();
-require('vue/layout.php');
+require(dirname(dirname(__FILE__)).'/vue/layout.php');
 ?>

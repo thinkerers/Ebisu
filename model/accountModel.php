@@ -26,14 +26,13 @@ class AccountModel {
             return false; 
         }
     }
-    public function deleteUser($idUser, $email) {
+    public function deleteUser($email) {
         try{
-        echo "rentre dans deleteUser";
-        $statement = $this->db->prepare('DELETE FROM user WHERE id = :id and email = :email');
-        $statement->bindParam(':id', $idUser);
+        #echo "rentre dans deleteUser";
+        $statement = $this->db->prepare('DELETE  FROM users WHERE email = :email');
         $statement->bindParam(':email', $email);
         $statement->execute();
-        
+            return true;   
         }catch (Exception $e) {
             // Handle the error (e.g., log it)
             $errorMsg = "Aucun compte n'a été trouvé";
