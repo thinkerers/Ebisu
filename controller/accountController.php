@@ -1,7 +1,7 @@
 <?php
-define('__ROOT__', dirname(dirname(__FILE__)));
-require_once __ROOT__.'/model/dbConnect.php'; // Inclure le fichier de connexion à la base de données
-require_once __ROOT__.'/model/accountModel.php'; // Inclure le fichier du modèle
+
+require_once dirname(dirname(__FILE__)).'/model/dbConnect.php'; // Inclure le fichier de connexion à la base de données
+require_once dirname(dirname(__FILE__)).'/model/accountModel.php'; // Inclure le fichier du modèle
 
 class AccountController {
 
@@ -49,12 +49,12 @@ class AccountController {
     }
 
     private function showCreateAccountForm() {
-        require_once __ROOT__.'/vue/createAccountView.php';
+        require_once dirname(dirname(__FILE__)).'/vue/createAccountView.php';
     }
     private function showDeleteAccountForm() {
-        require_once __ROOT__.'/vue/formDelete.php';
+        require_once dirname(dirname(__FILE__)).'/vue/formDelete.php';
     }
     private function showError($error) {
-        require_once __ROOT__.'/vue/createAccountView.php';
+        require_once dirname(dirname(__FILE__)).'/vue/createAccountView.php';
     }
 }
