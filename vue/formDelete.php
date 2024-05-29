@@ -1,5 +1,5 @@
 <?php
-//verifier si la l'utilisateur est connecté
+//verifier si l'utilisateur est connecté
 /*if(!isset($_SESSION['auth'])){
     header('Location: connexion.php');
     exit;
