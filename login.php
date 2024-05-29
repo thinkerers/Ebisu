@@ -1,4 +1,7 @@
-<?php include_once './vue/head.php'; ?>
+<?php 
+$title = 'Login';
+ob_start(); 
+?>
 <style>
   @import url(./vue/form.css);
 </style>
@@ -17,4 +20,7 @@
   </fieldset>
 </form>
 
-<?php include_once './vue/footer.php'; ?>
+<?php
+$content = ob_get_clean();
+require('vue/layout.php');
+?>

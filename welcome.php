@@ -6,11 +6,16 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-include_once './vue/head.php';
+$title = 'Bienvenue !';
+ob_start(); 
 ?>
 
-
+<section>
 <h1>Bienvenue sur Ebisu !</h1>
-<p><a href="vue/formDelete.php">Supprimer mon compte</a></p>
+<a href="vue/formDelete.php">Supprimer mon compte</a>
+</section>
 
-<?php include_once './vue/footer.php'; ?>
+<?php
+$content = ob_get_clean();
+require('vue/layout.php');
+?>
