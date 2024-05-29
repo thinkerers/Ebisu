@@ -15,4 +15,5 @@
   </form>
   </form>
 </dialog>
+<label class="errormsg"><?php if(isset($errorMsg)){echo $errorMsg;}?></label>
 <button onclick="document.querySelector('dialog').showModal();">Supprimer le compte</button>
