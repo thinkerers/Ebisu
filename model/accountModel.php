@@ -1,5 +1,6 @@
 <?php
-require_once 'dbConnect.php';
+require_once dirname(dirname(__FILE__)).'/model/dbConnect.php';
+
 
 class AccountModel {
     private $db;
@@ -14,24 +15,36 @@ class AccountModel {
 
         try {
             // Préparer la requête SQL
-            $stmt = $this->db->prepare('INSERT INTO users (email, hashedPassword) VALUES (:email, :hashedPassword)');
-            $stmt->bindValue(':email', $email);
-            $stmt->bindValue(':hashedPassword', $hashedPassword);
+            $statement = $this->db->prepare('INSERT INTO users (email, hashedPassword) VALUES (:email, :hashedPassword)');
+            $statement->bindValue(':email', $email);
+            $statement->bindValue(':hashedPassword', $hashedPassword);
 
             // Exécuter la requête
-            return $stmt->execute();
+            return $statement->execute();
         } catch (Exception $e) {
             // Gérer l'erreur (par exemple, la journaliser)
             return false; 
         }
     }
-    
+    public function deleteUser($email) {
+        try{
+        #echo "rentre dans deleteUser";
+        $statement = $this->db->prepare('DELETE  FROM users WHERE email = :email');
+        $statement->bindParam(':email', $email);
+        $statement->execute();
+            return true;   
+        }catch (Exception $e) {
+            // Handle the error (e.g., log it)
+            $errorMsg = "Aucun compte n'a été trouvé";
+            return false; 
+        }
+    }
     public function authenticateUser($email, $password) {
         try {
             // Prepare the SQL statement
-            $stmt = $this->db->prepare('SELECT hashedPassword FROM users WHERE email = :email');
-            $stmt->bindValue(':email', $email);
-            $result = $stmt->execute();
+            $statement = $this->db->prepare('SELECT hashedPassword FROM users WHERE email = :email');
+            $statement->bindValue(':email', $email);
+            $result = $statement->execute();
             $row = $result->fetchArray(SQLITE3_ASSOC);
 
             if ($row && password_verify($password, $row['hashedPassword'])) {
