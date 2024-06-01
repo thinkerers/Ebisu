@@ -18,7 +18,7 @@ class AccountController {
             //echo "rentre dans handlePostRequest";
             $this->handlePostRequest();
         } else {
-            echo "rentre dans showDeleteAccountForm";
+            //echo "rentre dans showDeleteAccountForm";
             $this->showDeleteAccountForm();
         }
     }
