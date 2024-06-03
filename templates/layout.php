@@ -13,8 +13,17 @@
     <?php if (isset($_SESSION['user'])) { ?>
         <header>
             <nav>
-                <a href="profil.php"><?= htmlspecialchars($_SESSION['user']); ?></span><a href="logout.php" class="material-symbols-outlined" title="Déconnexion">logout</a>
+            <span><?= htmlspecialchars($_SESSION['user']); ?></span>
+                <form action="index.php" method="get">
+                    <input type="hidden" name="action" value="logout">
+                    <button type="submit" class="logout-btn">
+                        <span class="material-symbols-outlined">logout</span>
+                        <span class="logout-text">Déconnexion</span>
+                    </button>
+                </form>
             </nav>
+
+            </form>
         </header>
     <?php } ?>
     <?= $content ?>
