@@ -4,6 +4,6 @@ class Homepage
 {
     public function execute()
     {
-        require('templates/homepage.php');
+        require('templates/login.php');
     }
 }

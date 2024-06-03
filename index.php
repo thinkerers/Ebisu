@@ -11,7 +11,10 @@ try {
     if ($action === '') {
         (new Homepage())->execute();
         return;
-    } else if ($action === 'logout') {
+    } else if ($action === 'login') {
+        (new AuthenticateController())->login();
+    }
+    else if ($action === 'logout') {
         (new AuthenticateController())->logout();
     } else if ($action === 'createAccount') {
         (new AccountController())->createAccount();
