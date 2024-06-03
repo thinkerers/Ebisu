@@ -1,7 +1,7 @@
 <?php
 require_once 'src/model/AuthenticateModel.php';
-require_once '/src/model/dbConnect.php';
-require_once '/src/model/accountModel.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/accountModel.php';
 
 class AuthenticateController
 {
