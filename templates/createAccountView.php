@@ -5,7 +5,7 @@ ob_start();
 <style>
   @import url(./templates/form.css);
 </style>
-<form method="post">
+<form method="get">
   <fieldset>
     <legend>Créez un compte (ou <a href="/login.php">connectez vous</a>)</legend>
     <label>
@@ -18,7 +18,7 @@ ob_start();
       <small id="emailHint">(optionnel) Le mot de passe doit être de minimum 6 caractères et contenir au moins une majuscule, une minuscule, un nombre et un caractère spécial.</small>
       <input name="password" type="password" minlength="6" maxlength="50" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}" aria-describedby="passwordHint">
     </label>
-    <input name="request" type="submit" value="create" />
+    <input name="action" type="submit" value="createAccount" />
   </fieldset>
 </form>
 <?php 

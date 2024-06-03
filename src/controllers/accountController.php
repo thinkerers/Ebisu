@@ -5,12 +5,19 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/accountModel.php'; // Inclure
 class AccountController {
 
     public function createAccount() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->handlePostRequest();
-        } else {
-            $this->showCreateAccountForm();
+        $email = $_GET['email'] ?? null;
+        $password = $_GET['password'] ?? null;
+
+        if(isset($email,$password)) {
+            if((new AccountModel())->createUser($email, $password)) {
+                header('Location: /login.php');
+                exit;
+            } else {
+                throw new Exception("Erreur lors de la création du compte.");
+            }
         }
     }
+
     public function deleteAccount() {
         //echo "rentre dans deleteAccount";
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -27,17 +34,9 @@ class AccountController {
         $accountModel = new AccountModel();
 
         $email = $_POST['emailToConfirm']??$_POST['email'];
-        $password = $_POST['password']??false;
         #echo "<hr>".$_POST['request'];
 
-        if ($_POST['request'] == 'create') {
-            if ($accountModel->createUser($email, $password)) {
-                header('Location: ../success.php');
-                exit();
-            } else {
-                $this->showError("Erreur lors de la création du compte.");
-            }
-        } else if ($_POST['request'] == 'delete') {
+         if ($_POST['request'] == 'delete') {
             #echo 'test';
             if ($accountModel->deleteUser($email)) {
                 echo "on a supp le compte";
@@ -51,9 +50,6 @@ class AccountController {
         }
     }
 
-    private function showCreateAccountForm() {
-        require_once $_SERVER['DOCUMENT_ROOT'].'/templates/createAccountView.php';
-    }
     private function showDeleteAccountForm() {
         require_once $_SERVER['DOCUMENT_ROOT'].'/templates/formDelete.php';
     }

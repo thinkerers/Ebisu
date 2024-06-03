@@ -1,21 +1,24 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/controllers/accountController.php';
+
+require_once 'src/controllers/homepage.php';
+require_once 'src/controllers/accountController.php';
 require_once 'src/controllers/authenticateController.php';
 
-$controller = new AccountController();
-$controller->createAccount();
 
-$action = $_GET['action'] ?? null;
-try{
-    if($action === 'logout'){
+try {
+    $action = $_GET['action'] ?? '';
+
+    if ($action === '') {
+        (new Homepage())->execute();
+        return;
+    } else if ($action === 'logout') {
         (new AuthenticateController())->logout();
+    } else if ($action === 'createAccount') {
+        (new AccountController())->createAccount();
+    } else {
+        throw new Exception("Action inconnue.");
     }
-    else{
-        $controller->createAccount();
-    }
-}
-
-catch (Exception $e) {
+} catch (Exception $e) {
     $errorMessage = $e->getMessage();
 
     require('templates/error.php');
