@@ -13,10 +13,14 @@
     <?php if (isset($_SESSION['user'])) { ?>
         <header>
             <nav>
-            <span><?= htmlspecialchars($_SESSION['user']); ?></span>
-                <form action="index.php" method="get">
-                    <input type="hidden" name="action" value="logout">
-                    <button type="submit" class="logout-btn">
+                <span><?= htmlspecialchars($_SESSION['user']); ?></span>
+                <form method="get" action="index.php">
+                    <button 
+                        type="submit" 
+                        name="action" 
+                        value="logout"
+                        class="logout-btn"
+                    >
                         <span class="material-symbols-outlined">logout</span>
                         <span class="logout-text">Déconnexion</span>
                     </button>

@@ -8,8 +8,7 @@ $controller->createAccount();
 $action = $_GET['action'] ?? null;
 try{
     if($action === 'logout'){
-        $controller = new AuthenticateController();
-        $controller->logout();
+        (new AuthenticateController())->logout();
     }
     else{
         $controller->createAccount();
