@@ -1,5 +1,5 @@
 <?php
-require_once 'controller/accountController.php';
+require_once 'src/controllers/accountController.php';
 
 
 $controller = new AccountController();

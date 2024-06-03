@@ -1,8 +1,10 @@
 <?php
-require_once './src/model/dbConnect.php';
-require_once './src/model/accountModel.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/accountModel.php';
 
-session_start();
+if(!isset($_SERVER)){
+    session_start();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];

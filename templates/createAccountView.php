@@ -23,5 +23,5 @@ ob_start();
 </form>
 <?php 
 $content = ob_get_clean();
-require(dirname(dirname(__FILE__)).'/templates/layout.php');
+require_once('layout.php');
 ?>

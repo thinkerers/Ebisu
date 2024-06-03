@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once dirname(dirname(__FILE__)).'/src/model/dbConnect.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php';
 
 
 class AccountModel {

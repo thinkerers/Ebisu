@@ -12,3 +12,4 @@
 [2024-05-29 17:50:15] EbisuDB Error: Unable to open database: unable to open database file
 [2024-05-29 17:52:16] EbisuDB Error: Unable to open database: unable to open database file
 [2024-05-29 18:16:41] EbisuDB Error: Unable to open database: unable to open database file
+[2024-06-03 18:20:26] EbisuDB Error: Unable to open database: unable to open database file

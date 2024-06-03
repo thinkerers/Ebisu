@@ -1,5 +1,7 @@
 <?php
-require_once '../src/controllers/accountController.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/src/controllers/accountController.php';
+
+// header('Location: ../src/controllers/accountController.php');
 
 $controller = new AccountController();
 $controller->deleteAccount();

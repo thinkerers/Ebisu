@@ -1,7 +1,6 @@
 <?php
-
-require_once dirname(dirname(__FILE__)).'/src/model/dbConnect.php'; // Inclure le fichier de connexion à la base de données
-require_once dirname(dirname(__FILE__)).'/src/model/accountModel.php'; // Inclure le fichier du modèle
+require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php'; // Inclure le fichier de connexion à la base de données
+require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/accountModel.php'; // Inclure le fichier du modèle
 
 class AccountController {
 
@@ -53,10 +52,10 @@ class AccountController {
     }
 
     private function showCreateAccountForm() {
-        require_once dirname(dirname(__FILE__)).'/templates/createAccountView.php';
+        require_once $_SERVER['DOCUMENT_ROOT'].'/templates/createAccountView.php';
     }
     private function showDeleteAccountForm() {
-        require_once dirname(dirname(__FILE__)).'/templates/formDelete.php';
+        require_once $_SERVER['DOCUMENT_ROOT'].'/templates/formDelete.php';
     }
     private function showError($error) {
         echo $error;
