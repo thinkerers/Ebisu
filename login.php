@@ -3,7 +3,7 @@ $title = 'Login';
 ob_start(); 
 ?>
 <style>
-  @import url(./vue/form.css);
+  @import url(./templates/form.css);
 </style>
 <form method="post" action="authenticate.php">
   <fieldset>
@@ -22,5 +22,5 @@ ob_start();
 
 <?php
 $content = ob_get_clean();
-require('vue/layout.php');
+require('templates/layout.php');
 ?>

@@ -12,10 +12,10 @@ ob_start();
 
 <section>
 <h1>Bienvenue sur Ebisu !</h1>
-<a href="vue/formDelete.php">Supprimer mon compte</a>
+<a href="templates/formDelete.php">Supprimer mon compte</a>
 </section>
 
 <?php
 $content = ob_get_clean();
-require('vue/layout.php');
+require('templates/layout.php');
 ?>

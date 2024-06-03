@@ -7,5 +7,5 @@ ob_start();
 <p>You can now <a href="login.php">log in</a> to your account.</p>
 <?php
 $content = ob_get_clean();
-require('vue/layout.php');
+require('templates/layout.php');
 ?>

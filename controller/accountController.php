@@ -53,13 +53,13 @@ class AccountController {
     }
 
     private function showCreateAccountForm() {
-        require_once dirname(dirname(__FILE__)).'/vue/createAccountView.php';
+        require_once dirname(dirname(__FILE__)).'/templates/createAccountView.php';
     }
     private function showDeleteAccountForm() {
-        require_once dirname(dirname(__FILE__)).'/vue/formDelete.php';
+        require_once dirname(dirname(__FILE__)).'/templates/formDelete.php';
     }
     private function showError($error) {
         echo $error;
-        #require_once dirname(dirname(__FILE__)).'/vue/createAccountView.php';
+        #require_once dirname(dirname(__FILE__)).'/templates/createAccountView.php';
     }
 }

@@ -3,7 +3,7 @@ $title = 'Créer un compte';
 ob_start(); 
 ?>
 <style>
-  @import url(./vue/form.css);
+  @import url(./templates/form.css);
 </style>
 <form method="post">
   <fieldset>
@@ -23,5 +23,5 @@ ob_start();
 </form>
 <?php 
 $content = ob_get_clean();
-require(dirname(dirname(__FILE__)).'/vue/layout.php');
+require(dirname(dirname(__FILE__)).'/templates/layout.php');
 ?>
