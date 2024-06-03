@@ -1,40 +1,36 @@
+document.getElementById("addTaskBtn").addEventListener("click", function () {
+  var taskContainer = document
+    .getElementById("taskContainer")
+    .getElementsByTagName("ul")[0];
+  var taskCount = taskContainer.getElementsByClassName("task").length;
 
+  var newTask = document.createElement("li");
+  newTask.className = "task";
+  newTask.innerHTML = `
+            <fieldset>
+                <small>Titre de la tâche</small><br>
+                <input type="text" name="task[${taskCount}][title]" required><br>
+                <label for="urgent-${taskCount}">Urgent</label>
+                <input type="radio" name="task[${taskCount}][urgency]" id="urgent-${taskCount}" value="urgent"><br>
+                <label for="notUrgent-${taskCount}">Not urgent</label>
+                <input type="radio" name="task[${taskCount}][urgency]" id="notUrgent-${taskCount}" value="notUrgent"><br>
+                <label for="important-${taskCount}">Important</label>
+                <input type="radio" name="task[${taskCount}][priority]" id="important-${taskCount}" value="important"><br>
+                <label for="notImportant-${taskCount}">Not important</label>
+                <input type="radio" name="task[${taskCount}][priority]" id="notImportant-${taskCount}" value="notImportant"><br>
+                <small>Description de la tâche</small><br>
+                <textarea name="task[${taskCount}][description]"></textarea><br>
+                <button type="button" class="removeTaskBtn" title="Supprimer la tâche">Supprimer</button>
+            </fieldset>
+        `;
 
-//On récupère le bouton d'ajout de task par son ID
-const addTaskBtn = document.getElementById("addTaskBtn");
+  taskContainer.appendChild(newTask);
+});
 
-//On récupère le container de task par son ID
-const taskContainer = document.getElementById("taskContainer");
-
-// Template pour chaque élément dans le container de to do
-const taskTemplate = `
-    <li>
-        <small>Titre de la tâche</small></br>
-        <input type="text" name="taskTitleInput" required></br>
-    
-        <small>Description de la tâche</small></br>
-        <textarea name="taskDescriptionInput" required></textarea></br>
-    
-        <button type="button" class="removeTaskBtn" title="Supprimer la tâche">Supprimer</button>
-    </li>
-`;
-
-// On ajoute un écouteur de click sur les boutons de suppression de chaque élément de liste
-taskContainer.addEventListener("click", ({ target }) => {
-
-    // L'évènement est déconstruit pour garder la target (cible), si la cible match le sélecteur css qui stipule que le bouton ne peut pas être dans un li unique, alors on continue
-    if (target.matches("li .removeTaskBtn")) {
-        
-        // On prend le li le plus proche de la cible du click, et on le supprime de l'html
-        target.closest("li").remove();
+document
+  .getElementById("taskContainer")
+  .addEventListener("click", function (e) {
+    if (e.target.classList.contains("removeTaskBtn")) {
+      e.target.closest("li").remove();
     }
-});
-
-// On ajoute un écouteur de click sur le bouton qui ajoute des task. Ici on a pas besoin de savoir ou le click a été fait donc on laisse la parenthèse vide.
-addTaskBtn.addEventListener("click", (e) => {
-
-    //querySelector permet de récupérer le premier enfant de taskContainer qui match le sélecteur css indiqué. On utilise la méthode insertAdjacentHTML pour insérer l'élément de liste, avec l'option 'beforeend' pour qu'il soit juste avant le tag fermant, donc en fin de liste.
-    taskContainer
-    .querySelector("ul")
-    .insertAdjacentHTML("beforeend", taskTemplate);
-});
+  });
