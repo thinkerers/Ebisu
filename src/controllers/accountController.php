@@ -1,7 +1,7 @@
 <?php
 
-require_once dirname(dirname(__FILE__)).'/model/dbConnect.php'; // Inclure le fichier de connexion à la base de données
-require_once dirname(dirname(__FILE__)).'/model/accountModel.php'; // Inclure le fichier du modèle
+require_once dirname(dirname(__FILE__)).'/src/model/dbConnect.php'; // Inclure le fichier de connexion à la base de données
+require_once dirname(dirname(__FILE__)).'/src/model/accountModel.php'; // Inclure le fichier du modèle
 
 class AccountController {
 

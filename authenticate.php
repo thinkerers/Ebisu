@@ -1,6 +1,6 @@
 <?php
-require_once './model/dbConnect.php';
-require_once './model/accountModel.php';
+require_once './src/model/dbConnect.php';
+require_once './src/model/accountModel.php';
 
 session_start();
 
