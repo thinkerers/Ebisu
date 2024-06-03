@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once dirname(dirname(__FILE__)).'/model/dbConnect.php';
 
 
@@ -27,6 +28,7 @@ class AccountModel {
         }
     }
     public function deleteUser($email) {
+        if($_SESSION['user'] == $email){
         try{
         #echo "rentre dans deleteUser";
         $statement = $this->db->prepare('DELETE  FROM users WHERE email = :email');
@@ -38,6 +40,7 @@ class AccountModel {
             $errorMsg = "Aucun compte n'a été trouvé";
             return false; 
         }
+    }
     }
     public function authenticateUser($email, $password) {
         try {
