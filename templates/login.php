@@ -3,7 +3,7 @@ $title = 'Login';
 ob_start(); 
 ?>
 <style>
-  @import url(./templates/form.css);
+  @import url(templates/form.css);
 </style>
 <form method="get">
   <fieldset>
