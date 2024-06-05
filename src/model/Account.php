@@ -1,13 +1,16 @@
 <?php
+
+namespace src\model;
+
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php';
 
 
-class AccountModel {
+class Account {
     private $db;
 
     function __construct() {
-        $this->db = new dbConnect(); // Créer une instance de la classe de connexion
+        $this->db = new \dbConnect(); // Créer une instance de la classe de connexion
     }
 
     public function createUser($email, $password) {
@@ -22,7 +25,7 @@ class AccountModel {
 
             // Exécuter la requête
             return $statement->execute();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Gérer l'erreur (par exemple, la journaliser)
             return false; 
         }
@@ -35,7 +38,7 @@ class AccountModel {
         $statement->bindParam(':email', $email);
         $statement->execute();
             return true;   
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             // Handle the error (e.g., log it)
             $errorMsg = "Aucun compte n'a été trouvé";
             return false; 
@@ -54,7 +57,7 @@ class AccountModel {
                 return true;
             }
             return false;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Handle the error (e.g., log it)
             return false; 
         }

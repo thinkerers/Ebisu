@@ -1,6 +1,4 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/accountModel.php';
 
 if(!isset($_SERVER)){
     session_start();
@@ -10,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $accountModel = new AccountModel();
+    $accountModel = new src\model\Account();
 
     if ($accountModel->authenticateUser($email, $password)) {
         $_SESSION['user'] = $email;

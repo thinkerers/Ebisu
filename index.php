@@ -1,23 +1,22 @@
 <?php
 
-require_once 'src/controllers/homepage.php';
-require_once 'src/controllers/accountController.php';
-require_once 'src/controllers/authenticateController.php';
+require_once 'bootstrap.php';
 
+use src\controllers as controller;
 
 try {
     $action = $_GET['action'] ?? '';
 
     if ($action === '') {
-        (new Homepage())->execute();
+        (new controller\Homepage())->execute();
         return;
     } else if ($action === 'login') {
-        (new AuthenticateController())->login();
+        (new controller\Authenticate())->login();
     }
     else if ($action === 'logout') {
-        (new AuthenticateController())->logout();
+        (new controller\Authenticate())->logout();
     } else if ($action === 'createAccount') {
-        (new AccountController())->createAccount();
+        (new controller\Account())->createAccount();
     } else {
         throw new Exception("Action inconnue.");
     }

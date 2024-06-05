@@ -1,13 +1,13 @@
 <?php
-require_once 'src/model/AuthenticateModel.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/accountModel.php';
 
-class AuthenticateController
+namespace src\controllers;
+use src\model as model;
+
+class Authenticate
 {
     public function logout()
     {
-        $model = new AuthenticateModel();
+        $model = new model\Authenticate();
         $model->logout();
     }
 
@@ -17,10 +17,10 @@ class AuthenticateController
         $password = filter_input(INPUT_GET, 'password');
 
         if (!$email || !$password) {
-            throw new Exception("Email et mot de passe requis.");
+            throw new \Exception("Email et mot de passe requis.");
         }
 
-        if ((new AccountModel())->authenticateUser($email, $password)) {
+        if ((new model\Account())->authenticateUser($email, $password)) {
             if(!isset($_SERVER)){
                 session_start();
             }
@@ -28,7 +28,7 @@ class AuthenticateController
             header('Location: welcome.php');
             exit;
         }  else {
-            throw new Exception("Email ou mot de passe incorrect.");
+            throw new \Exception("Email ou mot de passe incorrect.");
         }
     }
 }

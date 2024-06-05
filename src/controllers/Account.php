@@ -1,19 +1,20 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php'; // Inclure le fichier de connexion à la base de données
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/accountModel.php'; // Inclure le fichier du modèle
 
-class AccountController {
+namespace src\controllers;
+use src\model as model;
+
+class Account {
 
     public function createAccount() {
         $email = $_GET['email'] ?? null;
         $password = $_GET['password'] ?? null;
 
         if(isset($email,$password)) {
-            if((new AccountModel())->createUser($email, $password)) {
+            if((new model\Account())->createUser($email, $password)) {
                 header('Location: /login.php');
                 exit;
             } else {
-                throw new Exception("Erreur lors de la création du compte.");
+                throw new \Exception("Erreur lors de la création du compte.");
             }
         }
     }
@@ -31,7 +32,7 @@ class AccountController {
 
     private function handlePostRequest() {
         #echo "On est dans handlePostRequest";
-        $accountModel = new AccountModel();
+        $accountModel = new model\Account();
 
         $email = $_POST['emailToConfirm']??$_POST['email'];
         #echo "<hr>".$_POST['request'];

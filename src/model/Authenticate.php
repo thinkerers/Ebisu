@@ -1,6 +1,8 @@
 <?php
 
-class AuthenticateModel 
+namespace src\model;
+
+class Authenticate
 {
     public function logout()
     {
