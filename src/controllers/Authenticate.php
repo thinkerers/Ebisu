@@ -78,7 +78,7 @@ class Authenticate
 
         // If input is invalid, show the login page
         if (!$filtered_email || !$filtered_password) {
-            require_once('templates/login.php');
+            require_once('templates/account-form-login.php');
             exit;
         }
 
@@ -89,7 +89,7 @@ class Authenticate
         $this->redirect('/');
     } else {
         // If authentication fails, show the account creation view
-        require_once('templates/createAccountView.php');
+        require_once('templates/account-form-create.php');
         exit;
     }
     }

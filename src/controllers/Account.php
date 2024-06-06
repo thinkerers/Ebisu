@@ -22,7 +22,7 @@ class Account {
         }
 
         if (!isset($_POST['email'])){
-            require_once('templates/formDelete.php');
+            require_once('templates/account-form-delete.php');
         }
         
         if ($_POST['email']??null === $_SESSION['user']){
