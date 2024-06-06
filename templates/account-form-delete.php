@@ -1,5 +1,6 @@
 <?php 
 $title = 'Delete Account';
+$style ='@import url(assets/css/form.css);';
 ob_start(); 
 ?>
 <dialog>

@@ -1,10 +1,8 @@
 <?php 
 $title = 'Créer un compte';
+$style ='@import url(assets/css/form.css);';
 ob_start(); 
 ?>
-<style>
-  @import url(./templates/form.css);
-</style>
 <form method="post">
   <fieldset>
     <legend>Créez un compte (ou <a href="/?action=login">connectez vous</a>)</legend>

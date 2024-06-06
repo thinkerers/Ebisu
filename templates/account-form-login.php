@@ -1,10 +1,8 @@
 <?php 
 $title = 'Login';
-ob_start(); 
+$style ='@import url(assets/css/form.css);';
+ob_start();
 ?>
-<style>
-  @import url(templates/form.css);
-</style>
 <form method="post">
   <fieldset>
     <legend>Login</legend>
