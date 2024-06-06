@@ -6,20 +6,16 @@ require_once 'bootstrap.php';
 try {
     $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
-    if ($action === '') {
-        $page->render();
-    } else if ($action === 'login') {
-        $account->login();
+    if($action){
+        $result = match ($action) {
+            'login'         => $account->login(),
+            'logout'        => $account->logout(),
+            'createAccount' => $account->create(),
+            'deleteAccount' => $account->delete(),
+            default         => throw new Exception("Action inconnue."),
+        };
     }
-    else if ($action === 'logout') {
-        $account->logout();
-    } else if ($action === 'createAccount') {
-        $account->create();
-    } else if ($action === 'deleteAccount') {
-        $account->delete();
-    }else {
-        throw new Exception("Action inconnue.");
-    }
+    $page->render();
 } catch (Exception $e) {
     $errorMessage = $e->getMessage();
 

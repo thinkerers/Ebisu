@@ -9,12 +9,13 @@ namespace src\controllers;
  */
 class Account
 {
+        
     /**
      * Creates a new user account.
      *
      * Retrieves email and password from POST data, validates them, and attempts to create a new user.
      * If successful, automatically logs the user in.
-     *
+     * @return void
      * @throws \Exception If user creation fails or input is invalid.
      */
     public function create() {
@@ -25,7 +26,6 @@ class Account
         if(isset($email, $password)) {
             (new \src\model\Account())->create($email, $password);
             $this->login($email, $password); // Automatically log in the new user
-            exit;
         } else {
             throw new \Exception("Invalid email or password"); 
         }
@@ -35,7 +35,7 @@ class Account
      * Deletes the currently logged-in user account.
      *
      * Confirms the user's email to ensure they want to delete their account.
-     *
+     * @return void
      * @throws \Exception If the user is not logged in, email confirmation fails, or deletion fails.
      */
     public function delete()
@@ -64,14 +64,14 @@ class Account
      *
      * @param string|null $email The email address of the user.
      * @param string|null $password The password of the user.
-     * @return void
+     * @return int The HTTP response code.
      * @throws \Exception If an error occurs during authentication.
      */
-    public function login(?string $email = null, ?string $password = null): void
+    public function login(?string $email = null, ?string $password = null): int
     {
-        // If the user is already logged in, redirect to the homepage
+        // If the user is already logged in, return a 403 error: Forbidden
         if (isset($_SESSION['user'])) {
-            $this->redirect('/');
+            return http_response_code(403); // Forbidden
         }
 
         // Filter and validate input
@@ -81,30 +81,29 @@ class Account
         // If input is invalid, show the login page
         if (!$filtered_email || !$filtered_password) {
             require_once('templates/account-form-login.php');
-            exit;
+            return http_response_code(400); // Bad Request
         }
 
         // Authenticate the user
         if ((new \src\model\Account())->login($filtered_email, $filtered_password)) {
-            // Set session and redirect to the homepage on successful authentication
+            // Set session on successful authentication
             $_SESSION['user'] = $filtered_email;
-            $this->redirect('/');
+            return http_response_code(200); // OK
         } else {
             // If authentication fails, show the account creation view
             require_once('templates/account-form-create.php');
-            exit;
+            return http_response_code(401); // Unauthorized
         }
     }
 
     /**
-     * Logs the user out and redirects to the homepage.
+     * Logs the user out
      *
      * @return void
      */
     public function logout(): void
     {
         (new \src\model\Account())->logout();
-        $this->redirect('/');
     }
 
     /**
@@ -133,17 +132,5 @@ class Account
             return filter_input(INPUT_POST, 'password', FILTER_DEFAULT);
         }
         return filter_var($password, FILTER_DEFAULT);
-    }
-
-    /**
-     * Redirects the user to a specified URL.
-     *
-     * @param string $url The URL to redirect to.
-     * @return void
-     */
-    private function redirect(string $url): void
-    {
-        header('Location: ' . $url);
-        exit;
     }
 }
