@@ -23,7 +23,7 @@ class Account
 
         // Validate input
         if(isset($email, $password)) {
-            (new \src\model\Account())->createUser($email, $password);
+            (new \src\model\Account())->create($email, $password);
             $this->login($email, $password); // Automatically log in the new user
             exit;
         } else {
@@ -52,7 +52,7 @@ class Account
 
         // Confirm the email and delete the account if it matches
         if ($_POST['email'] ?? null === $_SESSION['user']) {
-            (new \src\model\Account())->deleteUser($_SESSION['user']);
+            (new \src\model\Account())->delete($_SESSION['user']);
             $this->logout();
         } else {
             throw new \Exception("The confirmation email does not match your email.");
@@ -85,7 +85,7 @@ class Account
         }
 
         // Authenticate the user
-        if ((new \src\model\Account())->authenticateUser($filtered_email, $filtered_password)) {
+        if ((new \src\model\Account())->login($filtered_email, $filtered_password)) {
             // Set session and redirect to the homepage on successful authentication
             $_SESSION['user'] = $filtered_email;
             $this->redirect('/');

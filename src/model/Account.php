@@ -9,7 +9,7 @@ class Account {
         $this->db = new \dbConnect(); // Créer une instance de la classe de connexion
     }
 
-    public function createUser($email, $password) {
+    public function create($email, $password) {
         // Hacher le mot de passe (obligatoire pour la sécurité)
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -27,7 +27,7 @@ class Account {
             return false; 
         }
     }
-    public function deleteUser($email) {
+    public function delete($email) {
         if($_SESSION['user'] == $email){
         try{
         #echo "rentre dans deleteUser";
@@ -41,23 +41,6 @@ class Account {
         }
     }
     }
-    public function authenticateUser($email, $password) {
-        try {
-            // Prepare the SQL statement
-            $statement = $this->db->prepare('SELECT hashedPassword FROM users WHERE email = :email');
-            $statement->bindValue(':email', $email);
-            $result = $statement->execute();
-            $row = $result->fetchArray(SQLITE3_ASSOC);
-
-            if ($row && password_verify($password, $row['hashedPassword'])) {
-                return true;
-            }
-            return false;
-        } catch (\Exception $e) {
-            // Handle the error (e.g., log it)
-            return false; 
-        }
-    }
 
     public function logout()
     {
@@ -68,16 +51,23 @@ class Account {
 
     public function login($email, $password)
     {
-        require_once 'src/model/dbConnect.php';
+        try {
 
-        $query = $db->prepare('SELECT * FROM users WHERE email = :email');
-        $query->execute(['email' => $email]);
-        $user = $query->fetch();
+        $statement = $this->db->prepare('SELECT * FROM users WHERE email = :email');
+        $statement->bindValue(':email', $email);
+        $statement->execute(['email' => $email]);
+        $result = $statement->execute();
+        $row = $result->fetchArray(SQLITE3_ASSOC);
 
-        if ($user && password_verify($password, $user['password'])) {
-            return $user;
+        if ($row && password_verify($password, $row['password'])) {
+            return true;
         } else {
             return false;
         }
+
+    } catch (\Exception $e) {
+        // Handle the error (e.g., log it)
+        return false; 
     }
+}
 }
