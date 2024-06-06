@@ -2,46 +2,76 @@
 
 namespace src\model;
 
-class Account {
+/**
+ * Class Account
+ *
+ * Handles account-related operations (creation, deletion, login, logout).
+ */
+class Account
+{
+    /**
+     * @var \dbConnect Database connection object.
+     */
     private $db;
 
-    function __construct() {
-        $this->db = new \dbConnect(); // Créer une instance de la classe de connexion
+    /**
+     * Account constructor.
+     * Initializes the database connection.
+     */
+    public function __construct()
+    {
+        $this->db = new dbConnect();
     }
 
-    public function create($email, $password) {
-        // Hacher le mot de passe (obligatoire pour la sécurité)
+    /**
+     * Creates a new user account.
+     *
+     * @param string $email User's email address.
+     * @param string $password User's password (plain text).
+     * @return bool True on success, false on failure.
+     * @throws \Exception If an error occurs during account creation.
+     */
+    public function create($email, $password)
+    {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         try {
-            // Préparer la requête SQL
             $statement = $this->db->prepare('INSERT INTO users (email, hashedPassword) VALUES (:email, :hashedPassword)');
             $statement->bindValue(':email', $email);
             $statement->bindValue(':hashedPassword', $hashedPassword);
-
-            // Exécuter la requête
             return $statement->execute();
         } catch (\Exception $e) {
-            // Gérer l'erreur (par exemple, la journaliser)
+            error_log("Account creation error: " . $e->getMessage());
             throw new \Exception("Erreur lors de la création du compte.");
-            return false; 
         }
-    }
-    public function delete($email) {
-        if($_SESSION['user'] == $email){
-        try{
-        #echo "rentre dans deleteUser";
-        $statement = $this->db->prepare('DELETE  FROM users WHERE email = :email');
-        $statement->bindParam(':email', $email);
-        $statement->execute();
-            return true;   
-        }catch (\Exception $e) {
-            throw new \Exception("Erreur lors de la suppression du compte.");
-            return false; 
-        }
-    }
     }
 
+    /**
+     * Delete the account linked to the email passed as argument
+     *
+     * @param string $email the email of the account to delete
+     * @return bool True if the account has been deleted, false otherwise.
+     */
+    public function delete($email)
+    {
+        if ($_SESSION['user'] == $email) {
+            try {
+                $statement = $this->db->prepare('DELETE FROM users WHERE email = :email');
+                $statement->bindParam(':email', $email);
+                $statement->execute();
+                return true;
+            } catch (\Exception $e) {
+                error_log("Account delete error: " . $e->getMessage());
+                throw new \Exception("Erreur lors de la suppression du compte.");
+            }
+        }
+    }
+
+    /**
+     * Logs out the current user.
+     *
+     * Destroys the session and redirects to the home page.
+     */
     public function logout()
     {
         session_start();
@@ -49,25 +79,32 @@ class Account {
         header('Location: /');
     }
 
-    public function login($email, $password)
-    {
-        try {
-
-        $statement = $this->db->prepare('SELECT * FROM users WHERE email = :email');
-        $statement->bindValue(':email', $email);
-        $statement->execute(['email' => $email]);
+ /**
+ * Logs in a user.
+ *
+ * @param string|null $email User's email address.
+ * @param string|null $password User's password (plain text).
+ * @return bool True on successful login, false on failure.
+ */
+public function login($email = null, $password = null)
+{
+    try {
+        $statement = $this->db->prepare('SELECT hashedPassword FROM users WHERE email = :email');
+        $statement->bindValue(':email', $email, SQLITE3_TEXT);
         $result = $statement->execute();
-        $row = $result->fetchArray(SQLITE3_ASSOC);
 
-        if ($row && password_verify($password, $row['password'])) {
-            return true;
-        } else {
-            return false;
+        if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            if (password_verify($password, $row['hashedPassword'])) {
+                return true;
+            }
         }
-
+        
+        return false;
     } catch (\Exception $e) {
-        // Handle the error (e.g., log it)
-        return false; 
+        // Log the error (important for debugging)
+        error_log("Login error: " . $e->getMessage());
+        return false;
     }
 }
+
 }
