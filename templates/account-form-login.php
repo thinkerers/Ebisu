@@ -1,6 +1,6 @@
 <?php 
 $title = 'Login';
-$style ='@import url(assets/css/form.css);';
+$style ='@import url(public/css/form.css);';
 ob_start();
 ?>
 <form method="post">

@@ -6,7 +6,7 @@ ob_start();
 <h1>To-Do List</h1>
 
 <!-- formulaire de nouvelle tâche -->
-<script defer src="toDo.js"></script>
+<script defer src="public/js/toDo.js"></script>
 <form action="self" method="post" class="taskForm">
     <fieldset id="taskContainer">
         <ul >
