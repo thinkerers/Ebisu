@@ -9,17 +9,17 @@ try {
     $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
     if ($action === '') {
-        (new controller\Homepage())->execute();
+        (new controller\Page())->execute();
         return;
     } else if ($action === 'login') {
-        (new controller\Authenticate())->login();
+        (new controller\Account())->login();
     }
     else if ($action === 'logout') {
-        (new controller\Authenticate())->logout();
+        (new controller\Account())->logout();
     } else if ($action === 'createAccount') {
-        (new controller\Account())->createAccount();
+        (new controller\Account())->create();
     } else if ($action === 'deleteAccount') {
-        (new controller\Account())->deleteAccount();
+        (new controller\Account())->delete();
     }else {
         throw new Exception("Action inconnue.");
     }
