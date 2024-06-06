@@ -17,15 +17,17 @@ class Account
      *
      * @throws \Exception If user creation fails or input is invalid.
      */
-    public function create()
-    {
+    public function create() {
         $email = $_POST['email'] ?? null;
         $password = $_POST['password'] ?? null;
 
-        if (isset($email, $password)) {
+        // Validate input
+        if(isset($email, $password)) {
             (new \src\model\Account())->createUser($email, $password);
-            $this->login($email, $password);
+            $this->login($email, $password); // Automatically log in the new user
             exit;
+        } else {
+            throw new \Exception("Invalid email or password"); 
         }
     }
 
@@ -55,46 +57,6 @@ class Account
         } else {
             throw new \Exception("The confirmation email does not match your email.");
         }
-    }
-
-    /**
-     * Redirects the user to a specified URL.
-     *
-     * @param string $url The URL to redirect to.
-     * @return void
-     */
-    private function redirect(string $url): void
-    {
-        header('Location: ' . $url);
-        exit;
-    }
-
-    /**
-     * Retrieves and filters the email from POST data or the provided argument.
-     *
-     * @param string|null $email The email address to filter.
-     * @return string|null The filtered email address or null if invalid.
-     */
-    private function getFilteredEmail(?string $email): ?string
-    {
-        if (isset($_POST['email'])) {
-            return filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        }
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
-    }
-
-    /**
-     * Retrieves and filters the password from POST data or the provided argument.
-     *
-     * @param string|null $password The password to filter.
-     * @return string|null The filtered password or null if invalid.
-     */
-    private function getFilteredPassword(?string $password): ?string
-    {
-        if (isset($_POST['password'])) {
-            return filter_input(INPUT_POST, 'password', FILTER_DEFAULT);
-        }
-        return filter_var($password, FILTER_DEFAULT);
     }
 
     /**
@@ -143,5 +105,45 @@ class Account
     {
         (new \src\model\Account())->logout();
         $this->redirect('/');
+    }
+
+    /**
+     * Retrieves and filters the email from POST data or the provided argument.
+     *
+     * @param string|null $email The email address to filter.
+     * @return string|null The filtered email address or null if invalid.
+     */
+    private function getFilteredEmail(?string $email): ?string
+    {
+        if (isset($_POST['email'])) {
+            return filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        }
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+     * Retrieves and filters the password from POST data or the provided argument.
+     *
+     * @param string|null $password The password to filter.
+     * @return string|null The filtered password or null if invalid.
+     */
+    private function getFilteredPassword(?string $password): ?string
+    {
+        if (isset($_POST['password'])) {
+            return filter_input(INPUT_POST, 'password', FILTER_DEFAULT);
+        }
+        return filter_var($password, FILTER_DEFAULT);
+    }
+
+    /**
+     * Redirects the user to a specified URL.
+     *
+     * @param string $url The URL to redirect to.
+     * @return void
+     */
+    private function redirect(string $url): void
+    {
+        header('Location: ' . $url);
+        exit;
     }
 }
