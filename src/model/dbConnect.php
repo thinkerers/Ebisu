@@ -1,5 +1,4 @@
 <?php
-
 namespace src\model;
 class dbConnect extends \SQLite3 {
     function __construct() {
