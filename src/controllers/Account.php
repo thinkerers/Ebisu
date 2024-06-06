@@ -6,56 +6,30 @@ use src\model as model;
 class Account {
 
     public function createAccount() {
-        $email = $_GET['email'] ?? null;
-        $password = $_GET['password'] ?? null;
+        $email = $_POST['email'] ?? null;
+        $password = $_POST['password'] ?? null;
 
         if(isset($email,$password)) {
-            if((new model\Account())->createUser($email, $password)) {
-                header('Location: /login.php');
-                exit;
-            } else {
-                throw new \Exception("Erreur lors de la création du compte.");
-            }
+            (new model\Account())->createUser($email, $password);
+            (new Authenticate())->login($email, $password);
+            exit;
         }
     }
 
     public function deleteAccount() {
-        //echo "rentre dans deleteAccount";
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            //echo "rentre dans handlePostRequest";
-            $this->handlePostRequest();
-        } else {
-            //echo "rentre dans showDeleteAccountForm";
-            $this->showDeleteAccountForm();
+        if(!isset($_SESSION['user'])){
+            throw new \Exception("Vous n'êtes pas connecté.");
         }
-    }
 
-    private function handlePostRequest() {
-        #echo "On est dans handlePostRequest";
-        $accountModel = new model\Account();
-
-        $email = $_POST['emailToConfirm']??$_POST['email'];
-        #echo "<hr>".$_POST['request'];
-
-         if ($_POST['request'] == 'delete') {
-            #echo 'test';
-            if ($accountModel->deleteUser($email)) {
-                echo "on a supp le compte";
-
-                header('Location: ../logout.php');
-                
-                exit;
-            } else {
-                $this->showError("Erreur lors de la suppression du compte.");
-            }
+        if (!isset($_POST['email'])){
+            require_once('templates/formDelete.php');
         }
-    }
-
-    private function showDeleteAccountForm() {
-        require_once $_SERVER['DOCUMENT_ROOT'].'/templates/formDelete.php';
-    }
-    private function showError($error) {
-        echo $error;
-        #require_once dirname(dirname(__FILE__)).'/templates/createAccountView.php';
+        
+        if ($_POST['email']??null === $_SESSION['user']){
+            (new model\Account())->deleteUser($_SESSION['user']);
+            (new Authenticate())->logout();
+        } else{
+            throw new \Exception("L'email de confirmation ne correspond pas à votre email.");
+        }
     }
 }

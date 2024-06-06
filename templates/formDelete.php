@@ -1,18 +1,17 @@
-<?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/controllers/accountController.php';
-
-// header('Location: ../src/controllers/accountController.php');
-
-$controller = new AccountController();
-$controller->deleteAccount();
+<?php 
+$title = 'Delete Account';
+ob_start(); 
 ?>
 <dialog>
   <form method="post">
-    <p>Veuillez écrire votre adresse email pour confirmé la suppression du compte :</p>
-    <input type="text" name="emailToConfirm" required>
+    <p>Veuillez écrire votre adresse email pour confirmer la suppression du compte :</p>
+    <input type="text" name="email" required>
     <a href="" class="btnReturn">Annuler</a>
-    <input name="request" type="submit" value="delete" />
+    <input name="action" type="submit" value="deleteAccount" />
   </form>
-    <label class="errormsg"><?php if(isset($errorMsg)){echo $errorMsg;}?></label>
 </dialog>
 <button onclick="document.querySelector('dialog').showModal();">Supprimer le compte</button>
+<?php
+$content = ob_get_clean();
+require_once($_SERVER['DOCUMENT_ROOT'].'/templates/layout.php');
+?>

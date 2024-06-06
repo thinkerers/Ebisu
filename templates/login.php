@@ -5,7 +5,7 @@ ob_start();
 <style>
   @import url(templates/form.css);
 </style>
-<form method="get">
+<form method="post">
   <fieldset>
     <legend>Login</legend>
     <label>
@@ -19,8 +19,7 @@ ob_start();
     <input type="submit" name="action" value="login" />
   </fieldset>
 </form>
-
 <?php
 $content = ob_get_clean();
-require 'templates/layout.php';
+require_once($_SERVER['DOCUMENT_ROOT'].'/templates/layout.php');
 ?>

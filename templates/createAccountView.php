@@ -5,9 +5,9 @@ ob_start();
 <style>
   @import url(./templates/form.css);
 </style>
-<form method="get">
+<form method="post">
   <fieldset>
-    <legend>Créez un compte (ou <a href="/login.php">connectez vous</a>)</legend>
+    <legend>Créez un compte (ou <a href="/?action=login">connectez vous</a>)</legend>
     <label>
       Email
       <small id="emailHint">Veuillez entrer un email valide</small>
@@ -21,7 +21,7 @@ ob_start();
     <input name="action" type="submit" value="createAccount" />
   </fieldset>
 </form>
-<?php 
+<?php
 $content = ob_get_clean();
 require_once($_SERVER['DOCUMENT_ROOT'].'/templates/layout.php');
 ?>

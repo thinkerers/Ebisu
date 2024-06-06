@@ -1,11 +1,12 @@
 <?php
+session_start();
 
 require_once 'bootstrap.php';
 
 use src\controllers as controller;
 
 try {
-    $action = $_GET['action'] ?? '';
+    $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
     if ($action === '') {
         (new controller\Homepage())->execute();
@@ -17,7 +18,9 @@ try {
         (new controller\Authenticate())->logout();
     } else if ($action === 'createAccount') {
         (new controller\Account())->createAccount();
-    } else {
+    } else if ($action === 'deleteAccount') {
+        (new controller\Account())->deleteAccount();
+    }else {
         throw new Exception("Action inconnue.");
     }
 } catch (Exception $e) {

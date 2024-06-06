@@ -2,7 +2,6 @@
 
 namespace src\model;
 
-session_start();
 require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php';
 
 
@@ -27,6 +26,7 @@ class Account {
             return $statement->execute();
         } catch (\Exception $e) {
             // Gérer l'erreur (par exemple, la journaliser)
+            throw new \Exception("Erreur lors de la création du compte.");
             return false; 
         }
     }
@@ -39,8 +39,7 @@ class Account {
         $statement->execute();
             return true;   
         }catch (\Exception $e) {
-            // Handle the error (e.g., log it)
-            $errorMsg = "Aucun compte n'a été trouvé";
+            throw new \Exception("Erreur lors de la suppression du compte.");
             return false; 
         }
     }
