@@ -2,9 +2,6 @@
 
 namespace src\model;
 
-require_once $_SERVER['DOCUMENT_ROOT'].'/src/model/dbConnect.php';
-
-
 class Account {
     private $db;
 
