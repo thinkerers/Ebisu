@@ -79,32 +79,43 @@ class Account
         header('Location: /');
     }
 
- /**
- * Logs in a user.
- *
- * @param string|null $email User's email address.
- * @param string|null $password User's password (plain text).
- * @return bool True on successful login, false on failure.
- */
-public function login($email = null, $password = null)
-{
-    try {
-        $statement = $this->db->prepare('SELECT hashedPassword FROM users WHERE email = :email');
-        $statement->bindValue(':email', $email, SQLITE3_TEXT);
-        $result = $statement->execute();
-
-        if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            if (password_verify($password, $row['hashedPassword'])) {
-                return true;
+    /**
+     * Retrieves the hashed password for a given email address.
+     *
+     * @param string $email User's email address.
+     * @return string The hashed password.
+     * @throws \Exception If the user is not found.
+     */
+    public function getUserHash($email)
+    {
+        try {
+            $statement = $this->db->prepare('SELECT hashedPassword FROM users WHERE email = :email');
+            $statement->bindValue(':email', $email, SQLITE3_TEXT);
+            $result = $statement->execute();
+            if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                return $row['hashedPassword'];
+            } else{
+                throw new \Exception("User not found.");
             }
         }
-        
-        return false;
-    } catch (\Exception $e) {
-        // Log the error (important for debugging)
-        error_log("Login error: " . $e->getMessage());
-        return false;
+       
+        catch(\Exception $e){
+            error_log("User not found: " . $e->getMessage());
+            return false;
+        }
     }
-}
+
+    /**
+     * Logs the user in if valid credentials are provided.
+     *
+     * @param string|null $email The email address of the user.
+     * @param string|null $password The password of the user.
+     * @return bool True if the user is authenticated, false otherwise.
+     */
+    public function login($email = null, $password = null)
+    {
+        $hashedPassword = $this->getUserHash($email);
+        return password_verify($password, $hashedPassword);
+    }
 
 }

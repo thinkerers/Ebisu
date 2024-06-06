@@ -19,13 +19,18 @@ class Account
      * @throws \Exception If user creation fails or input is invalid.
      */
     public function create() {
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['password'] ?? null;
+        // Filter and validate input
+        $filtered_email = $this->getFilteredEmail();
+        $filtered_password = $this->getFilteredPassword();
+        //Check if email already exists
+        if ((new \src\model\Account())->getUserHash($filtered_email)) {
+            throw new \Exception("Email already exists");
+        }
 
         // Validate input
-        if(isset($email, $password)) {
-            (new \src\model\Account())->create($email, $password);
-            $this->login($email, $password); // Automatically log in the new user
+        if($filtered_email && $filtered_password) {
+            (new \src\model\Account())->create($filtered_email, $filtered_password);
+            $this->login($filtered_email, $filtered_password); // Automatically log in the new user
         } else {
             throw new \Exception("Invalid email or password"); 
         }
@@ -90,6 +95,7 @@ class Account
             $_SESSION['user'] = $filtered_email;
             return http_response_code(200); // OK
         } else {
+            echo "Loggin attempt failed";
             // If authentication fails, show the account creation view
             require_once('templates/account-form-create.php');
             return http_response_code(401); // Unauthorized
@@ -112,7 +118,7 @@ class Account
      * @param string|null $email The email address to filter.
      * @return string|null The filtered email address or null if invalid.
      */
-    private function getFilteredEmail(?string $email): ?string
+    private function getFilteredEmail(?string $email = null): ?string
     {
         if (isset($_POST['email'])) {
             return filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -126,7 +132,7 @@ class Account
      * @param string|null $password The password to filter.
      * @return string|null The filtered password or null if invalid.
      */
-    private function getFilteredPassword(?string $password): ?string
+    private function getFilteredPassword(?string $password = null): ?string
     {
         if (isset($_POST['password'])) {
             return filter_input(INPUT_POST, 'password', FILTER_DEFAULT);
