@@ -7,7 +7,7 @@ class Page
         if (isset($_SESSION['user'])) {
             require('templates/welcome.php');
         } else {
-            require('templates/account-form-login.php');
+            require('templates/account-form-create.php');
         }
     }
 }

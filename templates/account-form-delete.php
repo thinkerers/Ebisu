@@ -5,7 +5,7 @@ ob_start();
 <dialog>
   <form method="post">
     <p>Veuillez écrire votre adresse email pour confirmer la suppression du compte :</p>
-    <input type="text" name="email" required>
+    <input type="text" name="emailConfirm" required>
     <a href="" class="btnReturn">Annuler</a>
     <input name="action" type="submit" value="deleteAccount" />
   </form>

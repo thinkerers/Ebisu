@@ -24,7 +24,7 @@ class Account
         $filtered_password = $this->getFilteredPassword();
         //Check if email already exists
         if ((new \src\model\Account())->getUserHash($filtered_email)) {
-            throw new \Exception("Email already exists");
+            throw new \Exception("Cet email est déjà utilisé.");
         }
 
         // Validate input
@@ -32,7 +32,7 @@ class Account
             (new \src\model\Account())->create($filtered_email, $filtered_password);
             $this->login($filtered_email, $filtered_password); // Automatically log in the new user
         } else {
-            throw new \Exception("Invalid email or password"); 
+            throw new \Exception("Email ou mot de passe invalide."); 
         }
     }
 
@@ -47,20 +47,20 @@ class Account
     {
         // Check if the user is logged in
         if (!isset($_SESSION['user'])) {
-            throw new \Exception("You are not logged in.");
+            throw new \Exception("Vous n'êtes pas connecté.");
         }
 
         // If email is not submitted yet, show the confirmation form
-        if (!isset($_POST['email'])) {
+        if (!isset($_POST['emailConfirm'])) {
             require_once('templates/account-form-delete.php');
         }
 
         // Confirm the email and delete the account if it matches
-        if ($_POST['email'] ?? null === $_SESSION['user']) {
+        if (isset($_POST['emailConfirm']) && $_POST['emailConfirm'] === $_SESSION['user']) {
             (new \src\model\Account())->delete($_SESSION['user']);
             $this->logout();
         } else {
-            throw new \Exception("The confirmation email does not match your email.");
+            throw new \Exception("Le mail de confirmation ne correspond pas.");
         }
     }
 
@@ -91,14 +91,11 @@ class Account
 
         // Authenticate the user
         if ((new \src\model\Account())->login($filtered_email, $filtered_password)) {
-            // Set session on successful authentication
             $_SESSION['user'] = $filtered_email;
             return http_response_code(200); // OK
         } else {
-            echo "Loggin attempt failed";
-            // If authentication fails, show the account creation view
-            require_once('templates/account-form-create.php');
-            return http_response_code(401); // Unauthorized
+            http_response_code(401); // Unauthorized
+            header('Location: /');
         }
     }
 
