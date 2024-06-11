@@ -7,13 +7,13 @@ ob_start();
   @import url(style.css);
 </style>
 <fieldset>
-<legend>Modifier mes informations</legend>
+  <legend>Profil</legend>
   <label>
-    <a href="changeUserEmail.php">Adresse email</a>
+    <a href="changeUserData.php">Modifier mon compte</a>
   </label>
   <br>
   <label>
-    <a href="changeUserPassword.php">Changer le mot de passe</a>
+    <a href="formDelete.php">Supprimer mon compte</a>
   </label>
 </fieldset>
 <?php

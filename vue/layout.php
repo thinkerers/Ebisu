@@ -13,7 +13,7 @@
     <?php if (isset($_SESSION['user'])) { ?>
         <header>
             <nav>
-                <a href="profil.php"><?= htmlspecialchars($_SESSION['user']); ?></span><a href="logout.php" class="material-symbols-outlined" title="Déconnexion">logout</a>
+                <a href="vue/profil.php"><?= htmlspecialchars($_SESSION['user']); ?></span><a href="logout.php" class="material-symbols-outlined" title="Déconnexion">logout</a>
             </nav>
         </header>
     <?php } ?>
