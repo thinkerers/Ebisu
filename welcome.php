@@ -12,6 +12,8 @@ ob_start();
 
 <section>
 <h1>Bienvenue sur Ebisu !</h1>
+<a href="vue/changeUserData.php">Modifier mon compte</a>
+<br>
 <a href="vue/formDelete.php">Supprimer mon compte</a>
 </section>
 
