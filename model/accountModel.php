@@ -42,6 +42,18 @@ class AccountModel {
         }
     }
     }
+    public function changeEmail($newEmail) {
+        try{
+        $statement = $this->db->prepare('UPDATE users SET email = :email WHERE email = :oldEmail');
+        $statement->bindParam(':email', $newEmail);
+        $statement->bindParam(':oldEmail', $_SESSION['user']);
+        $statement->execute();
+            return true;   
+        }catch (Exception $e) {
+            $errorMsg = "Aucun compte n'a été trouvé";
+            return false; 
+        }
+    }
     public function authenticateUser($email, $password) {
         try {
             // Prepare the SQL statement

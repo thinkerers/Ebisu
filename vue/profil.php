@@ -1,4 +1,5 @@
 <?php 
+session_start();
 $title = 'Modifier mon compte';
 ob_start(); 
 ?>
@@ -9,7 +10,7 @@ ob_start();
 <fieldset>
   <legend>Profil</legend>
   <label>
-    <a href="changeUserData.php">Modifier mon compte</a>
+    <a href="changeUserData.php">Modifier mes informations</a>
   </label>
   <br>
   <label>

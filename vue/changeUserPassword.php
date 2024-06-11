@@ -1,4 +1,5 @@
 <?php 
+session_start();
 $title = 'Changer le mot de passe';
 ob_start(); 
 ?>

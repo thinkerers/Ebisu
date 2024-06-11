@@ -1,4 +1,5 @@
 <?php 
+session_start();
 $title = 'Modifier mon compte';
 ob_start(); 
 ?>

@@ -1,5 +1,8 @@
 <?php 
-$title = 'Changer le mot de passe';
+require_once '../controller/accountController.php';
+$title = 'Changer l\'adresse email';
+$controller = new AccountController();
+$controller->changeEmail();
 ob_start(); 
 ?>
 <style>
@@ -9,15 +12,22 @@ ob_start();
   <fieldset>
     <legend>Mettre à jour votre Adresse email</legend>
     <label>
-        Adresse email actuelle
-        <?= $_SESSION['user'] ?>
+        Adresse email actuelle : 
+        <b><?= htmlspecialchars($_SESSION['user']); ?></b>
     </label>
+    <br />
     <label>
-        Email
         <small id="emailHint">Veuillez entrer un email valide</small>
-        <input name="email" type="email" minlength="5" maxlength="50" required autofocus aria-describedby="emailHint">
+        <br />
+        <input name="newEmail" type="email" minlength="5" maxlength="50" required autofocus aria-describedby="emailHint">
     </label>
-    <input name="request" type="submit" value="Envoyer"/>
+    <br />
+    <label>
+        <small id="emailHint">Confirmez l'adresse email</small>
+        <br />
+        <input name="newEmail2" type="email" minlength="5" maxlength="50" required autofocus aria-describedby="emailHint">
+    </label>
+    <input name="request" type="submit" value="changeEmail"/>
   </fieldset>
 </form>
 <?php 

@@ -22,6 +22,13 @@ class AccountController {
             $this->showDeleteAccountForm();
         }
     }
+    public function changeEmail() {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->handlePostRequest();
+        } else {
+            $this->showDeleteAccountForm();
+        }
+    }
 
     private function handlePostRequest() {
         #echo "On est dans handlePostRequest";
@@ -30,6 +37,8 @@ class AccountController {
         $email = $_POST['emailToConfirm']??$_POST['email'];
         $password = $_POST['password']??false;
         #echo "<hr>".$_POST['request'];
+        $newEmail = $_POST['newEmail'];
+        $newEmail2 = $_POST['newEmail2'];
 
         if ($_POST['request'] == 'create') {
             if ($accountModel->createUser($email, $password)) {
@@ -48,6 +57,18 @@ class AccountController {
                 exit;
             } else {
                 $this->showError("Erreur lors de la suppression du compte.");
+            }
+        }elseif ($_POST['request'] == 'changeEmail') { //to change email
+            if($newEmail == $newEmail2 && !empty($newEmail) && !empty($newEmail2)){
+                if ($accountModel->changeEmail($newEmail)) {
+                    echo "L'email a bien été modifié";
+                    header('Location:../../logout.php');
+                    exit();
+                } else {
+                    $this->showError("Erreur lors de la modification du compte.");
+                }
+            }else{
+                $this->showError("Les emails ne correspondent pas");
             }
         }
     }
