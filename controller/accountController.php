@@ -26,7 +26,7 @@ class AccountController {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->handlePostRequest();
         } else {
-            $this->showDeleteAccountForm();
+            $this->showChangeEmailForm();
         }
     }
 
@@ -34,9 +34,8 @@ class AccountController {
         #echo "On est dans handlePostRequest";
         $accountModel = new AccountModel();
 
-        $email = $_POST['emailToConfirm']??$_POST['email'];
+        $email = $_POST['emailToConfirm']??$_POST['email']??false;
         $password = $_POST['password']??false;
-        #echo "<hr>".$_POST['request'];
         $newEmail = $_POST['newEmail'];
         $newEmail2 = $_POST['newEmail2'];
 
@@ -59,7 +58,7 @@ class AccountController {
                 $this->showError("Erreur lors de la suppression du compte.");
             }
         }elseif ($_POST['request'] == 'changeEmail') { //to change email
-            if($newEmail == $newEmail2 && !empty($newEmail) && !empty($newEmail2)){
+            if(!empty($newEmail) && !empty($newEmail2) && $newEmail == $newEmail2){
                 if ($accountModel->changeEmail($newEmail)) {
                     echo "L'email a bien été modifié";
                     header('Location:../../logout.php');
@@ -78,6 +77,9 @@ class AccountController {
     }
     private function showDeleteAccountForm() {
         require_once dirname(dirname(__FILE__)).'/vue/formDelete.php';
+    }
+    private function showChangeEmailForm() {
+        require_once dirname(dirname(__FILE__)).'/vue/changeUserEmail.php';
     }
     private function showError($error) {
         echo $error;

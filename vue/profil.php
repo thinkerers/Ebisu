@@ -1,10 +1,12 @@
 <?php 
-session_start();
+require_once '../controller/accountController.php';
+
 $title = 'Modifier mon compte';
+
 ob_start(); 
+$controller = new AccountController();
 ?>
 <style>
-  /* @import url(form.css); */
   @import url(style.css);
 </style>
 <fieldset>
@@ -14,7 +16,8 @@ ob_start();
   </label>
   <br>
   <label>
-    <a href="formDelete.php">Supprimer mon compte</a>
+    <!-- <a href="formDelete.php">Supprimer mon compte</a> -->
+     <?php $controller->deleteAccount(); ?>
   </label>
 </fieldset>
 <?php
