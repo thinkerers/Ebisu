@@ -14,7 +14,7 @@ ob_start();
   </label>
   <br>
   <label>
-    <a href="changeUserPassword.php">Changer le mot de passe</a>
+    <a href="requestToChangeUserPassword.php">Changer le mot de passe</a>
   </label>
 </fieldset>
 <?php

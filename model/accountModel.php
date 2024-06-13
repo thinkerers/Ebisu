@@ -54,6 +54,30 @@ class AccountModel {
             return false; 
         }
     }
+    public function changePassword($newPassword) {
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        try{
+        $statement = $this->db->prepare('UPDATE users SET hashedPassword = :hashedPassword WHERE email = :email');
+        $statement->bindParam(':hashedPassword', $hashedPassword);
+        $statement->bindParam(':email', $_SESSION['user']);
+        $statement->execute();
+            return true;   
+        }catch (Exception $e) {
+            $errorMsg = "Aucun compte n'a été trouvé";
+            return false; 
+        }
+    }
+    public function checkEmail($email){
+        try{
+        $statement = $this->db->prepare('SELECT email FROM users WHERE email = :email');
+        $statement->bindParam(':email', $email);
+        $statement->execute();
+            return true;   
+        }catch (Exception $e) {
+            $errorMsg = "Aucun compte n'a été trouvé";
+            return false; 
+        }
+    }
     public function authenticateUser($email, $password) {
         try {
             // Prepare the SQL statement
