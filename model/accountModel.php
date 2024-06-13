@@ -48,7 +48,7 @@ class AccountModel {
         $statement->bindParam(':email', $newEmail);
         $statement->bindParam(':oldEmail', $_SESSION['user']);
         $statement->execute();
-            return true;   
+            return true;  
         }catch (Exception $e) {
             $errorMsg = "Aucun compte n'a été trouvé";
             return false; 
@@ -71,8 +71,15 @@ class AccountModel {
         try{
         $statement = $this->db->prepare('SELECT email FROM users WHERE email = :email');
         $statement->bindParam(':email', $email);
-        $statement->execute();
-            return true;   
+        $result = $statement->execute();
+        $row = $result->fetchArray(SQLITE3_ASSOC);
+
+        // Vérification si une ligne a été retournée
+        if ($row) {
+            return true; // Email trouvé
+        } else {
+            return false; // Email non trouvé
+        }
         }catch (Exception $e) {
             $errorMsg = "Aucun compte n'a été trouvé";
             return false; 
