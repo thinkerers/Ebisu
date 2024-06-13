@@ -76,9 +76,9 @@ class AccountModel {
 
         // Vérification si une ligne a été retournée
         if ($row) {
-            return true; // Email trouvé
+            return true; // Email trouvé donc messages d'erreur
         } else {
-            return false; // Email non trouvé
+            return false; // Email non trouvé ducoup suite du code
         }
         }catch (Exception $e) {
             $errorMsg = "Aucun compte n'a été trouvé";
