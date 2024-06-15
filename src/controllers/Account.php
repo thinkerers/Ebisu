@@ -83,7 +83,7 @@ class Account
 
         if (gettype((new \src\model\Account())->getUserHash($_POST['newEmail'])) === 'string'){
             //mail already exist
-            throw new \Exception("Email already exists.");
+            throw new \Exception("Cet email est déjà utilisé.");
         }
         
         if (isset($_POST['newEmail'])  === isset($_POST['newEmail2'])) {
