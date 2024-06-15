@@ -9,7 +9,7 @@ try {
         'createAccount' => $account->create(),
         'deleteAccount' => $account->delete(),
         'editAccount'   => $account->editAccount(),
-        'editEmail'      => $account->editEmail(),
+        'editEmail'     => $account->editEmail(),
         'editPassword'  => $account->editPassword(),
         default         => throw new Exception("Action inconnue."),
     };

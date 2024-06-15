@@ -5,7 +5,6 @@ ob_start();
 
 <section>
 <h1>Bienvenue sur Ebisu !</h1>
-<a href="?action=deleteAccount">Supprimer mon compte</a>
 </section>
 
 <?php

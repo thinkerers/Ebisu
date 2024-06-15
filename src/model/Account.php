@@ -79,6 +79,20 @@ class Account
                 throw new \Exception("Le mail n'a pas pu être modifié.");
             }
     }
+    
+    public function editPassword($password) {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        try{
+        $statement = $this->db->prepare('UPDATE users SET hashedPassword = :hashedPassword WHERE email = :email');
+        $statement->bindParam(':hashedPassword', $hashedPassword);
+        $statement->bindParam(':email', $_SESSION['user']);
+        $statement->execute();
+            return true;   
+        }catch (Exception $e) {
+            $errorMsg = "Aucun compte n'a été trouvé";
+            return false; 
+        }
+    }
 
     /**
      * Logs out the current user.

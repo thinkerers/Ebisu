@@ -101,6 +101,33 @@ class Account
        
     }
 
+    public function editPassword()
+    {
+        if (!isset($_SESSION['user'])) {
+            throw new \Exception("Vous n'êtes pas connecté.");
+        }
+        if (!isset($_POST['email'])) { // had to do the send request mail feater
+            require_once('templates/account-request-password-edit.php');
+            throw new \Exception("Vous devez consuter vos mails.");
+        }
+        if(!isset($_POST['newPassword']) || !isset($_POST['newPassword2'])){
+            require_once('templates/account-edit-password.php');
+            throw new \Exception("Vous devez fournir un mot de passe.");
+        }
+        if(isset($_POST['newPassword']) && isset($_POST['newPassword2'])){
+            if ($_POST['newPassword'] === $_POST['newPassword2']) {
+                if((new \src\model\Account())->editPassword($_POST['newPassword'])){
+                    //redirect to home page
+                    header('Location: /');
+                }
+            }else{
+                throw new \Exception("Les mots de passe ne correspondent pas.");
+            }
+        }else{
+            require_once('templates/account-edit-password.php');
+        }
+    }
+
     /**
      * Logs the user in if valid credentials are provided.
      *
