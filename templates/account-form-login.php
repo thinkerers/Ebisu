@@ -1,11 +1,9 @@
 <?php 
 $title = 'Login';
-ob_start(); 
+$style ='@import url(public/css/form.css);';
+ob_start();
 ?>
-<style>
-  @import url(./vue/form.css);
-</style>
-<form method="post" action="authenticate.php">
+<form method="post">
   <fieldset>
     <legend>Login</legend>
     <label>
@@ -16,11 +14,10 @@ ob_start();
       Mot de passe
       <input name="password" type="password">
     </label>
-    <input type="submit" value="Login"/>
+    <input type="submit" name="action" value="login" />
   </fieldset>
 </form>
-
 <?php
 $content = ob_get_clean();
-require('vue/layout.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/templates/layout.php');
 ?>

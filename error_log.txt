@@ -1,0 +1,1 @@
+[2024-06-03 17:59:20] EbisuDB Error: Unable to open database: unable to open database file

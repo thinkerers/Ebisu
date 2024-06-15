@@ -1,13 +1,11 @@
 <?php 
 $title = 'Créer un compte';
+$style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
-<style>
-  @import url(./vue/form.css);
-</style>
 <form method="post">
   <fieldset>
-    <legend>Créez un compte (ou <a href="/login.php">connectez vous</a>)</legend>
+    <legend>Créez un compte (ou <a href="/?action=login">connectez vous</a>)</legend>
     <label>
       Email
       <small id="emailHint">Veuillez entrer un email valide</small>
@@ -18,10 +16,10 @@ ob_start();
       <small id="emailHint">(optionnel) Le mot de passe doit être de minimum 6 caractères et contenir au moins une majuscule, une minuscule, un nombre et un caractère spécial.</small>
       <input name="password" type="password" minlength="6" maxlength="50" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}" aria-describedby="passwordHint">
     </label>
-    <input name="request" type="submit" value="create" />
+    <input name="action" type="submit" value="createAccount" />
   </fieldset>
 </form>
-<?php 
+<?php
 $content = ob_get_clean();
-require(dirname(dirname(__FILE__)).'/vue/layout.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/templates/layout.php');
 ?>
