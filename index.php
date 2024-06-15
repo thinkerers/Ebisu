@@ -11,6 +11,7 @@ try {
         'editAccount'   => $account->editAccount(),
         'editEmail'     => $account->editEmail(),
         'editPassword'  => $account->editPassword(),
+        'startPomodoro' => $page->pomodoroTimer(), 
         default         => throw new Exception("Action inconnue."),
     };
 

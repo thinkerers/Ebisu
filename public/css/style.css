@@ -57,3 +57,37 @@ gap: 1rem;
 .material-symbols-outlined :not([title]){
     font-family: var(--font);
 }
+
+@keyframes timer {
+    from {
+        transform: rotate(0turn) translateY(250px);
+    }
+    to {
+        transform: rotate(1turn) translateY(250px);
+    }
+  }
+  
+  .pomodoro{
+    border:solid 5px rgb(103, 26, 26);
+    height:500px;
+    aspect-ratio:1;
+    border-radius:100%;
+    position:relative;
+    --duration: calc(
+   (var(--minutes,0)*60*1s) 
+  + (var(--heures,0)*60*60*1s)
+  );
+    &:before{
+      animation: timer var(--duration) linear;
+      content:"";
+
+      display:block;
+      background-color:rgb(0, 0, 0);
+      width:1rem;
+      aspect-ratio:1;
+      border-radius:100%;
+      position:absolute;
+      inset:50%;
+      transform-origin:center;
+    }
+  }
