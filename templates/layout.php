@@ -14,7 +14,7 @@
     <?php if (isset($_SESSION['user'])) { ?>
         <header>
             <nav>
-                <span><?= htmlspecialchars($_SESSION['user']); ?></span>
+                <a  href="index.php?action=editAccount"><?= htmlspecialchars($_SESSION['user']); ?></a>
                 <a href="index.php?action=logout" title="Déconnexion" class="material-symbols-outlined">logout</a>
             </nav>
 

@@ -64,6 +64,43 @@ class Account
         }
     }
 
+    public function editAccount()
+    {
+        require_once('templates/account-profile.php');
+    }
+
+    public function editEmail()
+    {
+         // Check if the user is logged in
+         if (!isset($_SESSION['user'])) {
+            throw new \Exception("Vous n'êtes pas connecté.");
+        }
+         // If the new email is not submitted yet, show the form
+         if (!isset($_POST['newEmail']) || !isset($_POST['newEmail2'])) {
+            require_once('templates/account-form-edit-email.php');
+            throw new \Exception("Vous devez fournir un email.");
+        }
+
+        if (gettype((new \src\model\Account())->getUserHash($_POST['newEmail'])) === 'string'){
+            //mail already exist
+            throw new \Exception("Email already exists.");
+        }
+        
+        if (isset($_POST['newEmail'])  === isset($_POST['newEmail2'])) {
+            if((new \src\model\Account())->editEmail($_POST['newEmail'])){
+                //update session
+                $_SESSION['user'] = $_POST['newEmail'];
+                 //redirect to home page
+                 header('Location: /');
+            }
+               
+            else {
+                throw new \Exception("Le mail de confirmation ne correspond pas.");
+            }
+        }
+       
+    }
+
     /**
      * Logs the user in if valid credentials are provided.
      *

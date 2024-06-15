@@ -67,6 +67,19 @@ class Account
         }
     }
 
+    public function editEmail($email)
+    {        
+        try{
+            $statement = $this->db->prepare('UPDATE users SET email = :email WHERE email = :oldEmail');
+            $statement->bindParam(':email', $email);
+            $statement->bindParam(':oldEmail', $_SESSION['user']);
+            $statement->execute();
+                return true;  
+            }catch (Exception $e) {
+                throw new \Exception("Le mail n'a pas pu être modifié.");
+            }
+    }
+
     /**
      * Logs out the current user.
      *
