@@ -1,59 +1,79 @@
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 
-:root{
-    --primary: #f00;
-    --secondary: #0f0;
-    --tertiary: #00f;
-    --quaternary: #ff0;
-    --quinary: #0ff;
-    --senary: #f0f;
-    --septenary: #fff;
-    --octonary: #000;
-    --nonary: #888;
-    --denary: #444;
+:root {
+  --primary: #f00;
+  --secondary: #0f0;
+  --tertiary: #00f;
+  --quaternary: #ff0;
+  --quinary: #0ff;
+  --senary: #f0f;
+  --septenary: #fff;
+  --octonary: #000;
+  --nonary: #888;
+  --denary: #444;
 
-    --font: system-ui;
-}
-body{
-    font-family: var(--font);
-margin: 0;
-min-height: 100vh;
-width: 100vw;
-display: grid;
-place-items: center;
-grid-template: 
-"header" max-content
-"content" 1fr
-"footer" auto;
+  --font: system-ui;
 }
 
-header{
-grid-area: header;
-width: 100%;
-nav{
-display: flex;
-justify-content: space-between;
-align-items: center;
-:any-link{
-    text-decoration: none;
-    color:currentColor;
-}
->*{
-    padding: 1rem;
-}
-}
-}
-main{
-grid-area: content;
+/* Initialiser les règles */
+*{
+    margin: 0;
+    padding: 0;
 }
 
-footer.material-symbols-outlined{
-grid-area: footer;
-display: flex;
-place-items: center;
-gap: 1rem;
+/* style par section */
+body {
+  font-family: var(--font);
+  margin: 0;
+  min-height: 100vh;
+  width: 100vw;
+  display: grid;
+  place-items: center;
+  grid-template:
+    "header" max-content
+    "content" 1fr
+    "footer" auto;
 }
 
-.material-symbols-outlined :not([title]){
-    font-family: var(--font);
+header {
+  grid-area: header;
+  width: 100%;
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    :any-link {
+      text-decoration: none;
+      color: currentColor;
+    }
+    > * {
+      padding: 1rem;
+    }
+  }
+}
+body {
+  grid-area: content;
+  background-image: url("../img/prtScLandscape.jpg");
+}
+
+footer.material-symbols-outlined {
+  grid-area: footer;
+  display: flex;
+  place-items: center;
+  gap: 1rem;
+  width: 80vw;
+}
+
+.material-symbols-outlined :not([title]) {
+  font-family: var(--font);
+}
+
+form, 
+footer{
+    border: 7px solid #A35647;
+    background: #FEDAC1;
+    box-shadow: 4px 4px 79.1px 23px #E2A475 inset;
+
+    display: flex;
+    justify-content: center;
 }
