@@ -23,16 +23,20 @@
 
 /* style par section */
 body {
+  background-image: url("../img/prtScLandscape.jpg");
   font-family: var(--font);
   margin: 0;
   min-height: 100vh;
-  width: 100vw;
+  min-width: 100vw;
   display: grid;
   place-items: center;
   grid-template:
     "header" max-content
     "content" 1fr
     "footer" auto;
+  grid-area: content;
+  
+  background-repeat: no-repeat;
 }
 
 header {
@@ -51,10 +55,7 @@ header {
     }
   }
 }
-body {
-  grid-area: content;
-  background-image: url("../img/prtScLandscape.jpg");
-}
+
 
 footer.material-symbols-outlined {
   grid-area: footer;
@@ -62,18 +63,15 @@ footer.material-symbols-outlined {
   place-items: center;
   gap: 1rem;
   width: 80vw;
+  padding: 5px;
+
+  border: 7px solid #A35647;
+  background: #FEDAC1;
+  box-shadow: 4px 4px 79.1px 23px #E2A475 inset;  
+  display: flex;
+  justify-content: center;
 }
 
 .material-symbols-outlined :not([title]) {
   font-family: var(--font);
-}
-
-form, 
-footer{
-    border: 7px solid #A35647;
-    background: #FEDAC1;
-    box-shadow: 4px 4px 79.1px 23px #E2A475 inset;
-
-    display: flex;
-    justify-content: center;
 }
