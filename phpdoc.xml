@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>Documentation de mon projet</title>
+    <versions>
+        <version>1.0.0</version>
+    </versions>
+
+    <files>
+        <directory>src</directory>
+        <file>conventions.md</file>
+    </files>
+
+    <parser>
+        <target>build/docs</target>
+    </parser>
+
+    <transformer>
+        <target>build/docs</target>
+        <templates>
+            <template>clean</template>
+        </templates>
+    </transformer>
+</phpdoc>
