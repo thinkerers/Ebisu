@@ -66,7 +66,14 @@ class Account
             }
         }
     }
-
+    
+    /**
+     * Edit the email of the user session with the email in the argument
+     *
+     * @param  string $email
+     * @return void
+     * @throws \Exception If the email cannot be edited.
+     */
     public function editEmail($email)
     {        
         try{
@@ -79,7 +86,14 @@ class Account
                 throw new \Exception("Le mail n'a pas pu être modifié.");
             }
     }
-    
+        
+    /**
+     * Edit the password of the user session with the password in the argument
+     *
+     * @param  mixed $password
+     * @return true|false
+     * @throws \Exception If the password cannot be edited.
+     */
     public function editPassword($password) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         try{
@@ -89,7 +103,7 @@ class Account
         $statement->execute();
             return true;   
         }catch (Exception $e) {
-            $errorMsg = "Aucun compte n'a été trouvé";
+            throw new \Exception("Le mot de passe n'a pas pu être modifié.");
             return false; 
         }
     }

@@ -63,12 +63,26 @@ class Account
             throw new \Exception("Le mail de confirmation ne correspond pas.");
         }
     }
-
+    
+    /**
+     * Displays the account profile page for the currently logged-in user.
+     *
+     * @return void
+     */
     public function editAccount()
     {
         require_once('templates/account-profile.php');
     }
-
+    
+    /**
+     * Edits the email address of the currently logged-in user.
+     *
+     * @return void
+     * @throws \Exception If the user is not logged in, the new email is invalid, or the email is already in use.
+     * @throws \Exception If the new email is not submitted yet, shows the form.
+     * @throws \Exception If the new email is already in use, shows the form.
+     * @throws \Exception If the email confirmation fails, shows the form.
+     */
     public function editEmail()
     {
          // Check if the user is logged in
@@ -100,13 +114,22 @@ class Account
         }
        
     }
-
+    
+    /**
+     * Edits the password of the currently logged-in user.
+     *
+     * @return void
+     * @throws \Exception If the user is not logged in, the new password is invalid, or the new passwords do not match.
+     * @throws \Exception 
+     * @throws \Exception If the new password is not submitted yet, shows the form.
+     * @throws \Exception If the new passwords do not match, shows the form.
+     */
     public function editPassword()
     {
         if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
-        if (!isset($_POST['email'])) { // had to do the send request mail feater
+        if (!isset($_POST['email'])) {                                      // had to do the send request mail featur
             require_once('templates/account-request-password-edit.php');
             throw new \Exception("Vous devez consuter vos mails.");
         }
