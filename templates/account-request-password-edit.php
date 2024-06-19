@@ -12,7 +12,7 @@ ob_start();
       Entrez votre adresse email
       <input name="email" type="email" required>
     </label>
-    <input name="request" type="submit" value="editPassword" />
+    <input name="request" type="submit" value="sendEmail" />
   </fieldset>
 </form>
 <?php 

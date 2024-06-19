@@ -10,6 +10,8 @@ try {
         'deleteAccount' => $account->delete(),
         'editAccount'   => $account->editAccount(),
         'editEmail'     => $account->editEmail(),
+        'goToSendEmail' => $account->goToSendEmail(),
+        'sendEmail'     => $account->sendEmail(),
         'editPassword'  => $account->editPassword(),
         'startPomodoro' => $page->pomodoroTimer(), 
         default         => throw new Exception("Action inconnue."),

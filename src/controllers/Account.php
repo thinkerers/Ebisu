@@ -2,6 +2,10 @@
 
 namespace src\controllers;
 
+    use PHPMailer\PHPMailer\Exception;
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+
 /**
  * Class Account
  *
@@ -101,6 +105,52 @@ class Account
        
     }
 
+    public function goToSendEmail()
+    {
+        require_once('templates/account-request-password-edit.php');
+    }
+
+    public function sendEmail()
+    {
+
+       require_once('includes/PHPMailer/Exeption.php'); 
+       require_once('includes/PHPMailer/PHPMailer.php'); 
+       require_once('includes/PHPMailer/SMTP.php');
+
+       if($_POST['email'] === $_SESSION['user']){
+
+            $mail = new PHPMailer(true);
+
+            try{
+             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            
+             $mail->isSMTP();
+             $mail->Host = 'smtp.gmail.com'; // Hôte SMTP de Gmail
+             $mail->SMTPAuth = true; // Activer l'authentification SMTP
+             $mail->Username = 'luanosamsung@gmail.com'; // Adresse e-mail Gmail
+             $mail->Password = 'Luan0200o'; // Mot de passe de votre compte Gmail
+             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Activer le chiffrement TLS
+             $mail->Port = 587; // Port SMTP de Gmail
+            
+             $mail->charSet = 'UTF-8';
+            
+             $mail->addAddress($_POST['email']);
+            
+             $mail->setFrom('no-replay@ebisu.be', 'Ebisu');
+            
+             $mail->Subject = 'Changer votre mot de passe';
+             $mail->Body = 'Cliquez sur le lien pour changer votre mot de passe : <a href="http://ebisu.test/index.php?action=editPassword">Changer votre mot de passe</a>';
+            
+             $mail->send();
+             echo 'Message envoyé';
+            
+            }catch (Exception){
+                throw new Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+            }
+        }else{
+            throw new Exception("L'email ne correspond pas.");
+        }
+    }       
     public function editPassword()
     {
         if (!isset($_SESSION['user'])) {
