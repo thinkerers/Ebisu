@@ -1,10 +1,8 @@
 <?php 
 $title = 'Changer le mot de passe';
-ob_start(); 
+$style ='@import url(public/css/style.css);';
+ob_start();
 ?>
-<style>
-  @import url(style.css);
-</style>
 <form method="post">
   <fieldset>
     <legend>Mettre à jour votre mot de passe</legend>

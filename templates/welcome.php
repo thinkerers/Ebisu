@@ -1,17 +1,21 @@
 <?php
 $title = 'Bienvenue !';
+$style ='@import url(public/css/pomodoro.css);';
 ob_start(); 
 ?>
 <style>
-  @import url(style.css);
-  @import url(pomodoro.css);
+  @import url(public/css/style.css);
+  @import url(public/css/pomodoro.css);
 </style>
 <section>
 <h1>Bienvenue sur Ebisu !</h1>
 
 
-<form name="pomodoro">
-  <time>
+<form name="pomodoro" method="post">
+  <time style="
+  --Hh:<?=$_SESSION['hour']??'0';?>;
+  --Mm:<?=$_SESSION['min']??'0';?>;
+  ">
     <fieldset name="Hh:Mm:Ss">
       <fieldset name="Hh">
         <select name="H">
@@ -84,17 +88,12 @@ ob_start();
     <input type="checkbox" name="play" checked>
   </menu>
 </form>
-
-
-<div class="pomodoro"style="
---minutes:<?=$_SESSION['min']??false;?>;
---heures:<?=$_SESSION['hour']??false;?>;
-">
-<form method="post">
-<input type="time" name="setTime" id="time" value="00:00">
-<input type="submit" name="action" value="startPomodoro"/>
-</form>
-<?= var_dump($_SESSION);?>
+<code>
+  <h2>Debug</h2>
+  <pre>
+  <?= var_dump($_SESSION);?>
+  </pre>
+</code>
 </div>
 </section>
 
