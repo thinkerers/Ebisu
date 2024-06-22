@@ -1,0 +1,88 @@
+:root{
+    font-family:system-ui;
+    display:grid;
+    place-content:center;
+    min-height:100vh;
+  }
+  
+  form {
+          width:50vw;
+          & fieldset {
+              border: unset;
+              display: grid;
+              gap: 30px;
+              height: 100%;
+              grid-template-rows: repeat(3, 18%);
+  
+              & legend {
+                  margin-bottom: 0.5lh;
+                  font-size: 1.5rem;
+              }
+          }
+  
+          & label {
+              display: grid;
+              gap: 0.2lh;
+              grid-column: 1/-1;
+              grid-template-columns: subgrid;
+          }
+  
+          & input,
+          button {
+              padding: 0.5rem;
+              border: 1px solid #ccc;
+              border-radius: 0.5rem;
+          }
+          
+          & [type="submit"]{
+            cursor:pointer;
+            
+          }
+  
+          /* Visual Validation */
+          &:has([required]) {
+              --important-color:red;
+              [role="alert"] {
+                color: var(--important-color);
+              }
+              & label:has(:invalid) {
+                  position: relative;
+                  &:before {
+                      left: -1ch;
+                      position: absolute;
+                      content: "*";
+                      color: var(--important-color);
+                  }
+  
+                  :has([type="submit"]:focus) &:nth-child(1 of :has(:invalid)) {
+                      color: var(--important-color);
+  
+                      @media not (prefers-reduced-motion) {
+                          --amount: 5px;
+                          animation: 0.3s horizontal-shaking 0.2s;
+                      }
+                  }
+              }
+              &:invalid [type="submit"]{
+                  opacity:.33;
+                  cursor: not-allowed;
+              }
+              &:not(:invalid) [type="submit"]:active{
+                  background:lightgrey;
+              }
+          }
+      }
+  
+      /* Animation */
+      @keyframes horizontal-shaking {
+  
+          25%,
+          75% {
+              transform: translateX(var(--amount));
+          }
+  
+          50% {
+              transform: translateX(var(--amount) * -1);
+          }
+      }
+  
