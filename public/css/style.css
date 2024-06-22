@@ -38,7 +38,7 @@ body {
   background-image: url("../img/prtScLandscape.jpg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100%;
+  background-size: cover;
 }
 
 header {
