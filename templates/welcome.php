@@ -2,28 +2,55 @@
 $title = 'Bienvenue !';
 $style = '@import url(public/css/pomodoro.css);';
 
+/**
+ * Start a new Pomodoro session.
+ *
+ * This function initializes a new Pomodoro session by setting the start time and duration in the session variables.
+ *
+ * @param int $duration The duration of the Pomodoro session in seconds.
+ *
+ * @return void
+ */
 function startPomodoro(int $duration): void
 {
     $_SESSION['pomodoro-start'] = time();
     $_SESSION['pomodoro-duration'] = $duration;
 }
 
+/**
+ * Destroy the current Pomodoro session.
+ *
+ * This function unsets the session variables related to the Pomodoro session, effectively resetting the session.
+ *
+ * @return void
+ */
 function destroyPomodoro(): void
 {
     unset($_SESSION['pomodoro-start'], $_SESSION['pomodoro-duration']);
 }
 
+/**
+ * Get the remaining time for the current Pomodoro session.
+ *
+ * This function calculates the remaining time of a Pomodoro session based on the start time and duration stored in the session.
+ * If the session variables are not set, it returns an array indicating zero time left.
+ *
+ * @return array An array containing the hours, minutes, seconds left, total duration, and elapsed time. 
+ *               Format: [hours, minutes, seconds, total duration, elapsed time].
+ */
 function getPomodoroTime(): array
 {
-    $Hh = $Mm = $Ss = 0;
-    if (isset($_SESSION['pomodoro-start']) && isset($_SESSION['pomodoro-duration'])) {
-        $elapsed = time() - $_SESSION['pomodoro-start'];
-        $duration = $_SESSION['pomodoro-duration'];
-        $timeLeft = max(0, $duration - $elapsed);
-        $Hh = floor($timeLeft / 3600);
-        $Mm = floor(($timeLeft % 3600) / 60);
-        $Ss = $timeLeft % 60;
+    if(!isset($_SESSION['pomodoro-start']) || !isset($_SESSION['pomodoro-duration'])) {
+      return [0, 0, 0, 0, 0];
     }
+
+    $elapsed = time() - $_SESSION['pomodoro-start'];
+    $duration = $_SESSION['pomodoro-duration'];
+    $timeLeft = max(0, $duration - $elapsed);
+    $Hh = floor($timeLeft / 3600);
+    $Mm = floor(($timeLeft % 3600) / 60);
+    $Ss = $timeLeft % 60;
+
     return [$Hh, $Mm, $Ss, $duration, $elapsed];
 }
 
@@ -39,13 +66,20 @@ if (isset($_SESSION['pomodoro-start']) && isset($_SESSION['pomodoro-duration']))
     }
 }
 
+/**
+ * Splits a given integer into its digits.
+ * For single-digit numbers, a leading zero is added.
+ *
+ * @param int $number The integer to split.
+ * @return array An array containing the digits of the number.
+ */
 function splitDigits(int $number): array
 {
     $digits = array_map('intval', str_split("$number"));
     return count($digits) === 1 ? [0, $digits[0]] : $digits;
 }
 
-// Get pomodoro time
+// Get pomodoro time values
 [$Hh, $Mm, $Ss, $duration, $elapsed] = getPomodoroTime();
 [$H, $h] = splitDigits($Hh);
 [$M, $m] = splitDigits($Mm);
