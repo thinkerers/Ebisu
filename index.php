@@ -9,9 +9,9 @@ try {
         'createAccount' => $account->create(),
         'deleteAccount' => $account->delete(),
         'editAccount'   => $account->editAccount(),
-        'editEmail'     => $account->editEmail(),
-        'goToSendEmail' => $account->goToSendEmail(),
-        'sendEmail'     => $account->sendEmail(),
+        'editEmail'     => $account->editEmail(),       //Go to the profil page
+        'goToSendEmail' => $account->goToSendEmail(),   //Go to the page to send a request by email to change password
+        'sendEmail'     => $account->sendEmail(),       //Send the request by email to change password
         'editPassword'  => $account->editPassword(),
         'startPomodoro' => $page->pomodoroTimer(), 
         default         => throw new Exception("Action inconnue."),

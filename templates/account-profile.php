@@ -15,6 +15,10 @@ ob_start();
   <label>
     <a href="?action=goToSendEmail">Changer le mot de passe</a>
   </label>
+  <br>
+  <label>
+    <a href="?action=deleteAccount">Supprimer le compte</a>
+  </label>
 </fieldset>
 <?php
 $content = ob_get_clean();

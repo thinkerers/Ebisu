@@ -84,25 +84,22 @@ class Account
             require_once('templates/account-form-edit-email.php');
             throw new \Exception("Vous devez fournir un email.");
         }
-
+        // If the mail already exists, send an error message
         if (gettype((new \src\model\Account())->getUserHash($_POST['newEmail'])) === 'string'){
             //mail already exist
             throw new \Exception("Cet email est déjà utilisé.");
         }
         
-        if (isset($_POST['newEmail'])  === isset($_POST['newEmail2'])) {
+        if (isset($_POST['newEmail'])  == isset($_POST['newEmail2'])) {
             if((new \src\model\Account())->editEmail($_POST['newEmail'])){
                 //update session
                 $_SESSION['user'] = $_POST['newEmail'];
                  //redirect to home page
                  header('Location: /');
             }
-               
-            else {
-                throw new \Exception("Le mail de confirmation ne correspond pas.");
-            }
-        }
-       
+        }else {
+            throw new \Exception("Le mail de confirmation ne correspond pas.");
+        } 
     }
 
     public function goToSendEmail()
@@ -112,29 +109,44 @@ class Account
 
     public function sendEmail()
     {
-
+        echo 'je suis dans sendEmail';
        require_once('includes/PHPMailer/Exeption.php'); 
        require_once('includes/PHPMailer/PHPMailer.php'); 
        require_once('includes/PHPMailer/SMTP.php');
+        
 
-       if($_POST['email'] === $_SESSION['user']){
+        // Check if the user is logged in
+        if (!isset($_SESSION['user'])) {
+            throw new \Exception("Vous n'êtes pas connecté.");
+        }
+        if(!isset($_POST['emailForPassword'])){
+            require_once('templates/account-request-password-edit.php');
+        }
+        //Check if the email is set and the same as the session
+        if($_POST['emailForPassword'] === $_SESSION['user']){
 
             $mail = new PHPMailer(true);
 
             try{
              $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-            
+             // Test avec Gmail
+             //  $mail->isSMTP();
+             //  $mail->Host = 'smtp.gmail.com'; // Hôte SMTP de Gmail
+             //  $mail->SMTPAuth = true; // Activer l'authentification SMTP
+             //  $mail->Username = 'luanosamsung@gmail.com'; // Adresse e-mail Gmail
+             //  $mail->Password = 'Luan0200o'; // Mot de passe de votre compte Gmail
+             //  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Activer le chiffrement TLS
+             //  $mail->Port = 587; // Port SMTP de Gmail
+ 
+             // Test avec MailHog    
+             $mail->SMTPDebug = PHPMailer::DEBUG_SERVER;
              $mail->isSMTP();
-             $mail->Host = 'smtp.gmail.com'; // Hôte SMTP de Gmail
-             $mail->SMTPAuth = true; // Activer l'authentification SMTP
-             $mail->Username = 'luanosamsung@gmail.com'; // Adresse e-mail Gmail
-             $mail->Password = 'Luan0200o'; // Mot de passe de votre compte Gmail
-             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Activer le chiffrement TLS
-             $mail->Port = 587; // Port SMTP de Gmail
-            
+             $mail->Host = 'localhost';
+             $mail->Port = 1025; // Port par défaut de MailHog
+ 
              $mail->charSet = 'UTF-8';
             
-             $mail->addAddress($_POST['email']);
+             $mail->addAddress($_POST['emailForPassword']);
             
              $mail->setFrom('no-replay@ebisu.be', 'Ebisu');
             

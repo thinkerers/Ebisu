@@ -2,17 +2,14 @@
 $title = 'Changer le mot de passe';
 ob_start(); 
 ?>
-<style>
-  @import url(style.css);
-</style>
 <form method="post">
   <fieldset>
   <legend>Changer de mot de passe</legend>
     <label>
       Entrez votre adresse email
-      <input name="email" type="email" required>
+      <input type="email" name="emailForPassword" required>
     </label>
-    <input name="request" type="submit" value="sendEmail" />
+    <input type="submit" name="action" value="sendEmail"/>
   </fieldset>
 </form>
 <?php 
