@@ -1,152 +1,142 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-@layer pomodoro{
+
 [name="pomodoro"] {
-  /*Customisations*/
-  --_dot-size:1rem;
-  --_dot-color:red;
-  --_border-color:var(--_dot-color);
-  --_font-size:22pt;
-  --_font-family:Bebas Neue;
+    /*Customisations*/
+    --dot-size:1rem;
+    --speed:1s;
+    --border-width:calc(var(--dot-size)/4);
   
-  /* For debugging purpose: set the speed factor of the animation (default to 1s = 1s) */
-  --s:calc(1s/pow(6,var(--speed,0)));
-  [name="speed"],[type="reset"]{display:none;}
-  &:has([name="speed"] [value="10"]:checked){--speed:1;}
-  &:has([name="speed"] [value="100"]:checked){--speed:2;}
-  &:has([name="speed"] [value="1000"]:checked){--speed:3;}
-
-  /* Handle the state of the animation */
-  &:has([name="play"]:not(:checked)){
-    --animation-play-state:paused;
-    --animation-name:none;
-
-    time{
-      [name="Hh:Mm:Ss"]{display:static;}
-      output{display: none;}
-    }
-  }
-
-  /* Styling */
-  &, & *,& *:before,& *:after{
-    color:var(--_dot-color);
-    font-family:var(--_font-family,inherit);
-    font-size:var(--_font-size);
-  }
-
-  & {
-    display:grid;
+    box-sizing:border-box;
+    color:red;
+    font-family:Bebas Neue;
+    font-size:22pt;
+    border:solid var(--border-width) currentcolor;
+    block-size:clamp(8ch,50vw,500px);
+    max-block-size:500px;
     container-type: size;
-    width:300px;
     aspect-ratio:1;
-    grid-template-rows: 1fr min-content;
-    align-items:center;
-    align-content:end;
-    border-radius:100%;
-    border:solid var(--_border-color) 4px;
-    position:relative;
-  }
-
-  /* Styling the dot */
-  &:before{
-    position:absolute;
-    inset:0;
-    width:var(--_dot-size);
-    aspect-ratio:1;
-    margin:auto;
-    content:"";
-    background-color:var(--_dot-color);
-    transform-origin:center;
-    border-radius:100%;
-    transform: rotate(calc(var(--turn) + .5turn)) translateY(50cqh);
-    animation-composition: replace;  
-    animation-timing-function: linear;
-    animation-name:var(--animation-name,progress);
-    animation-duration:calc(var(--_duration)*var(--s));
-    animation-play-state:var(--animation-play-state);
-  }
-  
-  &:after{
-    border-radius:inherit;
-    pointer-events:none;
-    z-index:-10;
-    content:"";
-    display:block;
-    position:absolute;
-    inset:0;
-    animation-timing-function: linear;
-    animation-name:var(--animation-name,progress);
-    animation-duration:calc(var(--_duration)*var(--s));
-    animation-play-state:var(--animation-play-state);
-    background: conic-gradient(color-mix(in lch, var(--_dot-color) 10%, transparent) var(--percent), white 0%);
-  }
-
-  menu{
-    display:flex;
-    place-items:center;
-    justify-content:center;
-    margin:0;
-    padding:0;
-
-    [name="play"],[type="reset"]{
-      appearance:none;
-      font-size:var(--_font-size);
-      background:none;
-      border:0;
-      cursor:pointer;
+    display:grid;
+    border-radius:50%;
+    place-content:center;
+    place-items: center;
+    grid-template-areas:"stack";
+    
+    /*Stack everything on the center*/
+    &::before,&::after,& *{
+      grid-area:stack;
     }
   
-    [name="play"]{
-      width:100%;
-      aspect-ratio: 1;
-      position:absolute;
-      inset:0;
-      z-index:-1;
+    /*Progress animation*/
+    --_cycle:100%;
+    animation-name:var(--animation-name,progress);
+    animation-timing-function:linear;
+    animation-duration:calc(var(--_duration)*var(--speed));
+    background: conic-gradient(color-mix(in lch, currentcolor 10%, transparent) var(--percent), white 0%);
+  
+    /*Count down*/
+    &::before {
+      /* for debug purpose */
+      --_cycle:86400;/* 24*60*60 --> this timer run for one day max (animation-iteration-count = 1)*/
+      animation-name:var(--animation-name,timer);
+      animation-play-state:var(--animation-play-state,running);
+      animation-duration:calc(var(--_cycle)*var(--speed));
+/*       animation-direction:reverse; */
+      animation-timing-function:steps(var(--_cycle),end);
+      animation-delay:calc(
+          (
+            (23 - var(--_Hh))*3600
+          + (59 - var(--_Mm))*60
+          + (60 - var(--_Ss)) /*account for 0*/
+          )
+          * var(--speed)*-1
+        );
+      counter-reset: 
+        h round(down,var(--integer)/3600)
+        m round(down,mod(var(--integer),3600)/60)
+        s mod(var(--integer),60);
+      content:var(--content,);
     }
-  }
-
-  time{
-    text-align:center;
-
+  
+    /*Dot animation*/
+    &::after {
+      --_cycle:1turn;
+      width:var(--dot-size);
+      aspect-ratio:1;
+      margin:auto;
+      content:"";
+      background-color:currentColor;
+      transform-origin:center;
+      border-radius:100%;
+      animation-timing-function: linear;
+      animation-name:var(--animation-name,revolve);
+      animation-duration:calc(var(--_duration)*var(--speed));
+      animation-play-state:var(--animation-play-state,running);
+      transform: rotate(calc(var(--turn) + .5turn)) translateY(50cqh);
+    }
+  
+    /* Handle the state of the animation */
+    &:has([name="play"]:checked){
+      --content: 
+            counter(h, decimal-leading-zero)
+        ":" counter(m, decimal-leading-zero)
+        ":" counter(s, decimal-leading-zero);
+      [name="Hh:Mm:Ss"]{display:none;}
+    }
+    &:has([name="play"]:not(:checked)){
+      --animation-play-state:paused;
+      --animation-name:none;
+    }
+    
     [name="Hh:Mm:Ss"] {
-      padding:0;
-      display:flex;
-      justify-content:center;
-
-      &,fieldset{
-        margin:0;
         padding:0;
-        border:unset;
-        display: flex;
-        select{
-          appearance:none;
-          background:unset;
-          opacity:.33;
-          border:unset;
-          width:max-content;
-          height:100%;
+        display:flex;
+        justify-content:center;
+
+        &,fieldset{
+          margin:0;
           padding:0;
-          width:max-content;
-          height:min-content;
-          text-align:center;
-        }
-        &:nth-of-type(2){
-          &:before,&:after{
-            content:":";
+          border:unset;
+          display: flex;
+          select{
+            font: inherit;
+            appearance:none;
+            background:unset;
+            opacity:.33;
+            border:unset;
+            width:max-content;
+            height:100%;
+            padding:0;
+            width:max-content;
+            height:min-content;
+            text-align:center;
+          }
+          &:nth-of-type(2){
+            &:before,&:after{
+              content:":";
+            }
           }
         }
       }
+  
+    [name="play"]{
+      margin:0;
+      border:0;
+      appearance:none;
+      width:calc(100cqw + 2*var(--border-width));
+      aspect-ratio:1;
+      border-radius:inherit;
+      cursor:pointer;
+      z-index:-1;
     }
-  }
-
-   /* Calculations */
+  
     /* Input the time with inline css variables*/
     --_Hh:var(--Hh);
     --_Mm:var(--Mm);
     --_Ss:var(--Ss);
-    
+  
     /* Input the time with html select*/
-    &:has(time select:user-valid){
+    &:has([name="Hh:Mm:Ss"] select:user-valid){
     --_Hh:calc(var(--_H,0)*10 + var(--_h,0));
     --_Mm:calc(var(--_M,0)*10 + var(--_m,0));
     --_Ss:calc(var(--_S,0)*10 + var(--_s,0));
@@ -217,124 +207,36 @@
       &:has([name="s"] [value="8"]:checked){--_s:8;}
       &:has([name="s"] [value="9"]:checked){--_s:9;}
     }
-
-    /* --_duration:calc(
+  
+    /* Calcul of the duration */
+     --_duration:calc(
       (var(--_Hh,0)*60*60)
     + (var(--_Mm,0)*60)
     + var(--_Ss,0)
-    ); */
-
-    --_duration:var(--duration);
-
+    );
   
-  /* Calcul the delay to apply to start the animation at the correct time */
-    
-    /* Tens numeral are on base 60 */
-  --_delay_S:calc((59 - var(--_Ss))*pow(60,0));
-  --_delay_M:calc((59 - var(--_Mm))*pow(60,1));
-  --_delay_H:calc((59 - var(--_Hh))*pow(60,2));
-  /* Units numerals are on base 10 */
-  --_delay_s:calc((9 - mod(var(--_Ss),10))*pow(60,0));
-  --_delay_m:calc((9 - mod(var(--_Mm),10))*pow(60,1));
-  --_delay_h:calc((9 - mod(var(--_Hh),10))*pow(60,2));
-  
-  &:has([name="play"]:checked){
-    /* Hide the input fields when the animation is running*/
-    time{
-      [name="Hh:Mm:Ss"]{display:none;}
-      output{display: static;}
-    }
-  }
-  
-  /* The time is displayed with three nested output, the latest being used to show the time */
-  output{  
-    animation-play-state:var(--animation-play-state,running);
-    animation-name:var(--animation-name,timer-6),var(--animation-name,timer-10);
-    animation-duration:
-       calc(var(--_cycle)*60*var(--s))
-      ,calc(var(--_cycle)*10*var(--s));
-    animation-timing-function:step-end;
-    animation-iteration-count:
-      round(up,var(--_duration)/(var(--_cycle)*pow(60,2)) + var(--_duration)/(var(--_cycle)*pow(60,1))),
-      round(up,var(--_duration)*6/(var(--_cycle)*pow(60,2)) + (var(--_duration)*6/(var(--_cycle)*pow(60,1))));
-    animation-direction:reverse;
-    animation-fill-mode:forwards;
-    animation-delay:
-    calc(var(--_T,0)*-1*var(--s)),
-    calc(var(--_t,0)*-1*var(--s));
-  }
-
-  .Ss {
-    --_cycle:pow(60,0);
-    --_Ss_str:var(--_str_6,'0') var(--_str_10,'0');
-    --_T:var(--_delay_S);
-    --_t:var(--_delay_s);
-  }
-
-  .Mm {
-    --_cycle:pow(60,1);
-    --_Mm_str:var(--_str_6,'0') var(--_str_10,'0');
-    --_T:calc(var(--_delay_S) + var(--_delay_M));
-    --_t:calc(var(--_delay_S) + var(--_delay_m));
-  }
-
-  .Hh {
-    --_cycle:pow(60,2);
-    --_Hh_str:var(--_str_6,'0') var(--_str_10,'0');
-    --_T:calc(var(--_delay_S) + var(--_delay_M) + var(--_delay_H));
-    --_t:calc(var(--_delay_S) + var(--_delay_M) + var(--_delay_h));
-  }
-  
-  /* Display the time */
-  output :last-child:before{
-    content:var(--_Hh_str)":"var(--_Mm_str)":"var(--_Ss_str);
-  }
 }
 
-/* Timers  */
-/*
-  Better approach, to add in the v5: https://css-tricks.com/animating-number-counters/
-*/
-  
-@keyframes timer-10 {
-  0%{--_int_10:0;--_str_10:"0";}
-  10%{--_int_10:1;--_str_10:"1";}
-  20%{--_int_10:2;--_str_10:"2";}
-  30%{--_int_10:3;--_str_10:"3";}
-  40%{--_int_10:4;--_str_10:"4";}
-  50%{--_int_10:5;--_str_10:"5";}
-  60%{--_int_10:6;--_str_10:"6";}
-  70%{--_int_10:7;--_str_10:"7";}
-  80%{--_int_10:8;--_str_10:"8";}
-  90%{--_int_10:9;--_str_10:"9";}
-  100%{--_int_10:9;--_str_10:"9";}
+@property --integer {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
 }
-@keyframes timer-6 {
-  00.000000000% {--_int_6:0;--_str_6:"0";}
-  16.666666667% {--_int_6:1;--_str_6:"1";}
-  33.333333333% {--_int_6:2;--_str_6:"2";}
-  50.000000000% {--_int_6:3;--_str_6:"3";}
-  66.666666667% {--_int_6:4;--_str_6:"4";}
-  83.333333333% {--_int_6:5;--_str_6:"5";}
-  100.000000000%{--_int_6:5;--_str_6:"5";}
-}
-  
-  @property --percent {
-    syntax: '<percentage>';
-    inherits: false;
-    initial-value: 0%;
-  }
-  
-  @property --turn {
+
+@property --turn {
     syntax: '<angle>';
     inherits: false;
     initial-value: 0turn;
   }
-  
-  @keyframes progress{
-    to{
-      --percent:100%;
-      --turn:1turn;
-    }
+
+@property --percent {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
   }
-}
+
+@keyframes timer{from{--integer: var(--_cycle);}}
+
+@keyframes revolve{to{--turn: var(--_cycle);}}
+
+@keyframes progress{to{--percent: var(--_cycle);}}
