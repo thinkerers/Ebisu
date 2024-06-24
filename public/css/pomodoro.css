@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-
+:root{
+  display:grid;
+  place-content:center;
+  height:100vh;
+}
 [name="pomodoro"] {
     /*Customisations*/
     --dot-size:1rem;
@@ -32,6 +36,7 @@
     animation-name:var(--animation-name,progress);
     animation-timing-function:linear;
     animation-duration:calc(var(--_duration)*var(--speed));
+    animation-delay:calc(var(--_elapsed)*-1s);
     background: conic-gradient(color-mix(in lch, currentcolor 10%, transparent) var(--percent), white 0%);
   
     /*Count down*/
@@ -41,16 +46,8 @@
       animation-name:var(--animation-name,timer);
       animation-play-state:var(--animation-play-state,running);
       animation-duration:calc(var(--_cycle)*var(--speed));
-/*       animation-direction:reverse; */
       animation-timing-function:steps(var(--_cycle),end);
-      animation-delay:calc(
-          (
-            (23 - var(--_Hh))*3600
-          + (59 - var(--_Mm))*60
-          + (60 - var(--_Ss)) /*account for 0*/
-          )
-          * var(--speed)*-1
-        );
+      animation-delay:calc((var(--_cycle) - var(--_duration) + var(--_elapsed)) * -1s);
       counter-reset: 
         h round(down,var(--integer)/3600)
         m round(down,mod(var(--integer),3600)/60)
@@ -61,6 +58,7 @@
     /*Dot animation*/
     &::after {
       --_cycle:1turn;
+      
       width:var(--dot-size);
       aspect-ratio:1;
       margin:auto;
@@ -72,6 +70,7 @@
       animation-name:var(--animation-name,revolve);
       animation-duration:calc(var(--_duration)*var(--speed));
       animation-play-state:var(--animation-play-state,running);
+      animation-delay:calc(var(--_elapsed)*-1s);
       transform: rotate(calc(var(--turn) + .5turn)) translateY(50cqh);
     }
   
@@ -131,16 +130,24 @@
     }
   
     /* Input the time with inline css variables*/
-    --_Hh:var(--Hh);
-    --_Mm:var(--Mm);
-    --_Ss:var(--Ss);
-  
+    --_duration:var(--duration);
+    --_elapsed:var(--elapsed);
+
+ 
     /* Input the time with html select*/
     &:has([name="Hh:Mm:Ss"] select:user-valid){
-    --_Hh:calc(var(--_H,0)*10 + var(--_h,0));
-    --_Mm:calc(var(--_M,0)*10 + var(--_m,0));
-    --_Ss:calc(var(--_S,0)*10 + var(--_s,0));
-      
+      --_Hh:calc(var(--_H,0)*10 + var(--_h,0));
+      --_Mm:calc(var(--_M,0)*10 + var(--_m,0));
+      --_Ss:calc(var(--_S,0)*10 + var(--_s,0));
+
+      /* Calcul of the duration */
+      --_duration:calc(
+        (var(--_Hh,0)*60*60)
+      + (var(--_Mm,0)*60)
+      + var(--_Ss,0)
+      );
+      --_elapsed:0;
+
       &:has([name="H"] [value="0"]:checked){--_H:0;}
       &:has([name="H"] [value="1"]:checked){--_H:1;}
       &:has([name="H"] [value="2"]:checked){--_H:2;}
@@ -206,15 +213,7 @@
       &:has([name="s"] [value="7"]:checked){--_s:7;}
       &:has([name="s"] [value="8"]:checked){--_s:8;}
       &:has([name="s"] [value="9"]:checked){--_s:9;}
-    }
-  
-    /* Calcul of the duration */
-     --_duration:calc(
-      (var(--_Hh,0)*60*60)
-    + (var(--_Mm,0)*60)
-    + var(--_Ss,0)
-    );
-  
+  }
 }
 
 @property --integer {

@@ -8,10 +8,13 @@ if(!isset($_SESSION['pomodoro-start'])){
 }
 
 if (isset($_SESSION['pomodoro-start'])) {
-  $timeLeft = $_SESSION['pomodoro-duration'] - (time() - $_SESSION['pomodoro-start']);
+  $elapsed = time() - $_SESSION['pomodoro-start'];
+  $duration = $_SESSION['pomodoro-duration'];
+  $timeLeft = $duration - $elapsed;
   $Hh = floor($timeLeft / 3600);
   $Mm = floor(($timeLeft % 3600) / 60);
   $Ss = $timeLeft % 60;
+
 
   if ($timeLeft <= 0) {
       unset($_SESSION['pomodoro-start'], $_SESSION['pomodoro-duration']);
@@ -40,21 +43,12 @@ ob_start();
 <section>
 <h1>Bienvenue sur Ebisu !</h1> 
 
-<code>
-  <h2>Debug</h2>
-  <pre>
-  <?= var_dump($_SESSION);?>
-  TIMER: <?= $H?><?= $h?>:<?=$M?><?=$m?>:<?=$S?><?=$s?>
-  </pre>
-</code>
 <form 
   name="pomodoro"
   method="post"
   style="
-  --Hh:<?=$Hh?>;
-  --Mm:<?=$Mm?>;
-  --Ss:<?=$Ss?>;
-  --duration:<?=$duration?>
+  --duration:<?=$duration?>;
+  --elapsed:<?=$elapsed?>
   "
 >
 <fieldset name="Hh:Mm:Ss">
@@ -96,11 +90,6 @@ ob_start();
       </fieldset>
     </fieldset>
   <input type="checkbox" name="play" checked>
-</form>
-
-<!-- refresh page with button without js -->
-<form method="post">
-  <button type="submit" name="refresh">refresh</button>
 </form>
 
 </div>
