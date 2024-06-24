@@ -122,6 +122,7 @@ class Account
     public function sendEmail()
     {
         echo 'je suis dans sendEmail';
+        // A mettre dans le model
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/Exception.php');
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/PHPMailer.php');
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/SMTP.php');
