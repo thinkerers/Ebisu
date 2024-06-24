@@ -11,7 +11,7 @@ try {
         'editAccount'   => $account->editAccount(),
         'editEmail'     => $account->editEmail(),       //Go to the profil page
         'goToSendEmail' => $account->goToSendEmail(),   //Go to the page to send a request by email to change password
-        // 'editPassword'  => $account->editPassword(),
+        'editPassword'  => $account->editPassword(),
         'startPomodoro' => $page->pomodoroTimer(), 
         default         => throw new Exception("Action inconnue."),
     };

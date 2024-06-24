@@ -2,6 +2,10 @@
 
 namespace src\model;
 
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+
 /**
  * Class Account
  *
@@ -91,6 +95,48 @@ class Account
         }catch (Exception $e) {
             $errorMsg = "Aucun compte n'a été trouvé";
             return false; 
+        }
+    }
+    
+    /**
+     * Send an email to the user to change his password
+     * 
+     * @return bool True if the email as been send, false otherwise.
+    */
+    public function sendEmail($subject, $message){
+        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/Exception.php');
+        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/PHPMailer.php');
+        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/SMTP.php');
+
+        $mail = new PHPMailer(true);
+
+        try{
+         //$mail->SMTPDebug = SMTP::DEBUG_SERVER;//Info for debugging
+
+         // Test avec MailHog    
+         //$mail->SMTPDebug = PHPMailer::DEBUG_SERVER;
+         $mail->isSMTP();
+         $mail->Host = 'localhost';
+         $mail->Port = 1025; // Port par défaut de MailHog
+
+         $mail->charSet = 'UTF-8';
+
+         //Destinataire
+         $mail->addAddress($_SESSION['user']);
+        
+         //Expéditeur
+         $mail->setFrom('no-replay@ebisu.be', 'Ebisu');
+
+         $mail->isHTML();
+        
+         $mail->Subject = $subject;
+         $mail->Body = $message;
+        
+         $mail->send();
+         return true;
+        }catch (Exception){
+            throw new Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+            return false;
         }
     }
 

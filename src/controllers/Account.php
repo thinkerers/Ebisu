@@ -2,10 +2,6 @@
 
 namespace src\controllers;
 
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-
 /**
  * Class Account
  *
@@ -72,7 +68,13 @@ class Account
     {
         require_once('templates/account-profile.php');
     }
-
+    
+    /**
+     * Edits the email of the currently logged-in user account.
+     *
+     * @return void
+     * @throws \Exception If the user is not logged in, the new email is not provided, or if the new email is already used,or the new email does not match the confirmation.
+     */
     public function editEmail()
     {
          // Check if the user is logged in
@@ -101,7 +103,13 @@ class Account
             throw new \Exception("Le mail de confirmation ne correspond pas.");
         } 
     }
-
+    
+    /**
+     * Go to the page to send a request by email to change password.
+     *
+     * @return void
+     * @throws \Exception If the user is not logged in, the email is not submitted yet, or the email cannot be sent.
+     */
     public function goToSendEmail()
     {
             // Check if the user is logged in
@@ -118,16 +126,15 @@ class Account
             throw new \Exception("Le mail n'a pas été envoyé."); 
         }
     }
-
+    
+    /**
+     * Sends an email to the user to reset their password.
+     *
+     * @return void
+     * @throws \Exception If the user is not logged in or the email cannot be sent, or if the mail hasn't been sent ,or the email is not the same as the session.
+     */
     public function sendEmail()
     {
-        echo 'je suis dans sendEmail';
-        // A mettre dans le model
-        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/Exception.php');
-        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/PHPMailer.php');
-        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/SMTP.php');
-    
-
         // Check if the user is logged in
         if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
@@ -135,73 +142,56 @@ class Account
         if(!isset($_POST['emailForPassword'])){
             require_once('templates/account-request-password-edit.php');
         }
+        $subjetEmail = 'Changer de mot de passe.';
+        $messageEmail = "Cliquez sur le lien pour changer votre mot de passe : <a href='http://ebisu.test/index.php?action=editPassword'>Changer votre mot de passe</a>";
         //Check if the email is set and the same as the session
         if($_POST['emailForPassword'] === $_SESSION['user']){
-
-            $mail = new PHPMailer(true);
-
-            try{
-             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-             // Test avec Gmail
-             //  $mail->isSMTP();
-             //  $mail->Host = 'smtp.gmail.com'; // Hôte SMTP de Gmail
-             //  $mail->SMTPAuth = true; // Activer l'authentification SMTP
-             //  $mail->Username = 'luanosamsung@gmail.com'; // Adresse e-mail Gmail
-             //  $mail->Password = 'Luan0200o'; // Mot de passe de votre compte Gmail
-             //  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Activer le chiffrement TLS
-             //  $mail->Port = 587; // Port SMTP de Gmail
- 
-             // Test avec MailHog    
-             $mail->SMTPDebug = PHPMailer::DEBUG_SERVER;
-             $mail->isSMTP();
-             $mail->Host = 'localhost';
-             $mail->Port = 1025; // Port par défaut de MailHog
- 
-             $mail->charSet = 'UTF-8';
-            
-             $mail->addAddress($_POST['emailForPassword']);
-            
-             $mail->setFrom('no-replay@ebisu.be', 'Ebisu');
-            
-             $mail->Subject = 'Changer votre mot de passe';
-             $mail->Body = 'Cliquez sur le lien pour changer votre mot de passe : <a href="http://ebisu.test/index.php?action=editPassword">Changer votre mot de passe</a>';
-            
-             $mail->send();
-             echo 'Message envoyé';
-            
-            }catch (Exception){
-                throw new Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+            if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
+                echo "Le mail a été envoyé.";
+            }else{
+                throw new \Exception("Le mail n'a pas été envoyé.");
             }
         }else{
             throw new Exception("L'email ne correspond pas.");
         }
-    }       
+    }   
+        
+    /**
+     * Edits the password of the currently logged-in user account.
+     *
+     * @return void return a mail to confirm the password change.
+     * @throws \Exception If the user is not logged in, the new password is not provided, or the new password does not match the confirmation.
+     */
     public function editPassword()
     {
         if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
-        if (!isset($_POST['email'])) { // had to do the send request mail feater
-            require_once('templates/account-request-password-edit.php');
-            throw new \Exception("Vous devez consuter vos mails.");
-        }
+
         if(!isset($_POST['newPassword']) || !isset($_POST['newPassword2'])){
             require_once('templates/account-edit-password.php');
             throw new \Exception("Vous devez fournir un mot de passe.");
         }
+        $subjetEmail = "Confirmation du changement de mot de passe.";
+        $messageEmail = "Votre mot de passe a été modifié avec succes !";
         if(isset($_POST['newPassword']) && isset($_POST['newPassword2'])){
             if ($_POST['newPassword'] === $_POST['newPassword2']) {
                 if((new \src\model\Account())->editPassword($_POST['newPassword'])){
+                    //update session
+                    $this->login($_SESSION['user'], $_POST['newPassword']); // Automatically log in the new user
                     //redirect to home page
                     header('Location: /');
-                }
-            }else{
-                throw new \Exception("Les mots de passe ne correspondent pas.");
-            }
-        }else{
-            require_once('templates/account-edit-password.php');
-        }
+                    //send an email to confirm the change
+                    if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
+                        echo "Le mail a été envoyé.";
+
+                    }else{throw new \Exception("Le mail n'a pas été envoyé.");}
+
+            }else{throw new \Exception("Les mots de passe ne correspondent pas.");}
+
+        }else{require_once('templates/account-edit-password.php');}
     }
+}
 
     /**
      * Logs the user in if valid credentials are provided.
