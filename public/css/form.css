@@ -1,5 +1,6 @@
 * {
   font-family: Pixellari;
+  font-size: clamp(1rem, 1vw + 0.75rem, 1.667rem);
 
 }
 :root {
@@ -11,6 +12,10 @@
   min-height: 100vh;
   margin: 0;
 }
+body{
+  grid-template: none;
+  align-content: center;
+}
 
 
 /* fieldset{
@@ -21,25 +26,28 @@
 } */
 
 form {
+  display: grid;
+  align-self: center;
+
   border: 7px solid #a35647;
   background: #fedac1;
   box-shadow: 4px 4px 79.1px 23px #e2a475 inset;
 
 
-  margin-top: 45px;
-  padding: 45px;
+  /* margin-top: 45px; */
+  padding: clamp(1.222rem, 3vw + 1rem, 2.5rem);
   /* max-width: 656px; */
   /* max-height: 906px; */
 
   max-height: 88vh;
-  height: 88vh;
+  /* height: 88vh; */
   min-height: fit-content;
 
   max-width: 45.5vw;
   width: 100%;
   min-width: fit-content;
 
-  align-self: center;
+  /* align-self: center; */
   box-sizing: border-box;
 
   & fieldset {
@@ -63,7 +71,7 @@ form {
 
   & input,
   button {
-    padding: 15px;
+    padding: clamp(0.833rem, 1vw, 2.333rem);
   }
 
   & [type="submit"] {
@@ -121,8 +129,10 @@ form {
   min-width: 310px;
   max-width: fit-content;
 } */
-
 legend{
+  display: contents;
+}
+h2{
   box-sizing: border-box;
   flex-wrap: wrap;
 
@@ -133,7 +143,7 @@ legend{
   padding: 2.8vw; 
   margin: 2.4vw 0;
   margin-inline: auto;
-  margin-bottom: clamp(2.833rem, 3vw + 1rem, 6.778rem);
+  /* margin-bottom: clamp(2.833rem, 3vw + 1rem, 6.778rem); */
 
   font-size: clamp(1.611rem, 3vw + 1rem, 2.667rem);
   text-align: center;
@@ -145,6 +155,9 @@ legend{
 input{
   border: 3px solid #A35647;
   background: rgba(226, 164, 117, 0.28);
+  /* margin: 1rem; */
+  margin-bottom: clamp(0.5rem, 3vw + 1rem, 1rem);
+  
 }
 small{
   display: none;
@@ -158,9 +171,11 @@ body > form:nth-child(1) > fieldset:nth-child(1) > input:nth-child(4) {
   justify-self: center;
 
   /* width: 80%; */
-  padding: 6px clamp(1.667rem, 1vw + 1.5rem, 4rem);
+  padding: 6px clamp(1.222rem, 3vw + 1rem, 4rem);
+  /* margin: 5vh; */
 
-  /*! height: 48px; *//*! *//*! justify-content: center; *//*! align-items: center; */border: 3px solid #321C2C;
+  /*! height: 48px; *//*! *//*! justify-content: center; *//*! align-items: center; */
+  border: 3px solid #321C2C;
   background: #A35647;
 
   color: #FEDAC1;

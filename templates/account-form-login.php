@@ -5,7 +5,7 @@ ob_start();
 ?>
 <form method="post">
   <fieldset>
-    <legend>Connexion</legend>
+    <legend><h2>Connexion</h2></legend>
     <label>
       Email
       <input name="email" type="email" required>

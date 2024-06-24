@@ -20,6 +20,9 @@
     margin: 0;
     padding: 0;
 }
+h2{
+  font-weight: 500 ;
+}
 
 /* style par section */
 body {

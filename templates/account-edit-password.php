@@ -7,7 +7,7 @@ ob_start();
 </style>
 <form method="post">
   <fieldset>
-    <legend>Mettre à jour votre mot de passe</legend>
+    <legend><h2>Mettre à jour votre mot de passe</h2></legend>
     <label>
         <small id="emailHint">Veuillez entrer votre nouveau mot de passe</small>
         <br />

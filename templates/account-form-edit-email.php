@@ -7,7 +7,7 @@ ob_start();
 </style>
 <form method="post">
   <fieldset>
-    <legend>Mettre à jour votre Adresse email</legend>
+    <legend><h2>Mettre à jour votre Adresse email</h2></legend>
     <label>
         Adresse email actuelle : 
         <b><?= htmlspecialchars($_SESSION['user']); ?></b>
