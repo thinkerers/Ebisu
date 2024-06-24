@@ -13,8 +13,9 @@
   margin: 0;
 }
 body{
-  grid-template: none;
+  /* grid-template: none; */
   align-content: center;
+
 }
 
 
@@ -27,7 +28,11 @@ body{
 
 form {
   display: grid;
+  grid-area: content;
+
+  
   align-self: center;
+  align-content: center;
 
   border: 7px solid #a35647;
   background: #fedac1;

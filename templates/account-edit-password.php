@@ -1,5 +1,6 @@
 <?php 
 $title = 'Changer le mot de passe';
+// $style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
 <style>

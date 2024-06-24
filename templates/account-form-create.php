@@ -6,7 +6,7 @@ ob_start();
 <form method="post">
   <fieldset>
     <legend><h2>Créez un compte</h2> 
-      <!-- (ou <a href="/?action=login">connectez vous</a>) -->
+      (ou <a href="/?action=login">connectez vous</a>)
     </legend>
     <label>
       Email
