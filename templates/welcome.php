@@ -1,34 +1,56 @@
 <?php
 $title = 'Bienvenue !';
-$style ='@import url(public/css/pomodoro.css);';
+$style = '@import url(public/css/pomodoro.css);';
 
-if(!isset($_SESSION['pomodoro-start'])){
-    $_SESSION['pomodoro-duration'] = 25 * 60;
+function startPomodoro(int $duration): void
+{
     $_SESSION['pomodoro-start'] = time();
+    $_SESSION['pomodoro-duration'] = $duration;
 }
 
-if (isset($_SESSION['pomodoro-start'])) {
-  $elapsed = time() - $_SESSION['pomodoro-start'];
-  $duration = $_SESSION['pomodoro-duration'];
-  $timeLeft = $duration - $elapsed;
-  $Hh = floor($timeLeft / 3600);
-  $Mm = floor(($timeLeft % 3600) / 60);
-  $Ss = $timeLeft % 60;
-
-
-  if ($timeLeft <= 0) {
-      unset($_SESSION['pomodoro-start'], $_SESSION['pomodoro-duration']);
-      $Hh = $Mm = $Ss = 0; 
-  }
-} else {
-  $Hh = $Mm = $Ss = 0; 
+function destroyPomodoro(): void
+{
+    unset($_SESSION['pomodoro-start'], $_SESSION['pomodoro-duration']);
 }
 
-[$H, $h] = [(int) floor($Hh / 10), (int) $Hh % 10];
-[$M, $m] = [(int) floor($Mm / 10), (int) $Mm % 10];
-[$S, $s] = [(int) floor($Ss / 10), (int) $Ss % 10];
+function getPomodoroTime(): array
+{
+    $Hh = $Mm = $Ss = 0;
+    if (isset($_SESSION['pomodoro-start']) && isset($_SESSION['pomodoro-duration'])) {
+        $elapsed = time() - $_SESSION['pomodoro-start'];
+        $duration = $_SESSION['pomodoro-duration'];
+        $timeLeft = max(0, $duration - $elapsed);
+        $Hh = floor($timeLeft / 3600);
+        $Mm = floor(($timeLeft % 3600) / 60);
+        $Ss = $timeLeft % 60;
+    }
+    return [$Hh, $Mm, $Ss, $duration, $elapsed];
+}
 
-$duration = $_SESSION['pomodoro-duration'] ?? 0;
+// Start pomodoro if not already started
+if (!isset($_SESSION['pomodoro-start'])) {
+    startPomodoro(25 * 60);
+}
+
+// Destroy pomodoro if time is up
+if (isset($_SESSION['pomodoro-start']) && isset($_SESSION['pomodoro-duration'])) {
+    if (time() - $_SESSION['pomodoro-start'] >= $_SESSION['pomodoro-duration']) {
+        destroyPomodoro();
+    }
+}
+
+function splitDigits(int $number): array
+{
+    $digits = array_map('intval', str_split("$number"));
+    return count($digits) === 1 ? [0, $digits[0]] : $digits;
+}
+
+// Get pomodoro time
+[$Hh, $Mm, $Ss, $duration, $elapsed] = getPomodoroTime();
+[$H, $h] = splitDigits($Hh);
+[$M, $m] = splitDigits($Mm);
+[$S, $s] = splitDigits($Ss);
+
 
 ob_start();
 
