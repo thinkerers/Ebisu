@@ -75,7 +75,7 @@ class Account
             $statement->bindParam(':oldEmail', $_SESSION['user']);
             $statement->execute();
                 return true;  
-            }catch (Exception $e) {
+            }catch (\Exception $e) {
                 throw new \Exception("Le mail n'a pas pu être modifié.");
             }
     }
@@ -88,7 +88,7 @@ class Account
         $statement->bindParam(':email', $_SESSION['user']);
         $statement->execute();
             return true;   
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             $errorMsg = "Aucun compte n'a été trouvé";
             return false; 
         }
