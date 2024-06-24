@@ -2,9 +2,9 @@
 
 namespace src\controllers;
 
-    use PHPMailer\PHPMailer\Exception;
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 /**
  * Class Account
@@ -104,16 +104,28 @@ class Account
 
     public function goToSendEmail()
     {
-        require_once('templates/account-request-password-edit.php');
+            // Check if the user is logged in
+            if (!isset($_SESSION['user'])) {
+            throw new \Exception("Vous n'êtes pas connecté.");
+        }
+            // If the new email is not submitted yet, show the form
+            if (!isset($_POST['emailForPassword'])) {
+            require_once('templates/account-request-password-edit.php');
+            throw new \Exception("Vous devez fournir un email pour pouvoir changer votre mot de passe.");
+        }
+        // send email if form is submitted
+        else if($this->sendEmail()){
+            throw new \Exception("Le mail n'a pas été envoyé."); 
+        }
     }
 
     public function sendEmail()
     {
         echo 'je suis dans sendEmail';
-       require_once('includes/PHPMailer/Exeption.php'); 
-       require_once('includes/PHPMailer/PHPMailer.php'); 
-       require_once('includes/PHPMailer/SMTP.php');
-        
+        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/Exception.php');
+        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/PHPMailer.php');
+        require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/SMTP.php');
+    
 
         // Check if the user is logged in
         if (!isset($_SESSION['user'])) {
