@@ -11,7 +11,7 @@ ob_start();
     <input name="action" type="submit" value="deleteAccount" />
   </form>
 </dialog>
-<button onclick="document.querySelector('dialog').showModal();">Supprimer le compte</button>
+<a onclick="document.querySelector('dialog').showModal();">Supprimer le compte</a>
 <?php
 $content = ob_get_clean();
 require_once($_SERVER['DOCUMENT_ROOT'].'/templates/layout.php');
