@@ -8,7 +8,7 @@
   --_border-color:var(--_dot-color);
   --_font-size:22pt;
   --_font-family:Bebas Neue;
-
+  
   /* For debugging purpose: set the speed factor of the animation (default to 1s = 1s) */
   --s:calc(1s/pow(6,var(--speed,0)));
   [name="speed"],[type="reset"]{display:none;}
@@ -58,12 +58,27 @@
     background-color:var(--_dot-color);
     transform-origin:center;
     border-radius:100%;
-    transform: rotate(.5turn) translateY(50cqh);
+    transform: rotate(calc(var(--turn) + .5turn)) translateY(50cqh);
     animation-composition: replace;  
     animation-timing-function: linear;
-    animation-name:var(--animation-name,revolve);
+    animation-name:var(--animation-name,progress);
     animation-duration:calc(var(--_duration)*var(--s));
     animation-play-state:var(--animation-play-state);
+  }
+  
+  &:after{
+    border-radius:inherit;
+    pointer-events:none;
+    z-index:-10;
+    content:"";
+    display:block;
+    position:absolute;
+    inset:0;
+    animation-timing-function: linear;
+    animation-name:var(--animation-name,progress);
+    animation-duration:calc(var(--_duration)*var(--s));
+    animation-play-state:var(--animation-play-state);
+    background: conic-gradient(color-mix(in lch, var(--_dot-color) 10%, transparent) var(--percent), white 0%);
   }
 
   menu{
@@ -124,20 +139,97 @@
     }
   }
 
-  /* Calculations */
-  /* Calcul the total duration in seconds from the values passed with the html.*/
-  --_Hh:calc(var(--_H)*10 + var(--_h));
-  --_Mm:calc(var(--_M)*10 + var(--_m));
-  --_Ss:calc(var(--_S)*10 + var(--_s));
+   /* Calculations */
+    /* Input the time with inline css variables*/
+    --_Hh:var(--Hh);
+    --_Mm:var(--Mm);
+    --_Ss:var(--Ss);
+    
+    /* Input the time with html select*/
+    &:has(time select:user-valid){
+    --_Hh:calc(var(--_H,0)*10 + var(--_h,0));
+    --_Mm:calc(var(--_M,0)*10 + var(--_m,0));
+    --_Ss:calc(var(--_S,0)*10 + var(--_s,0));
+      
+      &:has([name="H"] [value="0"]:checked){--_H:0;}
+      &:has([name="H"] [value="1"]:checked){--_H:1;}
+      &:has([name="H"] [value="2"]:checked){--_H:2;}
+      &:has([name="H"] [value="3"]:checked){--_H:3;}
+      &:has([name="H"] [value="4"]:checked){--_H:4;}
+      &:has([name="H"] [value="5"]:checked){--_H:5;}
+      &:has([name="H"] [value="6"]:checked){--_H:6;}
+      &:has([name="H"] [value="7"]:checked){--_H:7;}
+      &:has([name="H"] [value="8"]:checked){--_H:8;}
+      &:has([name="H"] [value="9"]:checked){--_H:9;}
 
-  --_duration:calc(
-    (var(--_Hh)*60*60)
-  + (var(--_Mm)*60)
-  + var(--_Ss)
-  );
+      &:has([name="h"] [value="0"]:checked){--_h:0;}
+      &:has([name="h"] [value="1"]:checked){--_h:1;}
+      &:has([name="h"] [value="2"]:checked){--_h:2;}
+      &:has([name="h"] [value="3"]:checked){--_h:3;}
+      &:has([name="h"] [value="4"]:checked){--_h:4;}
+      &:has([name="h"] [value="5"]:checked){--_h:5;}
+      &:has([name="h"] [value="6"]:checked){--_h:6;}
+      &:has([name="h"] [value="7"]:checked){--_h:7;}
+      &:has([name="h"] [value="8"]:checked){--_h:8;}
+      &:has([name="h"] [value="9"]:checked){--_h:9;}
+
+      &:has([name="M"] [value="0"]:checked){--_M:0;}
+      &:has([name="M"] [value="1"]:checked){--_M:1;}
+      &:has([name="M"] [value="2"]:checked){--_M:2;}
+      &:has([name="M"] [value="3"]:checked){--_M:3;}
+      &:has([name="M"] [value="4"]:checked){--_M:4;}
+      &:has([name="M"] [value="5"]:checked){--_M:5;}
+      &:has([name="M"] [value="6"]:checked){--_M:6;}
+      &:has([name="M"] [value="7"]:checked){--_M:7;}
+      &:has([name="M"] [value="8"]:checked){--_M:8;}
+      &:has([name="M"] [value="9"]:checked){--_M:9;}
+
+      &:has([name="m"] [value="0"]:checked){--_m:0;}
+      &:has([name="m"] [value="1"]:checked){--_m:1;}
+      &:has([name="m"] [value="2"]:checked){--_m:2;}
+      &:has([name="m"] [value="3"]:checked){--_m:3;}
+      &:has([name="m"] [value="4"]:checked){--_m:4;}
+      &:has([name="m"] [value="5"]:checked){--_m:5;}
+      &:has([name="m"] [value="6"]:checked){--_m:6;}
+      &:has([name="m"] [value="7"]:checked){--_m:7;}
+      &:has([name="m"] [value="8"]:checked){--_m:8;}
+      &:has([name="m"] [value="9"]:checked){--_m:9;}
+
+      &:has([name="S"] [value="0"]:checked){--_S:0;}
+      &:has([name="S"] [value="1"]:checked){--_S:1;}
+      &:has([name="S"] [value="2"]:checked){--_S:2;}
+      &:has([name="S"] [value="3"]:checked){--_S:3;}
+      &:has([name="S"] [value="4"]:checked){--_S:4;}
+      &:has([name="S"] [value="5"]:checked){--_S:5;}
+      &:has([name="S"] [value="6"]:checked){--_S:6;}
+      &:has([name="S"] [value="7"]:checked){--_S:7;}
+      &:has([name="S"] [value="8"]:checked){--_S:8;}
+      &:has([name="S"] [value="9"]:checked){--_S:9;}
+
+      &:has([name="s"] [value="0"]:checked){--_s:0;}
+      &:has([name="s"] [value="1"]:checked){--_s:1;}
+      &:has([name="s"] [value="2"]:checked){--_s:2;}
+      &:has([name="s"] [value="3"]:checked){--_s:3;}
+      &:has([name="s"] [value="4"]:checked){--_s:4;}
+      &:has([name="s"] [value="5"]:checked){--_s:5;}
+      &:has([name="s"] [value="6"]:checked){--_s:6;}
+      &:has([name="s"] [value="7"]:checked){--_s:7;}
+      &:has([name="s"] [value="8"]:checked){--_s:8;}
+      &:has([name="s"] [value="9"]:checked){--_s:9;}
+    }
+
+    /* --_duration:calc(
+      (var(--_Hh,0)*60*60)
+    + (var(--_Mm,0)*60)
+    + var(--_Ss,0)
+    ); */
+
+    --_duration:var(--duration);
+
   
   /* Calcul the delay to apply to start the animation at the correct time */
-  /* Tens numeral are on base 60 */
+    
+    /* Tens numeral are on base 60 */
   --_delay_S:calc((59 - var(--_Ss))*pow(60,0));
   --_delay_M:calc((59 - var(--_Mm))*pow(60,1));
   --_delay_H:calc((59 - var(--_Hh))*pow(60,2));
@@ -197,76 +289,13 @@
   output :last-child:before{
     content:var(--_Hh_str)":"var(--_Mm_str)":"var(--_Ss_str);
   }
-  
-  /* Inputing the time with html*/
-  &:has([name="H"] [value="0"]:checked){--_H:0;}
-  &:has([name="H"] [value="1"]:checked){--_H:1;}
-  &:has([name="H"] [value="2"]:checked){--_H:2;}
-  &:has([name="H"] [value="3"]:checked){--_H:3;}
-  &:has([name="H"] [value="4"]:checked){--_H:4;}
-  &:has([name="H"] [value="5"]:checked){--_H:5;}
-  &:has([name="H"] [value="6"]:checked){--_H:6;}
-  &:has([name="H"] [value="7"]:checked){--_H:7;}
-  &:has([name="H"] [value="8"]:checked){--_H:8;}
-  &:has([name="H"] [value="9"]:checked){--_H:9;}
-  
-  &:has([name="h"] [value="0"]:checked){--_h:0;}
-  &:has([name="h"] [value="1"]:checked){--_h:1;}
-  &:has([name="h"] [value="2"]:checked){--_h:2;}
-  &:has([name="h"] [value="3"]:checked){--_h:3;}
-  &:has([name="h"] [value="4"]:checked){--_h:4;}
-  &:has([name="h"] [value="5"]:checked){--_h:5;}
-  &:has([name="h"] [value="6"]:checked){--_h:6;}
-  &:has([name="h"] [value="7"]:checked){--_h:7;}
-  &:has([name="h"] [value="8"]:checked){--_h:8;}
-  &:has([name="h"] [value="9"]:checked){--_h:9;}
-  
-  &:has([name="M"] [value="0"]:checked){--_M:0;}
-  &:has([name="M"] [value="1"]:checked){--_M:1;}
-  &:has([name="M"] [value="2"]:checked){--_M:2;}
-  &:has([name="M"] [value="3"]:checked){--_M:3;}
-  &:has([name="M"] [value="4"]:checked){--_M:4;}
-  &:has([name="M"] [value="5"]:checked){--_M:5;}
-  &:has([name="M"] [value="6"]:checked){--_M:6;}
-  &:has([name="M"] [value="7"]:checked){--_M:7;}
-  &:has([name="M"] [value="8"]:checked){--_M:8;}
-  &:has([name="M"] [value="9"]:checked){--_M:9;}
-  
-  &:has([name="m"] [value="0"]:checked){--_m:0;}
-  &:has([name="m"] [value="1"]:checked){--_m:1;}
-  &:has([name="m"] [value="2"]:checked){--_m:2;}
-  &:has([name="m"] [value="3"]:checked){--_m:3;}
-  &:has([name="m"] [value="4"]:checked){--_m:4;}
-  &:has([name="m"] [value="5"]:checked){--_m:5;}
-  &:has([name="m"] [value="6"]:checked){--_m:6;}
-  &:has([name="m"] [value="7"]:checked){--_m:7;}
-  &:has([name="m"] [value="8"]:checked){--_m:8;}
-  &:has([name="m"] [value="9"]:checked){--_m:9;}
-
-  &:has([name="S"] [value="0"]:checked){--_S:0;}
-  &:has([name="S"] [value="1"]:checked){--_S:1;}
-  &:has([name="S"] [value="2"]:checked){--_S:2;}
-  &:has([name="S"] [value="3"]:checked){--_S:3;}
-  &:has([name="S"] [value="4"]:checked){--_S:4;}
-  &:has([name="S"] [value="5"]:checked){--_S:5;}
-  &:has([name="S"] [value="6"]:checked){--_S:6;}
-  &:has([name="S"] [value="7"]:checked){--_S:7;}
-  &:has([name="S"] [value="8"]:checked){--_S:8;}
-  &:has([name="S"] [value="9"]:checked){--_S:9;}
-  
-  &:has([name="s"] [value="0"]:checked){--_s:0;}
-  &:has([name="s"] [value="1"]:checked){--_s:1;}
-  &:has([name="s"] [value="2"]:checked){--_s:2;}
-  &:has([name="s"] [value="3"]:checked){--_s:3;}
-  &:has([name="s"] [value="4"]:checked){--_s:4;}
-  &:has([name="s"] [value="5"]:checked){--_s:5;}
-  &:has([name="s"] [value="6"]:checked){--_s:6;}
-  &:has([name="s"] [value="7"]:checked){--_s:7;}
-  &:has([name="s"] [value="8"]:checked){--_s:8;}
-  &:has([name="s"] [value="9"]:checked){--_s:9;}
 }
 
 /* Timers  */
+/*
+  Better approach, to add in the v5: https://css-tricks.com/animating-number-counters/
+*/
+  
 @keyframes timer-10 {
   0%{--_int_10:0;--_str_10:"0";}
   10%{--_int_10:1;--_str_10:"1";}
@@ -281,16 +310,31 @@
   100%{--_int_10:9;--_str_10:"9";}
 }
 @keyframes timer-6 {
- /* 0/6 */00.000000000% {--_int_6:0;--_str_6:"0";}
- /* 1/6 */16.666666667% {--_int_6:1;--_str_6:"1";}
- /* 2/6 */33.333333333% {--_int_6:2;--_str_6:"2";}
- /* 3/6 */50.000000000% {--_int_6:3;--_str_6:"3";}
- /* 4/6 */66.666666667% {--_int_6:4;--_str_6:"4";}
- /* 5/6 */83.333333333% {--_int_6:5;--_str_6:"5";}
- /* 5/6 */100.000000000%{--_int_6:5;--_str_6:"5";}
+  00.000000000% {--_int_6:0;--_str_6:"0";}
+  16.666666667% {--_int_6:1;--_str_6:"1";}
+  33.333333333% {--_int_6:2;--_str_6:"2";}
+  50.000000000% {--_int_6:3;--_str_6:"3";}
+  66.666666667% {--_int_6:4;--_str_6:"4";}
+  83.333333333% {--_int_6:5;--_str_6:"5";}
+  100.000000000%{--_int_6:5;--_str_6:"5";}
 }
-@keyframes revolve {
-  from {transform: rotate(.5turn) translateY(50cqh);}
-  to { transform:rotate(1.5turn) translateY(50cqh);}
+  
+  @property --percent {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+  }
+  
+  @property --turn {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0turn;
+  }
+  
+  @keyframes progress{
+    to{
+      --percent:100%;
+      --turn:1turn;
+    }
   }
 }

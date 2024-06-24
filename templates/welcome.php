@@ -1,93 +1,109 @@
 <?php
 $title = 'Bienvenue !';
 $style ='@import url(public/css/pomodoro.css);';
-ob_start(); 
+
+if(!isset($_SESSION['pomodoro-start'])){
+    $_SESSION['pomodoro-duration'] = 25 * 60;
+    $_SESSION['pomodoro-start'] = time();
+}
+
+if (isset($_SESSION['pomodoro-start'])) {
+  $timeLeft = $_SESSION['pomodoro-duration'] - (time() - $_SESSION['pomodoro-start']);
+  $Hh = floor($timeLeft / 3600);
+  $Mm = floor(($timeLeft % 3600) / 60);
+  $Ss = $timeLeft % 60;
+
+  if ($timeLeft <= 0) {
+      unset($_SESSION['pomodoro-start'], $_SESSION['pomodoro-duration']);
+      $Hh = $Mm = $Ss = 0; 
+  }
+} else {
+  $Hh = $Mm = $Ss = 0; 
+}
+
+[$H, $h] = [(int) floor($Hh??0 / 10), (int) $Hh??0 % 10];
+[$M, $m] = [(int) floor($Mm??0 / 10), (int) $Mm??0 % 10];
+[$S, $s] = [(int) floor($Ss??0 / 10), (int) $Ss??0 % 10];
+
+$duration = $_SESSION['pomodoro-duration'] ?? 0;
+
+ob_start();
+
 ?>
 <style>
   @import url(public/css/style.css);
   @import url(public/css/pomodoro.css);
+
+  @view-transition {
+    navigation: auto;
+}
 </style>
 <section>
-<h1>Bienvenue sur Ebisu !</h1>
+<h1>Bienvenue sur Ebisu !</h1> 
 
-
-<form name="pomodoro" method="post">
-  <time style="
-  --Hh:<?=$_SESSION['hour']??'0';?>;
-  --Mm:<?=$_SESSION['min']??'0';?>;
-  ">
+<form 
+name="pomodoro"
+method="post"
+style="
+  --Hh:<?=$Hh?>;
+  --Mm:<?=$Mm?>;
+  --Ss:<?=$Ss?>;
+  --duration:<?=$duration?>
+">
+<!-- Note:
+ 
+The pomodoro is not updated when paused, the time displayed  need to be updated : refresh the page when the user pause the pomodoro, or use css to display the correct value.-->
+  <time>
     <fieldset name="Hh:Mm:Ss">
       <fieldset name="Hh">
         <select name="H">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
+          <?php for($i=0;$i<3;$i++): ?>
+            <option value="<?=$i?>" <?= $i === $H ? 'selected="selected"' : '';?> ><?=$i?></option>
+          <?php endfor; ?>
         </select>
         <select name="h">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
+          <?php for($i=0;$i<10;$i++): ?>
+            <option value="<?=$i?>" <?= $i === $h ? 'selected="selected"' : '';?> ><?=$i?></option>
+          <?php endfor; ?>
         </select>
       </fieldset>
       <fieldset name="Mm">
         <select name="M">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
+          <?php for($i=0;$i<6;$i++): ?>
+            <option value="<?=$i?>" <?= $i === $M ? 'selected' : '';?> ><?=$i?></option>
+          <?php endfor; ?>
         </select>
         <select name="m">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
+          <?php for($i=0;$i<10;$i++): ?>
+            <option value="<?=$i?>" <?= $i === $m ? 'selected' : '';?> ><?=$i?></option>
+          <?php endfor; ?>
         </select>
       </fieldset>
       <fieldset name="Ss">
         <select name="S">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3" selected="selected">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
+          <?php for($i=0;$i<6;$i++): ?>
+            <option value="<?=$i?>" <?= $i === $S ? 'selected' : '';?> ><?=$i?></option>
+          <?php endfor; ?>
         </select>
         <select name="s">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
+          <?php for($i=0;$i<10;$i++): ?>
+            <option value="<?=$i?>" <?= $i === $s ? 'selected' : '';?> ><?=$i?></option>
+          <?php endfor; ?>
         </select>
       </fieldset>
     </fieldset>
     <output class="Ss"><output class="Mm"><output class="Hh"></output></output></output>
   </time>
   <menu>
-    <button type="reset">🔄</button>
     <input type="checkbox" name="play" checked>
   </menu>
 </form>
+
+<!-- refresh page with button without js -->
+<form method="post">
+  <button type="submit" name="refresh">refresh</button>
+</form>
+
 <code>
   <h2>Debug</h2>
   <pre>
