@@ -2,12 +2,13 @@
 $title = 'Bienvenue !';
 $style = '@import url(public/css/pomodoro.css);';
 $pomodoro = new src\lib\Pomodoro();
+
 // Start pomodoro if not already started
 if (!isset($_SESSION['pomodoro-start'])) {
   $pomodoro->start(25*60);
 }
 
-if (isset($pomodoro)) {
+if (isset($_SESSION['pomodoro-start'])) {
   $duration = $_SESSION['pomodoro-duration'];
   // Get pomodoro time values
   [$H, $h, $M, $m, $S, $s, $elapsed] = $pomodoro->getTime($_SESSION['pomodoro-start'], $_SESSION['pomodoro-duration']);

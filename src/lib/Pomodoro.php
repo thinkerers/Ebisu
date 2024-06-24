@@ -4,7 +4,7 @@ namespace src\lib;
 
 class Pomodoro
 {
-
+    public function __construct($H = 0, $h = 0, $M = 0,$m = 0, $S = 0, $s = 0, $elapsed = 0){}
 
 /**
  * Start a new Pomodoro session.
