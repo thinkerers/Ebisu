@@ -12,7 +12,8 @@
     --border-width:calc(var(--dot-size)/4);
   
     box-sizing:border-box;
-    color:red;
+    --color:red;
+    color:var(--color);
     font-family:Bebas Neue;
     font-size:22pt;
     border:solid var(--border-width) currentcolor;
@@ -37,7 +38,12 @@
     animation-timing-function:linear;
     animation-duration:calc(var(--_duration)*var(--speed));
     animation-delay:calc(var(--_elapsed)*-1s);
-    background: conic-gradient(color-mix(in lch, currentcolor 10%, transparent) var(--percent), white 0%);
+    background: 
+    conic-gradient(
+      color-mix(in lch, var(--color) 30%, transparent)
+      var(--percent),
+      transparent 0%
+      );
   
     /*Count down*/
     &::before {
