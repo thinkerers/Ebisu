@@ -1,6 +1,6 @@
 <?php 
 $title = 'Changer l\'adresse email';
-// $style ='@import url(public/css/form.css);';
+$style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
 <style>

@@ -1,5 +1,6 @@
 <?php 
 $title = 'Changer le mot de passe';
+$style ="@import url(public/css/form.css);";
 ob_start(); 
 ?>
 <style>
@@ -7,12 +8,12 @@ ob_start();
 </style>
 <form method="post">
   <fieldset>
-  <legend>Changer de mot de passe</legend>
+  <legend><h2>Changer de mot de passe</h2></legend>
     <label>
       Entrez votre adresse email
       <input name="email" type="email" required>
     </label>
-    <input name="request" type="submit" value="editPassword" />
+    <button name="request" type="submit" value="editPassword">Valider</button>
   </fieldset>
 </form>
 <?php 
