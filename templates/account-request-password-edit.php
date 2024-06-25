@@ -10,7 +10,7 @@ ob_start();
       Entrez votre adresse email
       <input type="email" name="emailForPassword" required>
     </label>
-    <input type="submit" name="btnSubmit" value="Envoyer"/>
+    <button type="submit" name="btnSubmit" value="Envoyer">Valider</button>
   </fieldset>
 </form>
 <?php 

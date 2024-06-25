@@ -3,12 +3,15 @@ $title = 'Delete Account';
 $style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
+<style>
+  @import url(public/css/style.css);
+</style>
 <dialog>
   <form method="post">
     <p>Veuillez écrire votre adresse email pour confirmer la suppression du compte :</p>
     <input type="text" name="emailConfirm" required>
     <a class="btnReturn" href="?action=editAccount">Annuler</a>
-    <input name="action" type="submit" value="deleteAccount" />
+    <button name="action" type="submit" value="deleteAccount">Valider</button>
   </form>
 </dialog>
 <script type="module">
