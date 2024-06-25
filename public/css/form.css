@@ -1,24 +1,3 @@
-* {
-  font-family: Pixellari;
-  font-size: clamp(1rem, 1vw + 0.75rem, 1.667rem);
-
-}
-:root {
-  font-family: system-ui;
-  font-size: 18px;
-  display: grid;
-  place-content: center;
-  place-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
-body{
-  /* grid-template: none; */
-  align-content: center;
-
-}
-
-
 /* fieldset{
 
   display: flex;
@@ -29,7 +8,7 @@ body{
 form {
   display: grid;
   grid-area: content;
-
+  /* font-family: var(--font-family); */
   
   align-self: center;
   align-content: center;
@@ -69,7 +48,7 @@ form {
 
   & label {
     display: grid;
-    gap: 0.2lh;
+    /* gap: 0.2lh; */
     grid-column: 1/-1;
     grid-template-columns: subgrid;
   }
@@ -81,6 +60,18 @@ form {
 
   & [type="submit"] {
     cursor: pointer;
+    font-family: inherit;
+
+    display: flex;
+    justify-self: center;
+  
+  
+    padding: 6px clamp(1.222rem, 3vw + 1rem, 4rem);
+    border: 3px solid #321C2C;
+    background: #A35647;
+  
+    color: #FEDAC1;
+    font-size: clamp(1.111rem, 1vw + 1.25rem, 1.778rem);
   }
 
   /* Visual Validation */
@@ -169,21 +160,5 @@ small{
 }
 footer.material-symbols-outlined{
   display: none;
-}
-/* bouton valider : */
-body > form:nth-child(1) > fieldset:nth-child(1) > input:nth-child(4) {
-  display: flex;
-  justify-self: center;
-
-  /* width: 80%; */
-  padding: 6px clamp(1.222rem, 3vw + 1rem, 4rem);
-  /* margin: 5vh; */
-
-  /*! height: 48px; *//*! *//*! justify-content: center; *//*! align-items: center; */
-  border: 3px solid #321C2C;
-  background: #A35647;
-
-  color: #FEDAC1;
-  font-size: clamp(1.111rem, 1vw + 1.25rem, 1.778rem);
 }
 

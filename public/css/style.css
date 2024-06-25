@@ -1,18 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 
-:root {
-  --primary: #f00;
-  --secondary: #0f0;
-  --tertiary: #00f;
-  --quaternary: #ff0;
-  --quinary: #0ff;
-  --senary: #f0f;
-  --septenary: #fff;
-  --octonary: #000;
-  --nonary: #888;
-  --denary: #444;
 
-  --font: system-ui;
+:root {
+  
+  font-size: clamp(1rem, 1vw + 0.75rem, 1.667rem);
+  font-family: system-ui;
+  font-size: 18px;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  min-height: 100vh;
+  margin: 0;
+  --font-family:Pixellari;
 }
 
 /* Initialiser les règles */
@@ -26,11 +25,12 @@ h2{
 
 /* style par section */
 body {
-  font-family: var(--font);
+  font-family: var(--font-family);
   margin: 0;
   min-height: 100vh;
   min-width: 100vw;
   display: grid;
+  align-content: center;
   place-items: center;
   grid-template:
     "header" max-content
@@ -75,8 +75,12 @@ footer.material-symbols-outlined {
   box-shadow: 4px 4px 79.1px 23px #E2A475 inset;  
   display: flex;
   justify-content: center;
+  a{
+    text-decoration: none;
+    color:currentColor;
+  }
 }
 
 .material-symbols-outlined :not([title]) {
-  font-family: var(--font);
+  font-family: var(--font-family);
 }

@@ -25,7 +25,7 @@ ob_start();
         <br />
         <input name="newEmail2" type="email" minlength="5" maxlength="50" required autofocus aria-describedby="emailHint">
     </label>
-    <input name="request" type="submit" value="changeEmail"/>
+    <button name="request" type="submit" value="changeEmail">Valider</button>
   </fieldset>
 </form>
 <?php 

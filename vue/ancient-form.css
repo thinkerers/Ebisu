@@ -86,3 +86,59 @@
           }
       }
   
+/* Léa Style */
+/* legend{
+  min-width: 310px;
+  max-width: fit-content;
+} */
+
+legend{
+    box-sizing: border-box;
+    flex-wrap: wrap;
+  
+    /* max-width: 50vw;min-width: fit-content; */
+    width: fit-content;
+    
+  
+    padding: 2.8vw; 
+    margin: 2.4vw 0;
+    margin-inline: auto;
+    margin-bottom: clamp(2.833rem, 3vw + 1rem, 6.778rem);
+  
+    font-size: clamp(1.611rem, 3vw + 1rem, 2.667rem);
+    text-align: center;
+  
+    border: 7px solid #A35647;
+    background: rgba(226, 164, 117, 0.44);
+}
+  
+  input{
+    border: 3px solid #A35647;
+    background: rgba(226, 164, 117, 0.28);
+  }
+  small{
+    display: none;
+  }
+  footer.material-symbols-outlined{
+    display: none;
+  }
+
+  /* bouton valider : */
+  /* , 
+  body > form:nth-child(1) > fieldset:nth-child(1) > input:nth-child(4) */
+  [type="submit"]{
+    font-size: 500px;
+    display: flex;
+    justify-self: center;
+  
+    /* width: 80%; */
+    padding: 6px clamp(1.667rem, 1vw + 1.5rem, 4rem);
+  
+    /*! height: 48px; *//*! *//*! justify-content: center; *//*! align-items: center; */
+    border: 3px solid #321C2C;
+    background: #A35647;
+  
+    color: #FEDAC1;
+    font-size: clamp(1.111rem, 1vw + 1.25rem, 1.778rem);
+  }
+  

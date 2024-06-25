@@ -20,7 +20,7 @@ ob_start();
         <br />
         <input name="newPassword2" type="password" minlength="5" maxlength="50" required autofocus aria-describedby="emailHint">
     </label>
-    <input name="request" type="submit" value="editPassword"/>
+    <button name="request" type="submit" value="editPassword">Valider</button>
   </fieldset>
 </form>
 <?php 
