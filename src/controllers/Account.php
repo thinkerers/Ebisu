@@ -68,7 +68,13 @@ class Account
     {
         require_once('templates/account-profile.php');
     }
-
+    
+    /**
+     * Edits the email of the currently logged-in user account.
+     *
+     * @return void
+     * @throws \Exception If the user is not logged in, the new email is not provided, or if the new email is already used,or the new email does not match the confirmation.
+     */
     public function editEmail()
     {
          // Check if the user is logged in
@@ -80,7 +86,7 @@ class Account
             require_once('templates/account-form-edit-email.php');
             throw new \Exception("Vous devez fournir un email.");
         }
-
+        // If the mail already exists, send an error message
         if (gettype((new \src\model\Account())->getUserHash($_POST['newEmail'])) === 'string'){
             //mail already exist
             throw new \Exception("Cet email est déjà utilisé.");
@@ -106,27 +112,31 @@ class Account
         if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
-        if (!isset($_POST['email'])) { // had to do the send request mail feater
-            require_once('templates/account-request-password-edit.php');
-            throw new \Exception("Vous devez consuter vos mails.");
-        }
+
         if(!isset($_POST['newPassword']) || !isset($_POST['newPassword2'])){
             require_once('templates/account-edit-password.php');
             throw new \Exception("Vous devez fournir un mot de passe.");
         }
+        $subjetEmail = "Confirmation du changement de mot de passe.";
+        $messageEmail = "Votre mot de passe a été modifié avec succes !";
         if(isset($_POST['newPassword']) && isset($_POST['newPassword2'])){
             if ($_POST['newPassword'] === $_POST['newPassword2']) {
                 if((new \src\model\Account())->editPassword($_POST['newPassword'])){
+                    //update session
+                    $this->login($_SESSION['user'], $_POST['newPassword']); // Automatically log in the new user
                     //redirect to home page
                     header('Location: /');
-                }
-            }else{
-                throw new \Exception("Les mots de passe ne correspondent pas.");
-            }
-        }else{
-            require_once('templates/account-edit-password.php');
-        }
+                    //send an email to confirm the change
+                    if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
+                        echo "Le mail a été envoyé.";
+
+                    }else{throw new \Exception("Le mail n'a pas été envoyé.");}
+
+            }else{throw new \Exception("Les mots de passe ne correspondent pas.");}
+
+        }else{require_once('templates/account-edit-password.php');}
     }
+}
 
     /**
      * Logs the user in if valid credentials are provided.
