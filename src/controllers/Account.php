@@ -86,17 +86,17 @@ class Account
             throw new \Exception("Cet email est déjà utilisé.");
         }
         
-        if (isset($_POST['newEmail'])  === isset($_POST['newEmail2'])) {
+        if ($_POST['newEmail']  == $_POST['newEmail2']) {
             if((new \src\model\Account())->editEmail($_POST['newEmail'])){
                 //update session
                 $_SESSION['user'] = $_POST['newEmail'];
                  //redirect to home page
                  header('Location: /');
+            }else {
+                throw new \Exception("Erreur lors de la modification de l'email.");
             }
-               
-            else {
-                throw new \Exception("Le mail de confirmation ne correspond pas.");
-            }
+        }else {
+            throw new \Exception("Le mail de confirmation ne correspond pas.");
         }
        
     }
