@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+:root{
+  display:grid;
+  place-content:center;
+  height:100vh;
+}
+[name="pomodoro"] {
+    /*Customisations*/
+    --dot-size:1rem;
+    --speed:1s;
+    --border-width:calc(var(--dot-size)/4);
+  
+    box-sizing:border-box;
+    color:red;
+    font-family:Bebas Neue;
+    font-size:22pt;
+    border:solid var(--border-width) currentcolor;
+    block-size:clamp(8ch,50vw,500px);
+    max-block-size:500px;
+    container-type: size;
+    aspect-ratio:1;
+    display:grid;
+    border-radius:50%;
+    place-content:center;
+    place-items: center;
+    grid-template-areas:"stack";
+    
+    /*Stack everything on the center*/
+    &::before,&::after,& *{
+      grid-area:stack;
+    }
+  
+    /*Progress animation*/
+    --_cycle:100%;
+    animation-name:var(--animation-name,progress);
+    animation-timing-function:linear;
+    animation-duration:calc(var(--_duration)*var(--speed));
+    animation-delay:calc(var(--_elapsed)*-1s);
+    background: conic-gradient(color-mix(in lch, currentcolor 10%, transparent) var(--percent), white 0%);
+  
+    /*Count down*/
+    &::before {
+      /* for debug purpose */
+      --_cycle:86400;/* 24*60*60 --> this timer run for one day max (animation-iteration-count = 1)*/
+      animation-name:var(--animation-name,timer);
+      animation-play-state:var(--animation-play-state,running);
+      animation-duration:calc(var(--_cycle)*var(--speed));
+      animation-timing-function:steps(var(--_cycle),end);
+      animation-delay:calc((var(--_cycle) - var(--_duration) + var(--_elapsed)) * -1s);
+      counter-reset: 
+        h round(down,var(--integer)/3600)
+        m round(down,mod(var(--integer),3600)/60)
+        s mod(var(--integer),60);
+      content:var(--content,);
+    }
+  
+    /*Dot animation*/
+    &::after {
+      --_cycle:1turn;
+      
+      width:var(--dot-size);
+      aspect-ratio:1;
+      margin:auto;
+      content:"";
+      background-color:currentColor;
+      transform-origin:center;
+      border-radius:100%;
+      animation-timing-function: linear;
+      animation-name:var(--animation-name,revolve);
+      animation-duration:calc(var(--_duration)*var(--speed));
+      animation-play-state:var(--animation-play-state,running);
+      animation-delay:calc(var(--_elapsed)*-1s);
+      transform: rotate(calc(var(--turn) + .5turn)) translateY(50cqh);
+    }
+  
+    /* Handle the state of the animation */
+    &:has([name="play"]:checked){
+      --content: 
+            counter(h, decimal-leading-zero)
+        ":" counter(m, decimal-leading-zero)
+        ":" counter(s, decimal-leading-zero);
+      [name="Hh:Mm:Ss"]{display:none;}
+    }
+    &:has([name="play"]:not(:checked)){
+      --animation-play-state:paused;
+      --animation-name:none;
+    }
+    
+    [name="Hh:Mm:Ss"] {
+        padding:0;
+        display:flex;
+        justify-content:center;
+
+        &,fieldset{
+          margin:0;
+          padding:0;
+          border:unset;
+          display: flex;
+          select{
+            font: inherit;
+            appearance:none;
+            background:unset;
+            opacity:.33;
+            border:unset;
+            width:max-content;
+            height:100%;
+            padding:0;
+            width:max-content;
+            height:min-content;
+            text-align:center;
+          }
+          &:nth-of-type(2){
+            &:before,&:after{
+              content:":";
+            }
+          }
+        }
+      }
+  
+    [name="play"]{
+      margin:0;
+      border:0;
+      appearance:none;
+      width:calc(100cqw + 2*var(--border-width));
+      aspect-ratio:1;
+      border-radius:inherit;
+      cursor:pointer;
+      z-index:-1;
+    }
+  
+    /* Input the time with inline css variables*/
+    --_duration:var(--duration);
+    --_elapsed:var(--elapsed);
+
+ 
+    /* Input the time with html select*/
+    &:has([name="Hh:Mm:Ss"] select:user-valid){
+      --_Hh:calc(var(--_H,0)*10 + var(--_h,0));
+      --_Mm:calc(var(--_M,0)*10 + var(--_m,0));
+      --_Ss:calc(var(--_S,0)*10 + var(--_s,0));
+
+      /* Calcul of the duration */
+      --_duration:calc(
+        (var(--_Hh,0)*60*60)
+      + (var(--_Mm,0)*60)
+      + var(--_Ss,0)
+      );
+      --_elapsed:0;
+
+      &:has([name="H"] [value="0"]:checked){--_H:0;}
+      &:has([name="H"] [value="1"]:checked){--_H:1;}
+      &:has([name="H"] [value="2"]:checked){--_H:2;}
+      &:has([name="H"] [value="3"]:checked){--_H:3;}
+      &:has([name="H"] [value="4"]:checked){--_H:4;}
+      &:has([name="H"] [value="5"]:checked){--_H:5;}
+      &:has([name="H"] [value="6"]:checked){--_H:6;}
+      &:has([name="H"] [value="7"]:checked){--_H:7;}
+      &:has([name="H"] [value="8"]:checked){--_H:8;}
+      &:has([name="H"] [value="9"]:checked){--_H:9;}
+
+      &:has([name="h"] [value="0"]:checked){--_h:0;}
+      &:has([name="h"] [value="1"]:checked){--_h:1;}
+      &:has([name="h"] [value="2"]:checked){--_h:2;}
+      &:has([name="h"] [value="3"]:checked){--_h:3;}
+      &:has([name="h"] [value="4"]:checked){--_h:4;}
+      &:has([name="h"] [value="5"]:checked){--_h:5;}
+      &:has([name="h"] [value="6"]:checked){--_h:6;}
+      &:has([name="h"] [value="7"]:checked){--_h:7;}
+      &:has([name="h"] [value="8"]:checked){--_h:8;}
+      &:has([name="h"] [value="9"]:checked){--_h:9;}
+
+      &:has([name="M"] [value="0"]:checked){--_M:0;}
+      &:has([name="M"] [value="1"]:checked){--_M:1;}
+      &:has([name="M"] [value="2"]:checked){--_M:2;}
+      &:has([name="M"] [value="3"]:checked){--_M:3;}
+      &:has([name="M"] [value="4"]:checked){--_M:4;}
+      &:has([name="M"] [value="5"]:checked){--_M:5;}
+      &:has([name="M"] [value="6"]:checked){--_M:6;}
+      &:has([name="M"] [value="7"]:checked){--_M:7;}
+      &:has([name="M"] [value="8"]:checked){--_M:8;}
+      &:has([name="M"] [value="9"]:checked){--_M:9;}
+
+      &:has([name="m"] [value="0"]:checked){--_m:0;}
+      &:has([name="m"] [value="1"]:checked){--_m:1;}
+      &:has([name="m"] [value="2"]:checked){--_m:2;}
+      &:has([name="m"] [value="3"]:checked){--_m:3;}
+      &:has([name="m"] [value="4"]:checked){--_m:4;}
+      &:has([name="m"] [value="5"]:checked){--_m:5;}
+      &:has([name="m"] [value="6"]:checked){--_m:6;}
+      &:has([name="m"] [value="7"]:checked){--_m:7;}
+      &:has([name="m"] [value="8"]:checked){--_m:8;}
+      &:has([name="m"] [value="9"]:checked){--_m:9;}
+
+      &:has([name="S"] [value="0"]:checked){--_S:0;}
+      &:has([name="S"] [value="1"]:checked){--_S:1;}
+      &:has([name="S"] [value="2"]:checked){--_S:2;}
+      &:has([name="S"] [value="3"]:checked){--_S:3;}
+      &:has([name="S"] [value="4"]:checked){--_S:4;}
+      &:has([name="S"] [value="5"]:checked){--_S:5;}
+      &:has([name="S"] [value="6"]:checked){--_S:6;}
+      &:has([name="S"] [value="7"]:checked){--_S:7;}
+      &:has([name="S"] [value="8"]:checked){--_S:8;}
+      &:has([name="S"] [value="9"]:checked){--_S:9;}
+
+      &:has([name="s"] [value="0"]:checked){--_s:0;}
+      &:has([name="s"] [value="1"]:checked){--_s:1;}
+      &:has([name="s"] [value="2"]:checked){--_s:2;}
+      &:has([name="s"] [value="3"]:checked){--_s:3;}
+      &:has([name="s"] [value="4"]:checked){--_s:4;}
+      &:has([name="s"] [value="5"]:checked){--_s:5;}
+      &:has([name="s"] [value="6"]:checked){--_s:6;}
+      &:has([name="s"] [value="7"]:checked){--_s:7;}
+      &:has([name="s"] [value="8"]:checked){--_s:8;}
+      &:has([name="s"] [value="9"]:checked){--_s:9;}
+  }
+}
+
+@property --integer {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
+
+@property --turn {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0turn;
+  }
+
+@property --percent {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+  }
+
+@keyframes timer{from{--integer: var(--_cycle);}}
+
+@keyframes revolve{to{--turn: var(--_cycle);}}
+
+@keyframes progress{to{--percent: var(--_cycle);}}
