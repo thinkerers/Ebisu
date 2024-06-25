@@ -5,7 +5,7 @@ ob_start();
 ?>
 <form method="post">
   <fieldset>
-    <legend>Login</legend>
+    <legend><h2>Connexion</h2></legend>
     <label>
       Email
       <input name="email" type="email" required>
@@ -14,7 +14,7 @@ ob_start();
       Mot de passe
       <input name="password" type="password">
     </label>
-    <input type="submit" name="action" value="login" />
+    <button type="submit" name="action" value="login">Valider</button>
   </fieldset>
 </form>
 <?php

@@ -1,10 +1,11 @@
 <?php 
 $title = 'Modifier mon compte';
+$style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
 <style>
-  /* @import url(form.css); */
-  @import url(style.css);
+  /* @import url(style.css); */
+  @import url(form.css);
 </style>
 <fieldset>
 <legend>Modifier mes informations</legend>

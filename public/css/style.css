@@ -1,93 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 
-:root{
-    --primary: #f00;
-    --secondary: #0f0;
-    --tertiary: #00f;
-    --quaternary: #ff0;
-    --quinary: #0ff;
-    --senary: #f0f;
-    --septenary: #fff;
-    --octonary: #000;
-    --nonary: #888;
-    --denary: #444;
 
-    --font: system-ui;
-}
-body{
-    font-family: var(--font);
-margin: 0;
-min-height: 100vh;
-width: 100vw;
-display: grid;
-place-items: center;
-grid-template: 
-"header" max-content
-"content" 1fr
-"footer" auto;
+:root {
+  
+  font-size: clamp(1rem, 1vw + 0.75rem, 1.667rem);
+  font-family: system-ui;
+  font-size: 18px;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  min-height: 100vh;
+  margin: 0;
+  --font-family:Pixellari;
 }
 
-header{
-grid-area: header;
-width: 100%;
-nav{
-display: flex;
-justify-content: space-between;
-align-items: center;
-:any-link{
+/* Initialiser les règles */
+*{
+    margin: 0;
+    padding: 0;
+}
+h2{
+  font-weight: 500 ;
+}
+
+/* style par section */
+body {
+  font-family: var(--font-family);
+  margin: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+  display: grid;
+  align-content: center;
+  place-items: center;
+  grid-template:
+    "header" max-content
+    "content" 1fr
+    "footer" auto;
+  grid-area: content;
+
+  background-image: url("../img/prtScLandscape.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+header {
+  grid-area: header;
+  width: 100%;
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    :any-link {
+      text-decoration: none;
+      color: currentColor;
+    }
+    > * {
+      padding: 1rem;
+    }
+  }
+}
+
+
+footer.material-symbols-outlined {
+  grid-area: footer;
+  display: flex;
+  place-items: center;
+  gap: 1rem;
+  width: 80vw;
+  padding: 5px;
+
+  border: 7px solid #A35647;
+  background: #FEDAC1;
+  box-shadow: 4px 4px 79.1px 23px #E2A475 inset;  
+  display: flex;
+  justify-content: center;
+  a{
     text-decoration: none;
     color:currentColor;
-}
->*{
-    padding: 1rem;
-}
-}
-}
-main{
-grid-area: content;
-}
-
-footer.material-symbols-outlined{
-grid-area: footer;
-display: flex;
-place-items: center;
-gap: 1rem;
-}
-
-.material-symbols-outlined :not([title]){
-    font-family: var(--font);
-}
-
-@keyframes timer {
-    from {
-        transform: rotate(0turn) translateY(250px);
-    }
-    to {
-        transform: rotate(1turn) translateY(250px);
-    }
   }
-  
-  .pomodoro{
-    border:solid 5px rgb(103, 26, 26);
-    height:500px;
-    aspect-ratio:1;
-    border-radius:100%;
-    position:relative;
-    --duration: calc(
-   (var(--minutes,0)*60*1s) 
-  + (var(--heures,0)*60*60*1s)
-  );
-    &:before{
-      animation: timer var(--duration) linear;
-      content:"";
+}
 
-      display:block;
-      background-color:rgb(0, 0, 0);
-      width:1rem;
-      aspect-ratio:1;
-      border-radius:100%;
-      position:absolute;
-      inset:50%;
-      transform-origin:center;
-    }
-  }
+.material-symbols-outlined :not([title]) {
+  font-family: var(--font-family);
+}

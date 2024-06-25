@@ -1,11 +1,11 @@
 <?php 
 $title = 'Changer le mot de passe';
-$style ='@import url(public/css/style.css);';
-ob_start();
+$style ="@import url(public/css/form.css);";
+ob_start(); 
 ?>
 <form method="post">
   <fieldset>
-    <legend>Mettre à jour votre mot de passe</legend>
+    <legend><h2>Mettre à jour votre mot de passe</h2></legend>
     <label>
         <small id="emailHint">Veuillez entrer votre nouveau mot de passe</small>
         <br />
@@ -19,7 +19,7 @@ ob_start();
         <br />
         <input name="newPassword2" type="password" minlength="6" maxlength="50" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}" aria-describedby="passwordHint">
     </label>
-    <input name="request" type="submit" value="editPassword"/>
+    <button name="request" type="submit" value="editPassword">Valider</button>
   </fieldset>
 </form>
 <?php 
