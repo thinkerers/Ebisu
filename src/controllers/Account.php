@@ -70,42 +70,63 @@ class Account
     }
     
     /**
-     * Edits the email of the currently logged-in user account.
+     * Go to the page to send a request by email to change password.
      *
      * @return void
-     * @throws \Exception If the user is not logged in, the new email is not provided, or if the new email is already used,or the new email does not match the confirmation.
+     * @throws \Exception If the user is not logged in, the email is not submitted yet, or the email cannot be sent.
      */
-    public function editEmail()
+    public function goToSendEmail()
     {
-         // Check if the user is logged in
-         if (!isset($_SESSION['user'])) {
+            // Check if the user is logged in
+            if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
-         // If the new email is not submitted yet, show the form
-         if (!isset($_POST['newEmail']) || !isset($_POST['newEmail2'])) {
-            require_once('templates/account-form-edit-email.php');
-            throw new \Exception("Vous devez fournir un email.");
+            // If the new email is not submitted yet, show the form
+            if (!isset($_POST['emailForPassword'])) {
+            require_once('templates/account-request-password-edit.php');
+            throw new \Exception("Vous devez fournir un email pour pouvoir changer votre mot de passe.");
         }
-        // If the mail already exists, send an error message
-        if (gettype((new \src\model\Account())->getUserHash($_POST['newEmail'])) === 'string'){
-            //mail already exist
-            throw new \Exception("Cet email est déjà utilisé.");
+        // send email if form is submitted
+        else if($this->sendEmail()){
+            throw new \Exception("Le mail n'a pas été envoyé."); 
         }
-        
-        if ($_POST['newEmail']  == $_POST['newEmail2']) {
-            if((new \src\model\Account())->editEmail($_POST['newEmail'])){
-                //update session
-                $_SESSION['user'] = $_POST['newEmail'];
-                 //redirect to home page
-                 header('Location: /');
-            }else {
-                throw new \Exception("Erreur lors de la modification de l'email.");
-            }
-        }else {
-            throw new \Exception("Le mail de confirmation ne correspond pas.");
-        }
-       
     }
+    
+    /**
+     * Sends an email to the user to reset their password.
+     *
+     * @return void
+     * @throws \Exception If the user is not logged in or the email cannot be sent, or if the mail hasn't been sent ,or the email is not the same as the session.
+     */
+    public function sendEmail()
+    {
+        // Check if the user is logged in
+        if (!isset($_SESSION['user'])) {
+            throw new \Exception("Vous n'êtes pas connecté.");
+        }
+        if(!isset($_POST['emailForPassword'])){
+            require_once('templates/account-request-password-edit.php');
+        }
+        $subjetEmail = 'Changer de mot de passe.';
+        $messageEmail = "Cliquez sur le lien pour changer votre mot de passe : <a href='http://ebisu.test/index.php?action=editPassword'>Changer votre mot de passe</a>";
+        //Check if the email is set and the same as the session
+        if($_POST['emailForPassword'] === $_SESSION['user']){
+            if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
+                echo "Le mail a été envoyé.";
+            }else{
+                throw new \Exception("Le mail n'a pas été envoyé.");
+            }
+        }else{
+            throw new Exception("L'email ne correspond pas.");
+        }
+    }   
+        
+    /**
+     * Edits the password of the currently logged-in user account.
+     *
+     * @return void return a mail to confirm the password change.
+     * @throws \Exception If the user is not logged in, the new password is not provided, or the new password does not match the confirmation.
+     */
 
     public function editPassword()
     {
