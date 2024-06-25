@@ -274,4 +274,5 @@ class Account
         }
         return filter_var($password, FILTER_DEFAULT);
     }
+
 }
