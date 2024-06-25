@@ -13,7 +13,7 @@ ob_start();
   </label>
   <br>
   <label>
-    <a href="?action=">Changer le mot de passe</a>
+    <a href="?action=goToSendEmail">Changer le mot de passe</a>
   </label>
   <br>
   <label>

@@ -7,11 +7,13 @@ ob_start();
   <form method="post">
     <p>Veuillez écrire votre adresse email pour confirmer la suppression du compte :</p>
     <input type="text" name="emailConfirm" required>
-    <a href="" class="btnReturn">Annuler</a>
+    <a class="btnReturn" href="?action=editAccount">Annuler</a>
     <input name="action" type="submit" value="deleteAccount" />
   </form>
 </dialog>
-<a onclick="document.querySelector('dialog').showModal();">Supprimer le compte</a>
+<script type="module">
+document.querySelector('dialog').showModal();
+</script>
 <?php
 $content = ob_get_clean();
 require_once($_SERVER['DOCUMENT_ROOT'].'/templates/layout.php');

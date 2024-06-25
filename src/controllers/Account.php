@@ -63,12 +63,55 @@ class Account
             throw new \Exception("Le mail de confirmation ne correspond pas.");
         }
     }
-
+    
+    /**
+     * Edits the profile of the currently logged-in user account.
+     *
+     * @return void
+     */
     public function editAccount()
     {
         require_once('templates/account-profile.php');
     }
-    
+        
+    /**
+     * Edits the email of the currently logged-in user account.
+     *
+     * @return void
+     * @throws \Exception If the user is not logged in, the new email is not provided, the new email does not match the confirmation, or the email is already in use.
+     */
+    public function editEmail()
+    {
+         // Check if the user is logged in
+         if (!isset($_SESSION['user'])) {
+            throw new \Exception("Vous n'êtes pas connecté.");
+        }
+         // If the new email is not submitted yet, show the form
+         if (!isset($_POST['newEmail']) || !isset($_POST['newEmail2'])) {
+            require_once('templates/account-form-edit-email.php');
+            throw new \Exception("Vous devez fournir un email.");
+        }
+
+        if (gettype((new \src\model\Account())->getUserHash($_POST['newEmail'])) === 'string'){
+            //mail already exist
+            throw new \Exception("Cet email est déjà utilisé.");
+        }
+        
+        if ($_POST['newEmail']  == $_POST['newEmail2']) {
+            if((new \src\model\Account())->editEmail($_POST['newEmail'])){
+                //update session
+                $_SESSION['user'] = $_POST['newEmail'];
+                 //redirect to home page
+                 header('Location: /');
+            }else {
+                throw new \Exception("Erreur lors de la modification de l'email.");
+            }
+        }else {
+            throw new \Exception("Le mail de confirmation ne correspond pas.");
+        }
+       
+    }
+
     /**
      * Go to the page to send a request by email to change password.
      *
@@ -149,7 +192,7 @@ class Account
                     header('Location: /');
                     //send an email to confirm the change
                     if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
-                        echo "Le mail a été envoyé.";
+                        echo "Votre mot de passe a été modifié avec succes !";
 
                     }else{throw new \Exception("Le mail n'a pas été envoyé.");}
 
