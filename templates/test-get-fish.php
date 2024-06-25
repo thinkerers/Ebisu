@@ -15,9 +15,9 @@ ob_start();
 </form>
 
 <table class="fishes" >
-  <?php  for($row=0; $row<6; $row++){ ?>
+  <?php  for($row=0; $row<10; $row++){ ?>
   <tr>
-    <?php for($col=0; $col<6; $col++) { ?>
+    <?php for($col=0; $col<10; $col++) { ?>
       <td class="material-symbols-outlined" data-fish-id="<?= $row*6 + $col ?>">set_meal</td>
     <?php } ?>
   </tr>
