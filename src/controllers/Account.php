@@ -275,4 +275,14 @@ class Account
         return filter_var($password, FILTER_DEFAULT);
     }
 
+    public function getFish()
+    {
+        require_once('templates/test-get-fish.php');
+
+        if(isset($_GET['getFish'])){
+            $fish = rand(1,10);
+            echo "Vous avez attrapé un poisson de taille $fish cm.";
+        }
+    }
+
 }

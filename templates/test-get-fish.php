@@ -3,13 +3,13 @@ $title = 'Get Fish';
 $style ='@import url(public/css/style.css);';
 ob_start();
 ?>
-<form method="post">
+<form method="get">
   <fieldset>
     <legend>Get Fish</legend>
     <label>
         <small id="emailHint">Clic to get a fish</small>
     </label>
-    <input type="submit" name="getFish"value="getFish"/>
+    <input type="submit" name="getFish" value="getFish"/>
   </fieldset>
 </form>
 <?php
