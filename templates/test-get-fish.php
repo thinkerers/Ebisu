@@ -1,6 +1,8 @@
 <?php
 $title = 'Get Fish';
 $style ='@import url(public/css/style.css);';
+require_once($_SERVER['DOCUMENT_ROOT'].'/bootstrap.php');
+$account = new src\controllers\Account();
 ob_start();
 ?>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
@@ -13,12 +15,12 @@ ob_start();
     <input type="submit" name="getFish" value="getFish"/>
   </fieldset>
 </form>
-
+<?=$account->getFish();?>
 <table class="fishes" >
-  <?php  for($row=0; $row<10; $row++){ ?>
+  <?php  for($row=0; $row<4; $row++){ ?>
   <tr>
     <?php for($col=0; $col<10; $col++) { ?>
-      <td class="material-symbols-outlined" data-fish-id="<?= $row*6 + $col ?>">set_meal</td>
+      <td class="material-symbols-outlined" data-fish-id="<?= $row*4 + $col ?>">set_meal</td>
     <?php } ?>
   </tr>
   <?php }?>

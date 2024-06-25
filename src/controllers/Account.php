@@ -277,12 +277,37 @@ class Account
 
     public function getFish()
     {
-        require_once('templates/test-get-fish.php');
 
-        if(isset($_GET['getFish'])){
-            $fish = rand(1,10);
-            echo "Vous avez attrapé un poisson de taille $fish cm.";
+        if(isset($_GET['getFish'])){            
+            // Exemple d'utilisation
+            [$rarity, $randVariant] = $this->getRandomRarity();
+            echo "Le niveau de rareté sélectionné est: $rarity et le variant est: $randVariant.";
         }
     }
+    function getRandomRarity() {
+                // Probabilités cumulatives pour chaque rareté
+                $rarities = [
+                    'normal' => 700, // 70%
+                    'rare' => 200,   // 20%
+                    'ultra-rare' => 90, // 9%
+                    'legendaire' => 1 // 1%
+                ];
+            
+                // Générer un nombre aléatoire entre 1 et 100
+                $randomNumber = rand(1, 1000);
+                $randVariant = rand(1, 10);
+                
+                // Déterminer la rareté en fonction du nombre aléatoire
+                $cumulativeProbability = 0;
+                foreach ($rarities as $rarity => $probability) {
+                    $cumulativeProbability += $probability;
+                    if ($randomNumber <= $cumulativeProbability) {
+                        return [$rarity, $randVariant];
+                    }
+                }
+                
+                // En théorie, on ne devrait jamais atteindre cette ligne si les probabilités sont correctement définies
+                return null;
+            }
 
 }
