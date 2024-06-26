@@ -1,8 +1,11 @@
-<?php 
+<?php
 $title = 'Créer un compte';
+$style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
-
+<!-- <style>
+  @import url(style.css);
+</style> -->
 <h1>To-Do List</h1>
 
 <!-- formulaire de nouvelle tâche -->
