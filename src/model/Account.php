@@ -191,4 +191,25 @@ class Account
         return password_verify($password, $hashedPassword);
     }
 
+    public function addTask($taskTitle = null, $taskDescription = null)
+    {
+        try{
+            // Prepare the SQL statement with a subquery
+            $statement = $this->db->prepare('
+            INSERT INTO tasks (description, userId, name)
+            VALUES (:description, (SELECT id FROM users WHERE email = :email), :name)
+            ');
+
+            // Bind the parameters to the SQL query and execute the statement
+            $statement->bindValue(':email', $_SESSION["user"], SQLITE3_TEXT);
+            $statement->bindValue(':description', $taskDescription, SQLITE3_TEXT);
+            $statement->bindValue(':name', $taskTitle, SQLITE3_TEXT);
+           
+           $statement->execute();
+
+            return true;  
+            }catch (\Exception $e) {
+                throw new \Exception("La tâche n'a pas pu être ajoutée.");
+            }
+    }
 }

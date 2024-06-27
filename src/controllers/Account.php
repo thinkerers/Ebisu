@@ -160,7 +160,7 @@ class Account
                 throw new \Exception("Le mail n'a pas été envoyé.");
             }
         }else{
-            throw new Exception("L'email ne correspond pas.");
+            throw new \Exception("L'email ne correspond pas.");
         }
     }   
         
@@ -273,5 +273,26 @@ class Account
             return filter_input(INPUT_POST, 'password', FILTER_DEFAULT);
         }
         return filter_var($password, FILTER_DEFAULT);
+    }
+
+    //add tasks
+    public function addTask()
+    {
+        if (!isset($_SESSION['user'])) {
+            throw new \Exception("Vous n'êtes pas connecté.");
+        }
+        if (!isset($_POST['taskTitle']) || !isset($_POST['taskDescription'])){
+            require_once("templates/vueToDo.php");
+        }
+        if (isset($_POST['addTask'])){
+            // echo $_POST["taskDescription"];
+            (new \src\model\Account())->addTask($_POST['taskTitle'], $_POST['taskDescription']);
+            header('Location: /?action=addTask');
+        }
+
+        echo "<pre>";
+        print_r($_POST);
+        echo "</pre>";
+
     }
 }
