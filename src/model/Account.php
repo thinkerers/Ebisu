@@ -212,7 +212,6 @@ class Account
      * @return bool True if the password has been edited, false otherwise.
      */
     public function editPassword($password) {
-        echo "on essaie d'edit";
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         try{
         $statement = $this->db->prepare('UPDATE users SET hashedPassword = :hashedPassword WHERE email = :email');

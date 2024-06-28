@@ -33,22 +33,28 @@ class Account
         } else {
             throw new \Exception("Email ou mot de passe invalide."); 
         }
-    }
+    }    
+    /**
+     * Verifies the token validity.
+     *
+     * @return bool true if the token is valid, false otherwise.
+     * @throws \Exception If the token is not set or the verification fails.
+     */
     public function verify(){
         $verificationToken = $_GET['token'];
         if (isset($verificationToken)) {
             if((new \src\model\Account())->verify($verificationToken)){
                 if($_GET['action'] == 'editPassword'){
                     require_once('templates/account-edit-password.php');
-                }else{
+                }else if($_GET['action'] == 'verify'){
                 echo "Votre email a été vérifié.";
                 }
                 return true;
             }else{
-                throw new \Exception("Erreur lors de la vérification de l'email.");
+                throw new \Exception("Erreur lors de la vérification du token.");
             }
         } else {
-            throw new \Exception("Erreur lors de la vérification du Token.");
+            throw new \Exception("Erreur lors de la récupération du Token.");
         }
     }
 
@@ -210,14 +216,12 @@ class Account
                 if((new \src\model\Account())->editPassword($_POST['newPassword'])){
                     //update session
                     $this->login($_SESSION['user'], $_POST['newPassword']); // Automatically log in the new user
+                    //send an email to confirm the change
+                    if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail, $_SESSION['user'])){
+                        echo "Votre mot de passe a été modifié avec succes !";
+                    }else{throw new \Exception("Le mail n'a pas été envoyé.");}
                     //redirect to home page
                     header('Location: /');
-                    //send an email to confirm the change
-                    if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
-                        echo "Votre mot de passe a été modifié avec succes !";
-
-                    }else{throw new \Exception("Le mail n'a pas été envoyé.");}
-
             }else{
                 require_once('templates/account-request-password-edit.php');
                 throw new \Exception("Les mots de passe ne correspondent pas.");
