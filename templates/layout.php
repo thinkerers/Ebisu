@@ -16,6 +16,7 @@
             <nav>
                 <a  href="index.php?action=editAccount"><?= htmlspecialchars($_SESSION['user']); ?></a>
                 <a href="index.php?action=addTask">Novelle tâche</a>
+                <a href="index.php?action=goFishing" title="Partir à la pêche" class="material-symbols-outlined">set_meal</a>
                 <a href="index.php?action=logout" title="Déconnexion" class="material-symbols-outlined">logout</a>
             </nav>
 
