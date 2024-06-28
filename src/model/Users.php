@@ -13,10 +13,6 @@ namespace src\model;
  */
 class Users
 {
-    public $id;
-    public $email;
-    public $hashedPassword;
-
     /**
      * Constructor to initialize properties.
      *
@@ -24,10 +20,10 @@ class Users
      * @param string $email
      * @param string $hashedPassword
      */
-    public function __construct(int $id, string $email, string $hashedPassword)
-    {
-        $this->id = $id;
-        $this->email = $email;
-        $this->hashedPassword = $hashedPassword;
-    }
+    public function __construct(
+        public int $id, 
+        public string $email, 
+        public string $hashedPassword
+    )
+    {}
 }

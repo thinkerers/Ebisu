@@ -16,13 +16,6 @@ namespace src\model;
  */
 class Pomodoro
 {
-    public $id;
-    public $userId;
-    public $focusTime;
-    public $breakTime;
-    public $startTime;
-    public $endTime;
-
     /**
      * Constructor to initialize properties.
      *
@@ -33,13 +26,13 @@ class Pomodoro
      * @param string $startTime
      * @param string $endTime
      */
-    public function __construct(int $id, int $userId, string $focusTime, string $breakTime, string $startTime, string $endTime)
-    {
-        $this->id = $id;
-        $this->userId = $userId;
-        $this->focusTime = $focusTime;
-        $this->breakTime = $breakTime;
-        $this->startTime = $startTime;
-        $this->endTime = $endTime;
-    }
+    public function __construct(
+        public int $id, 
+        public int $userId, 
+        public string $focusTime, 
+        public string $breakTime, 
+        public string $startTime, 
+        public string $endTime
+        )
+    {}
 }

@@ -15,12 +15,6 @@ namespace src\model;
  */
 class Compendium
 {
-    public $id;
-    public $rank;
-    public $name;
-    public $description;
-    public $img;
-
     /**
      * Constructor to initialize properties.
      *
@@ -30,12 +24,12 @@ class Compendium
      * @param string $description
      * @param string $img
      */
-    public function __construct(int $id, int $rank, string $name, string $description, string $img)
-    {
-        $this->id = $id;
-        $this->rank = $rank;
-        $this->name = $name;
-        $this->description = $description;
-        $this->img = $img;
-    }
+    public function __construct(
+        public int $id, 
+        public int $rank, 
+        public string $name, 
+        public string $description, 
+        public string $img
+        )
+    {}
 }

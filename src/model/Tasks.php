@@ -18,15 +18,6 @@ namespace src\model;
  */
 class Tasks
 {
-    public $id;
-    public $userId;
-    public $description;
-    public $name;
-    public $urgency;
-    public $priority;
-    public $state;
-    public $endTime;
-
     /**
      * Constructor to initialize properties.
      *
@@ -39,15 +30,15 @@ class Tasks
      * @param int $state
      * @param string $endTime
      */
-    public function __construct(int $id, int $userId, string $description, string $name, int $urgency, int $priority, int $state, string $endTime)
-    {
-        $this->id = $id;
-        $this->userId = $userId;
-        $this->description = $description;
-        $this->name = $name;
-        $this->urgency = $urgency;
-        $this->priority = $priority;
-        $this->state = $state;
-        $this->endTime = $endTime;
-    }
+    public function __construct(
+       public int $id, 
+       public int $userId, 
+       public string $description, 
+       public string $name, 
+       public int $urgency, 
+       public int $priority, 
+       public int $state, 
+       public string $endTime
+    )
+    {}
 }

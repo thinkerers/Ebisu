@@ -14,11 +14,6 @@ namespace src\model;
  */
 class Fishes
 {
-    public $id;
-    public $userId;
-    public $fishId;
-    public $caughtTime;
-
     /**
      * Constructor to initialize properties.
      *
@@ -27,11 +22,11 @@ class Fishes
      * @param int $fishId
      * @param string $caughtTime
      */
-    public function __construct(int $id, int $userId, int $fishId, string $caughtTime)
-    {
-        $this->id = $id;
-        $this->userId = $userId;
-        $this->fishId = $fishId;
-        $this->caughtTime = $caughtTime;
-    }
+    public function __construct(
+        public int $id, 
+        public int $userId, 
+        public int $fishId, 
+        public ?string $caughtTime
+        )
+    {}
 }
