@@ -31,21 +31,23 @@ class Page
     public function goFishing()
     {
 
-        // initialize the discoveredFishes session variable if it does not exist
-        if (!isset($_SESSION['discoveredFishes'])) {
-            // get the discovered fishes from the database
-            $_SESSION['discoveredFishes'] = $this->fishing->discovered($_SESSION['user']['id']);
+        if (!isset($_SESSION['userId'])) {
+            $_SESSION['userId'] = (new \src\model\Account())->getUserId($_SESSION['user']);
         }
 
-        $fish = $this->fishing->catch();
-        $this->fishing->save($fish,$_SESSION['user']['id']);
+        if (!isset($_SESSION['discoveredFishes'])) {
+            $_SESSION['discoveredFishes'] = $this->fishing->discovered($_SESSION['userId']);
+        }
+
+        $catch = $this->fishing->catch();
+        $this->fishing->save($catch,$_SESSION['userId']);
 
         //update the discovered fish in the session
-        $_SESSION['discoveredFishes'][$fish->fishId] = ($_SESSION['discoveredFishes'][$fish->fishId] ?? 0) + 1;
+        $_SESSION['discoveredFishes'][$catch->fishId] = ($_SESSION['discoveredFishes'][$catch->fishId] ?? 0) + 1;
 
          // Prepare data for the template
         $data = [
-            'fish' => $fish,
+            'fish' => $catch,
             'discoveredFishes' => $_SESSION['discoveredFishes']
         ];
 
