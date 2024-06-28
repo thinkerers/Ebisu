@@ -46,7 +46,24 @@ class Fishes
         public int $userId, 
         public int $fishId, 
         public ?string $caughtTime,
-        private ?dbConnect $db
+        private ?dbConnect $db,
+        private array $rarities = [
+            'normal' => 70,
+            'rare' => 20,
+            'ultra-rare' => 9,
+            'legendaire' => 1
+        ],
+        private array $variants = [
+            'a' => 1,
+            'b' => 1,
+            'c' => 1,
+            'd' => 1,
+            'e' => 1,
+            'f' => 1,
+            'g' => 1,
+            'h' => 1,
+            'i' => 1,
+        ]
         )
     {}
 
@@ -84,4 +101,45 @@ class Fishes
             error_log("Fish storage error: " . $e->getMessage());
         }
     }
+
+    /**
+     * Determines a random rarity and variant based on weighted probabilities.
+     *
+     * @return object An object containing the selected rarity, variant, and fishId.
+     */
+    public function getRandomRarity(): object
+    {
+        $rarity = $this->weightedRandomChoice($this->rarities);
+        $variant = $this->weightedRandomChoice($this->variants);
+
+        $rarityIndex = array_search($rarity, array_keys($this->rarities));
+        $variantIndex = array_search($variant, array_keys($this->variants));
+        $fishId = $rarityIndex * 10 + $variantIndex;
+
+        return (object)['rarity' => $rarity, 'variant' => $variant, 'fishId' => $fishId];
+    }
+
+    /**
+     * Selects a random choice from an array with weighted probabilities.
+     *
+     * @param array $choices An associative array where keys are choices and values are weights.
+     * @return string The selected choice.
+     * @throws \Exception If unable to make a choice.
+     */
+    public function weightedRandomChoice(array $choices): string
+    {
+        $totalWeight = array_sum(array_values($choices));
+        $selection = random_int(1, $totalWeight);
+        $count = 0;
+        
+        foreach ($choices as $choice => $weight) {
+            $count += $weight;
+            if ($count >= $selection) {
+                return $choice;
+            }
+        }
+
+        throw new \Exception('Unable to make a choice!');
+    }
+
 }
