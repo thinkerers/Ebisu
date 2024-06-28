@@ -165,6 +165,12 @@ footer.material-symbols-outlined{
 }
 
 /* tasks */
+.taskDisplay{
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+  margin-bottom: 44px;
+}
 .task{
   display: flex;
   align-items: center;
@@ -177,15 +183,17 @@ footer.material-symbols-outlined{
   display: inline-block;
 }
 input#task,
-button.delete{
+button.delete[type="submit"]{
   margin: 10px;
   padding: 0;
 }
-button.delete{
-  padding: 0;
+button.delete[type="submit"]{
   background-color: transparent;
+  color: black;
   border-style: none;
+
   font-size: 24px;
   font-weight: 700;
+
   justify-self: flex-end ;
 }

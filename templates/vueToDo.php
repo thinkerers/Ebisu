@@ -7,18 +7,19 @@ ob_start();
 <!-- <h2>Tâches à réaliser :</h2> -->
 
 <div class="book">
-    <form method="post">
+    <form method="post" class="taskDisplay">
         <legend><h2>To-do list</h2></legend>
         
         <!-- affichage des tâches -->
-        <?php foreach ($rows as $row){
+        <?php foreach ( $_SESSION["tasks"] as $row){
             echo '
             <div class="task">
                 <div>
                     <input type="checkbox" id="task" name="task"  />
                     <label for="task">' . $row . '</label>
                 </div>
-                <button class="delete">X</button>
+                <button class="delete" type="submit" name="removeTask" title="Supprimer la tâche"
+                value='. $row .'>X</button>
             </div>
             ';
         }?>
@@ -33,17 +34,15 @@ ob_start();
                     <small>Titre de la tâche</small></br>
                     <input type="text" name="taskTitle" required></br>
                 
-                    <small>Description de la tâche</small></br>
-                    <textarea name="taskDescription" required></textarea></br>
-                    
-                    <button type="submit" name="removeTask" title="Supprimer la tâche">Supprimer</button>
+                    <!-- <small>Description de la tâche</small></br>
+                    <textarea name="taskDescription" required></textarea></br> -->
                 </li>
             </ul>
             
-            <button type="submit" name="addTask" title="Ajouter une tache">+</button>
+            <button type="submit" name="addTask" title="Ajouter une tache">ajouter</button>
         </fieldset>
         
-        <input type="submit" name="taskSubmit" value="valider"> 
+        <!-- <input type="submit" name="taskSubmit" value="valider">  -->
     </form>
 </div>
 

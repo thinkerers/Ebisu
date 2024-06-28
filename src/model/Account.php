@@ -207,7 +207,7 @@ class Account
            
            $statement->execute();
 
-            return true;  
+            return $_SESSION["tasks"]= $taskTitle;  
             }catch (\Exception $e) {
                 throw new \Exception("La tâche n'a pas pu être ajoutée.");
             }
@@ -216,7 +216,7 @@ class Account
     {
         try{
             // Prepare the SQL statement with a subquery
-            $statement = $this->db->prepare('SELECT name FROM tasks');
+            $statement = $this->db->prepare('SELECT name, id FROM tasks');
 
             // execute
             $result = $statement->execute();
@@ -225,7 +225,8 @@ class Account
             $tasks = [];
             
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                $tasks[] = $row['name'];
+                // $tasks[] = $row['name' , 'id'];
+                $tasks[] = ['name' => $row['name'], 'id' => $row['id']];
             }
             return $tasks;
 
@@ -236,6 +237,26 @@ class Account
             // Gérer l'erreur si la requête échoue
             error_log($e->getMessage("No tasks found."));
             return [false];
+        }
+    }
+    public function taskDelete()
+    {
+        try{
+            //retirer la tâche de la variable de session
+            array_shift($_SESSION["tasks"]);
+
+            //variable with task name
+            $taskName = $_POST[""];
+
+            // Prepare the SQL statement with a subquery
+            $statement = $this->db->prepare('SELECT name FROM tasks');
+
+            // execute
+            $result = $statement->execute();
+        }
+        catch (\Exception $e) {
+            error_log($e->getMessage("Task not deleted"));
+            return false; 
         }
     }
 }

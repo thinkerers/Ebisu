@@ -282,23 +282,14 @@ class Account
             throw new \Exception("Vous n'êtes pas connecté.");
         }
 
-        
-
-        //récup toutes tasks enregistrées
+        //Fetch all tasks
         if ((new \src\model\Account())->taskExist()){
 
-            // Fetch all rows from the database
+            // Fetch all rows from fuction
             $rows = (new \src\model\Account())->taskExist();
 
-            // echo "glouglou";
-            // foreach ($rows as $row){
-            //     echo '
-            //         <div>
-            //             <input type="checkbox" id="task" name="task"  />
-            //             <label for="task">' . $row . '</label>
-            //         </div>
-            //         ';
-            // }
+            //Infos dans session
+            $_SESSION["tasks"]=$rows;
         }
         else {
             echo "No tasks found.";
@@ -309,8 +300,12 @@ class Account
 
         if (isset($_POST['addTask'])){
             // echo $_POST["taskDescription"];
-            (new \src\model\Account())->addTask($_POST['taskTitle'], $_POST['taskDescription']);
+            (new \src\model\Account())->addTask($_POST['taskTitle'], 
+            // $_POST['taskDescription']
+            );
             header('Location: /?action=addTask');
         }
+
+        // if isset $post delete task
     }
 }
