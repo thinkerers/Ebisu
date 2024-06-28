@@ -43,11 +43,12 @@ class Account
                 }else{
                 echo "Votre email a été vérifié.";
                 }
+                return true;
             }else{
-                throw new Exception("Erreur lors de la vérification de l'email.");
+                throw new \Exception("Erreur lors de la vérification de l'email.");
             }
         } else {
-            throw new Exception("Erreur lors de la vérification du Token.");
+            throw new \Exception("Erreur lors de la vérification du Token.");
         }
     }
 
@@ -180,7 +181,7 @@ class Account
                 throw new \Exception("Le mail n'a pas été envoyé.");
             }
         }else{
-            throw new Exception("L'email ne correspond pas.");
+            throw new \Exception("L'email ne correspond pas.");
         }
     }   
         
@@ -196,19 +197,16 @@ class Account
         if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
-        if ($this->verify()) {
-            require_once('templates/account-request-password-edit.php');
-            throw new \Exception("Vérifiez vos emails.");
-        }
-
+        
         if(!isset($_POST['newPassword']) || !isset($_POST['newPassword2'])){
             require_once('templates/account-edit-password.php');
             throw new \Exception("Vous devez fournir un mot de passe.");
         }
+
         $subjetEmail = "Confirmation du changement de mot de passe.";
         $messageEmail = "Votre mot de passe a été modifié avec succes !";
         if(isset($_POST['newPassword']) && isset($_POST['newPassword2'])){
-            if ($_POST['newPassword'] === $_POST['newPassword2']) {
+            if (($_POST['newPassword'] === $_POST['newPassword2']) && $this->verify()) {
                 if((new \src\model\Account())->editPassword($_POST['newPassword'])){
                     //update session
                     $this->login($_SESSION['user'], $_POST['newPassword']); // Automatically log in the new user
@@ -220,7 +218,11 @@ class Account
 
                     }else{throw new \Exception("Le mail n'a pas été envoyé.");}
 
-            }else{throw new \Exception("Les mots de passe ne correspondent pas.");}
+            }else{
+                require_once('templates/account-request-password-edit.php');
+                throw new \Exception("Les mots de passe ne correspondent pas.");
+                throw new \Exception("Vérifiez vos emails.");
+            }
 
         }else{require_once('templates/account-edit-password.php');}
     }

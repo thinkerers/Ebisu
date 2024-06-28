@@ -2,7 +2,7 @@
 
 namespace src\model;
 
-use PHPMailer\PHPMailer\Exception;
+// use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
@@ -126,31 +126,41 @@ class Account
      * @param  mixed $token
      * @return bool True if the token is valid, false otherwise
      */
-    public function verify($token){
-        try{
-                $statement = $this->db->prepare("SELECT email, token_expiry FROM users WHERE verification_token = :token AND is_verified = 0");
-                $statement->bindValue(':token',$token);
-                $result = $statement->execute();
-            
-                if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                    $tokenExpiry = strtotime($row['token_expiry']);
-                    $current_time = time();
-            
-                    if ($current_time < $tokenExpiry) {
-                        $statement = $this->db->prepare("UPDATE users SET is_verified = 1 WHERE verification_token = :token");
-                        $statement->bindValue(':token',$token);
-                        $statement->execute();
-                        return true;
-                    } else {
-                        return false;
-                    }
+    public function verify($token) {
+        try {
+            error_log("Verification start for token: " . $token);
+    
+            // Préparer et exécuter la requête SELECT
+            $statement = $this->db->prepare("SELECT email, token_expiry FROM users WHERE verification_token = :token AND is_verified = 0");
+            $statement->bindValue(':token', $token, SQLITE3_TEXT); // Spécifiez le type de données
+            $result = $statement->execute();
+            $row = $result->fetchArray(SQLITE3_ASSOC);
+    
+            if ($row) {
+                error_log("Token found: " . print_r($row, true));
+                $tokenExpiry = strtotime($row['token_expiry']);
+                $current_time = time();
+    
+                if ($current_time < $tokenExpiry) {
+                    error_log("Token not expired. Updating verification status.");
+    
+                    // Préparer et exécuter la requête UPDATE
+                    $updateStatement = $this->db->prepare("UPDATE users SET is_verified = 1 WHERE verification_token = :token");
+                    $updateStatement->bindValue(':token', $token, SQLITE3_TEXT); // Spécifiez le type de données
+                    $updateStatement->execute();
+                    return true;
                 } else {
-                    return false;
+                    throw new \Exception("Token expired.");
+                    // Token expiré
                 }
-            } catch (\Exception $e) {
-                error_log("Account creation error: " . $e->getMessage());
-                throw new \Exception("Erreur lors de la vérification.");
+            } else {
+                throw new \Exception("No matching token found or already verified.");
+                // Aucun utilisateur trouvé avec ce token
             }
+        } catch (\Exception $e) {
+            error_log("Account verification error: " . $e->getMessage());
+            throw new \Exception("Erreur lors de la vérification.");
+        }
     }
 
     /**
@@ -202,6 +212,7 @@ class Account
      * @return bool True if the password has been edited, false otherwise.
      */
     public function editPassword($password) {
+        echo "on essaie d'edit";
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         try{
         $statement = $this->db->prepare('UPDATE users SET hashedPassword = :hashedPassword WHERE email = :email');
@@ -251,8 +262,8 @@ class Account
         
          $mail->send();
          return true;
-        }catch (Exception){
-            throw new Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        }catch ( \PHPMailer\PHPMailer\Exception){
+            throw new  \PHPMailer\PHPMailer\Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
             return false;
         }
     }
