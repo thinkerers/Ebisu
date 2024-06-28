@@ -155,9 +155,9 @@ input{
   margin-bottom: clamp(0.5rem, 3vw + 1rem, 1rem);
   
 }
-small{
+/* small{
   display: none;
-}
+} */
 footer.material-symbols-outlined{
   display: none;
 }
