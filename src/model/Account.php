@@ -39,7 +39,7 @@ class Account
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $verificationToken = bin2hex(random_bytes(16));
-        $tokenExpiry = date("Y-m-d H:i:s", strtotime('+10 minutes'));
+        $tokenExpiry = date("Y-m-d H:i:s", strtotime('+60 minutes'));
 
         try {
             $statement = $this->db->prepare('INSERT INTO users (email, hashedPassword, verification_token, token_expiry) VALUES (:email, :hashedPassword, :verification_token, :token_expiry)');
@@ -160,6 +160,22 @@ class Account
         } catch (\Exception $e) {
             error_log("Account verification error: " . $e->getMessage());
             throw new \Exception("Erreur lors de la vérification.");
+        }
+    }
+
+    public function is_verified($email){
+        try{
+            $statement = $this->db->prepare('SELECT is_verified FROM users WHERE email = :email');
+            $statement->bindValue(':email', $email);
+            $result = $statement->execute();
+            if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                return $row['is_verified'];
+            } else{
+                throw new \Exception("Utilisateur introuvable.");
+            }
+        } catch (\Exception $e) {
+            error_log("Account is_verified error: " . $e->getMessage());
+            throw new \Exception("Erreur lors de la recupération du Token.");
         }
     }
 

@@ -146,6 +146,9 @@ class Account
             if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
+        if((new \src\model\Account())->is_verified($_SESSION['user']) == 0){
+            throw new \Exception("Votre email n'est pas vérifié, vous ne pouvez pas changer de mot de passe.");
+        }
             // If the new email is not submitted yet, show the form
             if (!isset($_POST['emailForPassword'])) {
             require_once('templates/account-request-password-edit.php');
