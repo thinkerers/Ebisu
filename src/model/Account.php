@@ -218,6 +218,45 @@ class Account
     }
 
     // Fishing related methods
+    /*
+    DROP TABLE IF EXISTS "catch";
+    CREATE TABLE "catch" (
+        "id" INTEGER PRIMARY KEY,
+        "userId" INTEGER NOT NULL,
+        "fishId" INTEGER NOT NULL,
+        "caughtTime" DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE,
+        FOREIGN KEY ("fishId") REFERENCES "compendium"("id") ON DELETE CASCADE
+    );
+
+    DROP TABLE IF EXISTS "compendium";
+    CREATE TABLE "compendium" (
+        "id" INTEGER NOT NULL UNIQUE,
+        "rank" INTEGER NOT NULL,
+        "name" TEXT NOT NULL,
+        "description" TEXT NOT NULL,
+        "img" TEXT NOT NULL,
+        PRIMARY KEY("id")	
+    );
+
+    ## Entity-Relationship Diagram
+
+    +------------+       +--------------+
+    |  compendium|       |     catch    |
+    +------------+       +--------------+
+    | id         |<----->| compendiumId |
+    | rank       |       | userId       |
+    | name       |       | caughtTime   |
+    | description|       | id           |
+    | img        |       +--------------+
+    +------------+
+
+    ## Description
+
+    The `compendium` table stores each type of fishes available. Each type of fish has a unique ID, a rank, a name, a description, and an image URL.
+
+    The `catch` table stores the fish caught by each user. Each catch has a unique ID, a user ID, a fish ID, and a timestamp.
+    */
 
     /**
      * Stores the fish data in the database.
@@ -225,11 +264,11 @@ class Account
      * @param object $fish The fish data to store.
      * @param int $userId The ID of the user who caught the fish.
      */
-    public function storeFish($fish, $userId)
+    public function storeCatch($catch, $userId)
     {
         try {
-            $statement = $this->db->prepare('INSERT INTO fish (fishId, userId) VALUES (:fishId, :userId)');
-            $statement->bindValue(':fishId', $fish->fishId);
+            $statement = $this->db->prepare('INSERT INTO "catch" (fishId, userId) VALUES (:fishId, :userId)');
+            $statement->bindValue(':fishId', $catch->fishId);
             $statement->bindValue(':userId', $userId);
             $statement->execute();
         } catch (\Exception $e) {
