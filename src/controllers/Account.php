@@ -281,18 +281,36 @@ class Account
         if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
-        if (!isset($_POST['taskTitle']) || !isset($_POST['taskDescription'])){
-            require_once("templates/vueToDo.php");
+
+        
+
+        //récup toutes tasks enregistrées
+        if ((new \src\model\Account())->taskExist()){
+
+            // Fetch all rows from the database
+            $rows = (new \src\model\Account())->taskExist();
+
+            // echo "glouglou";
+            // foreach ($rows as $row){
+            //     echo '
+            //         <div>
+            //             <input type="checkbox" id="task" name="task"  />
+            //             <label for="task">' . $row . '</label>
+            //         </div>
+            //         ';
+            // }
         }
+        else {
+            echo "No tasks found.";
+        }
+
+        require_once("templates/vueToDo.php");
+
+
         if (isset($_POST['addTask'])){
             // echo $_POST["taskDescription"];
             (new \src\model\Account())->addTask($_POST['taskTitle'], $_POST['taskDescription']);
             header('Location: /?action=addTask');
         }
-
-        echo "<pre>";
-        print_r($_POST);
-        echo "</pre>";
-
     }
 }

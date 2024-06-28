@@ -212,4 +212,30 @@ class Account
                 throw new \Exception("La tâche n'a pas pu être ajoutée.");
             }
     }
+    public function taskExist()
+    {
+        try{
+            // Prepare the SQL statement with a subquery
+            $statement = $this->db->prepare('SELECT name FROM tasks');
+
+            // execute
+            $result = $statement->execute();
+
+            //declare tableau tasks 
+            $tasks = [];
+            
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                $tasks[] = $row['name'];
+            }
+            return $tasks;
+
+            // return $result->fetchAll(PDO::FETCH_ASSOC);
+        } 
+
+        catch(\Exception $e){
+            // Gérer l'erreur si la requête échoue
+            error_log($e->getMessage("No tasks found."));
+            return [false];
+        }
+    }
 }

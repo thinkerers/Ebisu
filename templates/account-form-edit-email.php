@@ -6,7 +6,7 @@ ob_start();
 <style>
   @import url(style.css);
 </style>
-<form method="post">
+<form method="post" class="book">
   <fieldset>
     <legend><h2>Mettre à jour votre Adresse email</h2></legend>
     <label>

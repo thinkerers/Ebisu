@@ -7,7 +7,7 @@ ob_start();
   @import url(public/css/style.css);
 </style>
 <dialog>
-  <form method="post">
+  <form method="post" class="book">
     <p>Veuillez écrire votre adresse email pour confirmer la suppression du compte :</p>
     <input type="text" name="emailConfirm" required>
     <a class="btnReturn" href="?action=editAccount">Annuler</a>

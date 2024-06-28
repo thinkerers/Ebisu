@@ -3,7 +3,7 @@ $title = 'Créer un compte';
 $style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
-<form method="post">
+<form method="post" class="book">
   <fieldset>
     <legend><hgroup>
       <h2>Créez un compte</h2> 

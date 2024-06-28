@@ -3,7 +3,7 @@ $title = 'Login';
 $style ='@import url(public/css/form.css);';
 ob_start();
 ?>
-<form method="post">
+<form method="post"  class="book">
   <fieldset>
     <legend><h2>Connexion</h2></legend>
     <label>

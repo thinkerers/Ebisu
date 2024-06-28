@@ -3,7 +3,7 @@ $title = 'Changer le mot de passe';
 $style ="@import url(public/css/form.css);";
 ob_start(); 
 ?>
-<form method="post">
+<form method="post" class="book">
   <fieldset>
   <legend><h2>Changer de mot de passe</h2></legend>
     <label>

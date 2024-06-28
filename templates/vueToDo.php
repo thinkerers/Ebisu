@@ -3,35 +3,50 @@ $title = 'Créer un compte';
 $style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
-<!-- <style>
-  @import url(style.css);
-</style> -->
-<h1>To-Do List</h1>
-
-<!-- formulaire de nouvelle tâche -->
 <!-- <script defer src="public/js/toDo.js"></script> -->
-<form method="post" class="taskForm">
-    <fieldset id="taskContainer">
-        <ul >
-            <li>
-                <small>Titre de la tâche</small></br>
-                <input type="text" name="taskTitle" required></br>
-            
-                <small>Description de la tâche</small></br>
-                <textarea name="taskDescription" required></textarea></br>
-                
-                <button type="submit" name="removeTask" title="Supprimer la tâche">Supprimer</button>
-            </li>
-        </ul>
-        
-        <button type="submit" name="addTask" title="Ajouter une tache">+</button>
-    </fieldset>
-    
-    <input type="submit" name="taskSubmit" value="valider"> 
-</form>
+<!-- <h2>Tâches à réaliser :</h2> -->
 
-<!-- affichage des tâches -->
-<h2>Tâches à réaliser :</h2>
+<div class="book">
+    <form method="post">
+        <legend><h2>To-do list</h2></legend>
+        
+        <!-- affichage des tâches -->
+        <?php foreach ($rows as $row){
+            echo '
+            <div class="task">
+                <div>
+                    <input type="checkbox" id="task" name="task"  />
+                    <label for="task">' . $row . '</label>
+                </div>
+                <button class="delete">X</button>
+            </div>
+            ';
+        }?>
+    
+    </form>
+    
+    <!-- formulaire de nouvelle tâche -->
+    <form method="post" class="taskForm">
+        <fieldset id="taskContainer">
+            <ul class="createToDo">
+                <li>
+                    <small>Titre de la tâche</small></br>
+                    <input type="text" name="taskTitle" required></br>
+                
+                    <small>Description de la tâche</small></br>
+                    <textarea name="taskDescription" required></textarea></br>
+                    
+                    <button type="submit" name="removeTask" title="Supprimer la tâche">Supprimer</button>
+                </li>
+            </ul>
+            
+            <button type="submit" name="addTask" title="Ajouter une tache">+</button>
+        </fieldset>
+        
+        <input type="submit" name="taskSubmit" value="valider"> 
+    </form>
+</div>
+
 
 <?php
 $content = ob_get_clean();
