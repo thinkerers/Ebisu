@@ -191,4 +191,66 @@ class Account
         return password_verify($password, $hashedPassword);
     }
 
+    /**
+     * Retrieves the user ID for a given email address.
+     *
+     * @param string $email User's email address.
+     * @return int The user ID.
+     * @throws \Exception If the user is not found.
+     */
+    public function getUserId($email)
+    {
+        try {
+            $statement = $this->db->prepare('SELECT id FROM users WHERE email = :email');
+            $statement->bindValue(':email', $email, SQLITE3_TEXT);
+            $result = $statement->execute();
+            if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                return $row['id'];
+            } else{
+                throw new \Exception("User not found.");
+            }
+        }
+       
+        catch(\Exception $e){
+            error_log("User not found: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Fishing related methods
+
+    /**
+     * Stores the fish data in the database.
+     *
+     * @param object $fish The fish data to store.
+     * @param int $userId The ID of the user who caught the fish.
+     */
+    public function storeFish($fish, $userId)
+    {
+        try {
+            $statement = $this->db->prepare('INSERT INTO fish (fishId, userId) VALUES (:fishId, :userId)');
+            $statement->bindValue(':fishId', $fish->fishId);
+            $statement->bindValue(':userId', $userId);
+            $statement->execute();
+        } catch (\Exception $e) {
+            error_log("Fish storage error: " . $e->getMessage());
+        }
+    }
+
+    public function getDiscoveredFish($userId)
+    {
+        try {
+            $statement = $this->db->prepare('SELECT fishId FROM fish WHERE userId = :userId');
+            $statement->bindValue(':userId', $userId);
+            $result = $statement->execute();
+            $discoveredFish = [];
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                $discoveredFish[] = $row['fishId'];
+            }
+            return $discoveredFish;
+        } catch (\Exception $e) {
+            error_log("Fish retrieval error: " . $e->getMessage());
+            return [];
+        }
+    }
 }
