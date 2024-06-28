@@ -10,7 +10,7 @@ ob_start();
     <legend>Mettre à jour votre Adresse email</legend>
     <label>
         Adresse email actuelle : 
-        <b><?= htmlspecialchars($_SESSION['user']); ?></b>
+        <b><?= htmlspecialchars($_SESSION['user']['email']); ?></b>
     </label>
     <br />
     <label>

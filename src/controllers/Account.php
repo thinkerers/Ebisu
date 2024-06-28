@@ -56,8 +56,8 @@ class Account
         }
 
         // Confirm the email and delete the account if it matches
-        if (isset($_POST['emailConfirm']) && $_POST['emailConfirm'] === $_SESSION['user']) {
-            (new \src\model\Account())->delete($_SESSION['user']);
+        if (isset($_POST['emailConfirm']) && $_POST['emailConfirm'] === $_SESSION['user']['email']) {
+            (new \src\model\Account())->delete($_SESSION['user']['email']);
             $this->logout();
         } else {
             throw new \Exception("Le mail de confirmation ne correspond pas.");
@@ -100,7 +100,7 @@ class Account
         if ($_POST['newEmail']  == $_POST['newEmail2']) {
             if((new \src\model\Account())->editEmail($_POST['newEmail'])){
                 //update session
-                $_SESSION['user'] = $_POST['newEmail'];
+                $_SESSION['user']['email'] = $_POST['newEmail'];
                  //redirect to home page
                  header('Location: /');
             }else {
@@ -153,14 +153,14 @@ class Account
         $subjetEmail = 'Changer de mot de passe.';
         $messageEmail = "Cliquez sur le lien pour changer votre mot de passe : <a href='http://ebisu.test/index.php?action=editPassword'>Changer votre mot de passe</a>";
         //Check if the email is set and the same as the session
-        if($_POST['emailForPassword'] === $_SESSION['user']){
+        if($_POST['emailForPassword'] === $_SESSION['user']['email']){
             if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
                 echo "Le mail a été envoyé.";
             }else{
                 throw new \Exception("Le mail n'a pas été envoyé.");
             }
         }else{
-            throw new Exception("L'email ne correspond pas.");
+            throw new \Exception("L'email ne correspond pas.");
         }
     }   
         
@@ -187,7 +187,7 @@ class Account
             if ($_POST['newPassword'] === $_POST['newPassword2']) {
                 if((new \src\model\Account())->editPassword($_POST['newPassword'])){
                     //update session
-                    $this->login($_SESSION['user'], $_POST['newPassword']); // Automatically log in the new user
+                    $this->login($_SESSION['user']['email'], $_POST['newPassword']); // Automatically log in the new user
                     //redirect to home page
                     header('Location: /');
                     //send an email to confirm the change
@@ -214,7 +214,8 @@ class Account
     {
         // If the user is already logged in, return a 403 error: Forbidden
         if (isset($_SESSION['user'])) {
-            return http_response_code(403); // Forbidden
+            http_response_code(403); // Forbidden
+            return 403;
         }
 
         // Filter and validate input
@@ -224,16 +225,23 @@ class Account
         // If input is invalid, show the login page
         if (!$filtered_email || !$filtered_password) {
             require_once('templates/account-form-login.php');
-            return http_response_code(400); // Bad Request
+            http_response_code(400); // Bad Request
+            return 400;
         }
 
         // Authenticate the user
-        if ((new \src\model\Account())->login($filtered_email, $filtered_password)) {
-            $_SESSION['user'] = $filtered_email;
-            return http_response_code(200); // OK
+        $account = new \src\model\Account();
+        if ($account->login($filtered_email, $filtered_password)) {
+            $_SESSION['user'] = [
+                'email' => $filtered_email,
+                'id' => $account->getUserId($filtered_email)
+            ];
+            http_response_code(200); // OK
+            return 200;
         } else {
             http_response_code(401); // Unauthorized
             header('Location: /');
+            return 401;
         }
     }
 
@@ -274,40 +282,4 @@ class Account
         }
         return filter_var($password, FILTER_DEFAULT);
     }
-
-    public function getFish()
-    {
-
-        if(isset($_GET['getFish'])){            
-            // Exemple d'utilisation
-            [$rarity, $randVariant] = $this->getRandomRarity();
-            echo "Le niveau de rareté sélectionné est: $rarity et le variant est: $randVariant.";
-        }
-    }
-    function getRandomRarity() {
-                // Probabilités cumulatives pour chaque rareté
-                $rarities = [
-                    'normal' => 700, // 70%
-                    'rare' => 200,   // 20%
-                    'ultra-rare' => 90, // 9%
-                    'legendaire' => 1 // 1%
-                ];
-            
-                // Générer un nombre aléatoire entre 1 et 100
-                $randomNumber = rand(1, 1000);
-                $randVariant = rand(1, 10);
-                
-                // Déterminer la rareté en fonction du nombre aléatoire
-                $cumulativeProbability = 0;
-                foreach ($rarities as $rarity => $probability) {
-                    $cumulativeProbability += $probability;
-                    if ($randomNumber <= $cumulativeProbability) {
-                        return [$rarity, $randVariant];
-                    }
-                }
-                
-                // En théorie, on ne devrait jamais atteindre cette ligne si les probabilités sont correctement définies
-                return null;
-            }
-
 }

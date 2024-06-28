@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\SMTP;
 /**
  * Class Account
  *
- * Handles account-related operations (creation, deletion, login, logout).
+ * Handles account-related operations (creation, deletion, login, logout, storeFish).
  */
 class Account
 {
@@ -58,7 +58,7 @@ class Account
      */
     public function delete($email)
     {
-        if ($_SESSION['user'] == $email) {
+        if ($_SESSION['user']['email'] == $email) {
             try {
                 $statement = $this->db->prepare('DELETE FROM users WHERE email = :email');
                 $statement->bindParam(':email', $email);
@@ -76,7 +76,7 @@ class Account
         try{
             $statement = $this->db->prepare('UPDATE users SET email = :email WHERE email = :oldEmail');
             $statement->bindParam(':email', $email);
-            $statement->bindParam(':oldEmail', $_SESSION['user']);
+            $statement->bindParam(':oldEmail', $_SESSION['user']['email']);
             $statement->execute();
                 return true;  
             }catch (\Exception $e) {
@@ -89,7 +89,7 @@ class Account
         try{
         $statement = $this->db->prepare('UPDATE users SET hashedPassword = :hashedPassword WHERE email = :email');
         $statement->bindParam(':hashedPassword', $hashedPassword);
-        $statement->bindParam(':email', $_SESSION['user']);
+        $statement->bindParam(':email', $_SESSION['user']['email']);
         $statement->execute();
             return true;   
         }catch (\Exception $e) {
@@ -119,10 +119,10 @@ class Account
          $mail->Host = 'localhost';
          $mail->Port = 1025; // Port par défaut de MailHog
 
-         $mail->charSet = 'UTF-8';
+         $mail->CharSet = 'UTF-8';
 
          //Destinataire
-         $mail->addAddress($_SESSION['user']);
+         $mail->addAddress($_SESSION['user']['email']);
         
          //Expéditeur
          $mail->setFrom('no-replay@ebisu.be', 'Ebisu');
@@ -179,6 +179,32 @@ class Account
     }
 
     /**
+     * Retrieves the user ID for a given email address.
+     *
+     * @param string $email User's email address.
+     * @return int The user ID.
+     * @throws \Exception If the user is not found.
+     */
+    public function getUserId($email)
+    {
+        try {
+            $statement = $this->db->prepare('SELECT id FROM users WHERE email = :email');
+            $statement->bindValue(':email', $email, SQLITE3_TEXT);
+            $result = $statement->execute();
+            if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                return $row['id'];
+            } else{
+                throw new \Exception("User not found.");
+            }
+        }
+       
+        catch(\Exception $e){
+            error_log("User not found: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Logs the user in if valid credentials are provided.
      *
      * @param string|null $email The email address of the user.
@@ -189,6 +215,41 @@ class Account
     {
         $hashedPassword = $this->getUserHash($email);
         return password_verify($password, $hashedPassword);
+    }
+
+    /**
+     * Stores the fish data in the database.
+     *
+     * @param object $fish The fish data to store.
+     * @param int $userId The ID of the user who caught the fish.
+     */
+    public function storeFish($fish, $userId)
+    {
+        try {
+            $statement = $this->db->prepare('INSERT INTO fish (fishId, userId) VALUES (:fishId, :userId)');
+            $statement->bindValue(':fishId', $fish->fishId);
+            $statement->bindValue(':userId', $userId);
+            $statement->execute();
+        } catch (\Exception $e) {
+            error_log("Fish storage error: " . $e->getMessage());
+        }
+    }
+
+    public function getDiscoveredFish($userId)
+    {
+        try {
+            $statement = $this->db->prepare('SELECT fishId FROM fish WHERE userId = :userId');
+            $statement->bindValue(':userId', $userId);
+            $result = $statement->execute();
+            $discoveredFish = [];
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                $discoveredFish[] = $row['fishId'];
+            }
+            return $discoveredFish;
+        } catch (\Exception $e) {
+            error_log("Fish retrieval error: " . $e->getMessage());
+            return [];
+        }
     }
 
 }

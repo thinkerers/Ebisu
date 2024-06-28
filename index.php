@@ -2,7 +2,7 @@
 require_once 'bootstrap.php';
 
 try {
-    $action = match ($_GET['action'] ?? $_POST['action'] ?? '') {
+    $action = match ( $_POST['action'] ?? $_GET['action'] ?? '') {
         ''              => null,
         'login'         => $account->login(),
         'logout'        => $account->logout(),
@@ -13,7 +13,7 @@ try {
         'goToSendEmail' => $account->goToSendEmail(),   //Go to the page to send a request by email to change password
         'editPassword'  => $account->editPassword(),
         'startPomodoro' => $page->pomodoroTimer(),
-        'getFish'       => $account->getFish(),
+        'goFishing'     => $page->goFishing(), //go to the fishing page
         default         => throw new Exception("Action inconnue."),
     };
 

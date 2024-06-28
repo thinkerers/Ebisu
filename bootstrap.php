@@ -7,3 +7,4 @@ spl_autoload_register(function ($class) {
 
 $account = new src\controllers\Account();
 $page = new src\controllers\Page();
+$fishing = new src\lib\Fishing();
