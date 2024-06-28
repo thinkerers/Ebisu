@@ -119,7 +119,7 @@ class Account
          $mail->Host = 'localhost';
          $mail->Port = 1025; // Port par défaut de MailHog
 
-         $mail->charSet = 'UTF-8';
+         $mail->CharSet = 'UTF-8';
 
          //Destinataire
          $mail->addAddress($_SESSION['user']);
