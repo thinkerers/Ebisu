@@ -14,18 +14,11 @@ use PHPMailer\PHPMailer\SMTP;
 class Account
 {
     /**
-     * @var \dbConnect Database connection object.
-     */
-    private $db;
-
-    /**
      * Account constructor.
      * Initializes the database connection.
      */
-    public function __construct()
-    {
-        $this->db = new dbConnect();
-    }
+    public function __construct(public $db = new dbConnect())
+    {}
 
     /**
      * Creates a new user account.
