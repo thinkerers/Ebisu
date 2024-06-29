@@ -119,7 +119,7 @@ class Account
          $mail->Host = 'localhost';
          $mail->Port = 1025; // Port par défaut de MailHog
 
-         $mail->charSet = 'UTF-8';
+         $mail->CharSet = 'UTF-8';
 
          //Destinataire
          $mail->addAddress($_SESSION['user']);
@@ -212,11 +212,14 @@ class Account
                 throw new \Exception("La tâche n'a pas pu être ajoutée.");
             }
     }
-    public function taskExist()
+    public function getTasks()
     {
         try{
             // Prepare the SQL statement with a subquery
-            $statement = $this->db->prepare('SELECT name, id FROM tasks');
+            $statement = $this->db->prepare('SELECT name, id FROM tasks WHERE userId = (SELECT id FROM users WHERE email = :email)');
+
+            // Bind the parameters to the SQL query and execute the statement
+            $statement->bindValue(':email', $_SESSION["user"], SQLITE3_TEXT);
 
             // execute
             $result = $statement->execute();
@@ -225,8 +228,7 @@ class Account
             $tasks = [];
             
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                // $tasks[] = $row['name' , 'id'];
-                $tasks[] = ['name' => $row['name'], 'id' => $row['id']];
+                $tasks[$row['id']] = $row['name'];
             }
             return $tasks;
 
@@ -239,20 +241,16 @@ class Account
             return [false];
         }
     }
-    public function taskDelete()
+    public function deleteTask()
     {
         try{
-            //retirer la tâche de la variable de session
-            array_shift($_SESSION["tasks"]);
-
-            //variable with task name
-            $taskName = $_POST[""];
-
+            //update task session
+            unset($_SESSION["tasks"][$_POST['removeTask']]);
             // Prepare the SQL statement with a subquery
-            $statement = $this->db->prepare('SELECT name FROM tasks');
-
-            // execute
-            $result = $statement->execute();
+            $statement = $this->db->prepare('DELETE FROM tasks WHERE id = :id');
+            $statement->bindParam(':id', $_POST['removeTask']);
+            $statement->execute();
+            return true;
         }
         catch (\Exception $e) {
             error_log($e->getMessage("Task not deleted"));

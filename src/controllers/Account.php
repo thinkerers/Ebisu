@@ -277,35 +277,27 @@ class Account
 
     //add tasks
     public function addTask()
-    {
-        if (!isset($_SESSION['user'])) {
-            throw new \Exception("Vous n'êtes pas connecté.");
-        }
-
-        //Fetch all tasks
-        if ((new \src\model\Account())->taskExist()){
-
-            // Fetch all rows from fuction
-            $rows = (new \src\model\Account())->taskExist();
-
-            //Infos dans session
-            $_SESSION["tasks"]=$rows;
-        }
-        else {
-            echo "No tasks found.";
-        }
-
-        require_once("templates/vueToDo.php");
-
-
-        if (isset($_POST['addTask'])){
-            // echo $_POST["taskDescription"];
-            (new \src\model\Account())->addTask($_POST['taskTitle'], 
-            // $_POST['taskDescription']
-            );
-            header('Location: /?action=addTask');
-        }
-
-        // if isset $post delete task
+{
+    if (!isset($_SESSION['user'])) {
+        throw new \Exception("Vous n'êtes pas connecté.");
     }
+
+    // Instantiate the Account model once
+    $accountModel = new \src\model\Account();
+
+    // Handle form submission to add a new task
+    if (isset($_POST['addTask'])) {
+        $accountModel->addTask($_POST['taskTitle']);
+    }
+
+    if(isset($_POST['removeTask'])){
+        $accountModel->deleteTask($_POST['removeTask']);
+    }
+
+    $_SESSION["tasks"] = $accountModel->getTasks();
+
+    // Include the view template
+    require_once("templates/vueToDo.php");
+}
+
 }

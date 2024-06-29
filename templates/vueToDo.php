@@ -3,28 +3,37 @@ $title = 'Créer un compte';
 $style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
-<!-- <script defer src="public/js/toDo.js"></script> -->
-<!-- <h2>Tâches à réaliser :</h2> -->
-
 <div class="book">
     <form method="post" class="taskDisplay">
         <legend><h2>To-do list</h2></legend>
-        
-        <!-- affichage des tâches -->
-        <?php foreach ( $_SESSION["tasks"] as $row){
-            echo '
-            <div class="task">
-                <div>
-                    <input type="checkbox" id="task" name="task"  />
-                    <label for="task">' . $row . '</label>
-                </div>
-                <button class="delete" type="submit" name="removeTask" title="Supprimer la tâche"
-                value='. $row .'>X</button>
-            </div>
-            ';
-        }?>
-    
+        <?php
+foreach ($_SESSION["tasks"] as $id => $name) {
+    echo '
+        <label class="task">
+            <input type="checkbox" name="task[]" value="' . $id . '" />
+            ' . htmlspecialchars($name) . '
+            <button class="delete" type="submit" name="removeTask" value="' . $id . '" title="Supprimer la tâche">X</button>
+        </label>
+    ';
+}
+?>
     </form>
+
+    <style>
+        .book{
+            overflow-y: scroll;
+        }
+        .task{
+            display: grid;
+            grid-auto-flow: column;
+            align-content: center;
+        }
+        [type="checkbox"]{
+            height: 2lh;
+            aspect-ratio: 1;
+            margin:0;
+        }
+    </style>
     
     <!-- formulaire de nouvelle tâche -->
     <form method="post" class="taskForm">
