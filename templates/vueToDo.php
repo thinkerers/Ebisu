@@ -30,7 +30,7 @@ ob_start();
         <fieldset id="taskContainer">
             <ul class="createToDo">
                 <li>
-                    <small>Titre de la tâche</small></br>
+                    <!-- <small>Titre de la tâche</small>--></br> 
                     <input autofocus minlength="3" type="text" name="taskTitle" required></br>
                 
                     <!-- <small>Description de la tâche</small></br>

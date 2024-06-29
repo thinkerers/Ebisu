@@ -165,7 +165,7 @@ input,
   
 }
 small{
-  display: none;
+  /* display: none; */
 }
 footer.material-symbols-outlined{
   display: none;
