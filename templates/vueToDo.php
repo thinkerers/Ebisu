@@ -2,7 +2,6 @@
 $title = 'To-do list';
 $style ='@import url(public/css/form.css);';
 ob_start(); 
-
 ?>
 
 <div class="book">
