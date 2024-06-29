@@ -194,13 +194,11 @@ class Account
     public function addTask($taskTitle = null, $taskDescription = null)
     {
         try{
-            // Prepare the SQL statement with a subquery
             $statement = $this->db->prepare('
             INSERT INTO tasks (description, userId, name)
             VALUES (:description, (SELECT id FROM users WHERE email = :email), :name)
             ');
 
-            // Bind the parameters to the SQL query and execute the statement
             $statement->bindValue(':email', $_SESSION["user"], SQLITE3_TEXT);
             $statement->bindValue(':description', $taskDescription, SQLITE3_TEXT);
             $statement->bindValue(':name', $taskTitle, SQLITE3_TEXT);
@@ -215,28 +213,18 @@ class Account
     public function getTasks()
     {
         try{
-            // Prepare the SQL statement with a subquery
             $statement = $this->db->prepare('SELECT name, id FROM tasks WHERE userId = (SELECT id FROM users WHERE email = :email)');
-
-            // Bind the parameters to the SQL query and execute the statement
             $statement->bindValue(':email', $_SESSION["user"], SQLITE3_TEXT);
-
-            // execute
             $result = $statement->execute();
-
-            //declare tableau tasks 
             $tasks = [];
             
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
                 $tasks[$row['id']] = $row['name'];
             }
             return $tasks;
-
-            // return $result->fetchAll(PDO::FETCH_ASSOC);
         } 
 
         catch(\Exception $e){
-            // Gérer l'erreur si la requête échoue
             error_log($e->getMessage("No tasks found."));
             return [false];
         }
@@ -244,9 +232,7 @@ class Account
     public function deleteTask()
     {
         try{
-            //update task session
             unset($_SESSION["tasks"][$_POST['removeTask']]);
-            // Prepare the SQL statement with a subquery
             $statement = $this->db->prepare('DELETE FROM tasks WHERE id = :id');
             $statement->bindParam(':id', $_POST['removeTask']);
             $statement->execute();
