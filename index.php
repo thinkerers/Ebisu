@@ -13,7 +13,7 @@ try {
         'goToSendEmail' => $account->goToSendEmail(),   //Go to the page to send a request by email to change password
         'editPassword'  => $account->editPassword(),
         'startPomodoro' => $page->pomodoroTimer(), 
-        'addTask'       => $account->addTask(),
+        'handleTasks'       => $page->handleTasks(),
         'goFishing'     => $page->goFishing(),
         default         => throw new Exception("Action inconnue."),
     };

@@ -4,6 +4,7 @@ namespace src\controllers;
 use \src\model\dbConnect;
 use \src\model\Account as AccountModel;
 use \src\model\Fishes as FishesModel;
+use \src\model\Tasks as TasksModel;
 class Page
 {
     public function __construct(
@@ -61,5 +62,34 @@ class Page
 
             require 'templates/fishing.php';
         } 
+
+    public function handleTasks()
+    {
+        if (!isset($_SESSION['user'])) {
+            throw new \Exception("Vous n'êtes pas connecté.");
+        }
+    
+        // Instantiate the Tasks model once
+        $tasksModel  = new \src\model\Tasks(
+            db: $this->db
+        );
+        // Handle form submission to add a new task
+        if (isset($_POST['addTask'])) {
+            $tasksModel->add($_POST['taskTitle']);
+        }
+    
+        if(isset($_POST['removeTask'])){
+            $tasksModel->delete($_POST['removeTask']);
+        }
+    
+        $_SESSION["tasks"] = $tasksModel->get();
+
+        $data = [
+            'tasks' =>  $_SESSION["tasks"] ?? null,
+        ];
+    
+        // Include the view template
+        require_once("templates/vueToDo.php");
+    }
 
 }

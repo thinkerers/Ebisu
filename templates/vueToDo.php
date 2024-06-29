@@ -12,7 +12,7 @@ ob_start();
         <button tabindex="0"  type="submit" name="addTask" title="Ajouter une tâche">ajouter</button>
     </label>
 
-    <?php foreach ($_SESSION["tasks"] as $id => $name) : ?>
+    <?php foreach ($data['tasks'] as $id => $name) : ?>
         <label class="task">
             <input type="checkbox" name="task[]" value="<?= htmlspecialchars($id) ?>" />
             <?= htmlspecialchars($name) ?>
@@ -21,10 +21,6 @@ ob_start();
         <br>
     <?php endforeach; ?>
 </form>
-
-
-
-
 <?php
 $content = ob_get_clean();
 require_once($_SERVER['DOCUMENT_ROOT'].'/templates/layout.php');

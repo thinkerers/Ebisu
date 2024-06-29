@@ -32,7 +32,7 @@ class Tasks
     )
     {}
 
-    public function addTask($taskTitle = null, $taskDescription = null)
+    public function add($taskTitle = null, $taskDescription = null)
     {
         try{
             $statement = $this->db->prepare('
@@ -51,7 +51,7 @@ class Tasks
                 throw new \Exception("La tâche n'a pas pu être ajoutée.");
             }
     }
-    public function getTasks()
+    public function get()
     {
         try{
             $statement = $this->db->prepare('SELECT name, id FROM tasks WHERE userId = (SELECT id FROM users WHERE email = :email)');
@@ -70,7 +70,7 @@ class Tasks
             return [false];
         }
     }
-    public function deleteTask()
+    public function delete()
     {
         try{
             unset($_SESSION["tasks"][$_POST['removeTask']]);
