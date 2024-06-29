@@ -30,7 +30,6 @@ h2{
 
 /* style par section */
 body {
-  background-position-y: bottom;
   font-family: var(--font-family);
   margin: 0;
   min-height: 100vh;
@@ -46,7 +45,8 @@ body {
 
   background-image: url("../img/prtScLandscape.jpg");
   background-repeat: no-repeat;
-  background-position: center;
+  background-position-x: center;
+  background-position-y: bottom;
   background-size: cover;
 }
 
