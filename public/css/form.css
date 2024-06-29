@@ -1,12 +1,22 @@
-/* fieldset{
 
-  display: flex;
-  justify-content: center;
+.taskDisplay{
+  .task{
+  display: grid;
+  grid-auto-flow: column;
+  align-content: center;
+  &:has(:checked) {
+    text-decoration: line-through;
+  }
+  [type="checkbox"]{
+    height: 2lh;
+    aspect-ratio: 1;
+    margin:0;
+  }
+}
+}
 
-} */
-
-/* form, */
 .book {
+  overflow-y: scroll;
   display: grid;
   grid-area: content;
   /* font-family: var(--font-family); */
