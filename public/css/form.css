@@ -5,7 +5,8 @@
 
 } */
 
-form {
+/* form, */
+.book {
   display: grid;
   grid-area: content;
   /* font-family: var(--font-family); */
@@ -148,7 +149,8 @@ h2{
   background: rgba(226, 164, 117, 0.44);
 }
 
-input{
+input,
+.task{
   border: 3px solid #A35647;
   background: rgba(226, 164, 117, 0.28);
   /* margin: 1rem; */
@@ -162,3 +164,36 @@ footer.material-symbols-outlined{
   display: none;
 }
 
+/* tasks */
+.taskDisplay{
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+  margin-bottom: 44px;
+}
+.task{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  margin: 0;
+}
+
+.task label{
+  display: inline-block;
+}
+input#task,
+button.delete[type="submit"]{
+  margin: 10px;
+  padding: 0;
+}
+button.delete[type="submit"]{
+  background-color: transparent;
+  color: black;
+  border-style: none;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  justify-self: flex-end ;
+}

@@ -274,4 +274,30 @@ class Account
         }
         return filter_var($password, FILTER_DEFAULT);
     }
+
+    //add tasks
+    public function addTask()
+{
+    if (!isset($_SESSION['user'])) {
+        throw new \Exception("Vous n'êtes pas connecté.");
+    }
+
+    // Instantiate the Account model once
+    $accountModel = new \src\model\Account();
+
+    // Handle form submission to add a new task
+    if (isset($_POST['addTask'])) {
+        $accountModel->addTask($_POST['taskTitle']);
+    }
+
+    if(isset($_POST['removeTask'])){
+        $accountModel->deleteTask($_POST['removeTask']);
+    }
+
+    $_SESSION["tasks"] = $accountModel->getTasks();
+
+    // Include the view template
+    require_once("templates/vueToDo.php");
+}
+
 }

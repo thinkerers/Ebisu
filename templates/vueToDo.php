@@ -3,35 +3,58 @@ $title = 'Créer un compte';
 $style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
-<!-- <style>
-  @import url(style.css);
-</style> -->
-<h1>To-Do List</h1>
+<div class="book">
+    <form method="post" class="taskDisplay">
+        <legend><h2>To-do list</h2></legend>
+        <?php
+foreach ($_SESSION["tasks"] as $id => $name) {
+    echo '
+        <label class="task">
+            <input type="checkbox" name="task[]" value="' . $id . '" />
+            ' . htmlspecialchars($name) . '
+            <button class="delete" type="submit" name="removeTask" value="' . $id . '" title="Supprimer la tâche">X</button>
+        </label>
+    ';
+}
+?>
+    </form>
 
-<!-- formulaire de nouvelle tâche -->
-<script defer src="public/js/toDo.js"></script>
-<form action="self" method="post" class="taskForm">
-    <fieldset id="taskContainer">
-        <ul >
-            <li>
-                <small>Titre de la tâche</small></br>
-                <input type="text" name="taskTitleInput" required></br>
-            
-                <small>Description de la tâche</small></br>
-                <textarea name="taskDescriptionInput" required></textarea></br>
-                
-                <button type="button" class="removeTaskBtn" title="Supprimer la tâche">Supprimer</button>
-            </li>
-        </ul>
-        
-        <button type="button" id="addTaskBtn" title="Ajouter une tache">+</button>
-    </fieldset>
+    <style>
+        .book{
+            overflow-y: scroll;
+        }
+        .task{
+            display: grid;
+            grid-auto-flow: column;
+            align-content: center;
+        }
+        [type="checkbox"]{
+            height: 2lh;
+            aspect-ratio: 1;
+            margin:0;
+        }
+    </style>
     
-    <input type="submit" name="taskSubmit" value="valider"> 
-</form>
+    <!-- formulaire de nouvelle tâche -->
+    <form method="post" class="taskForm">
+        <fieldset id="taskContainer">
+            <ul class="createToDo">
+                <li>
+                    <small>Titre de la tâche</small></br>
+                    <input type="text" name="taskTitle" required></br>
+                
+                    <!-- <small>Description de la tâche</small></br>
+                    <textarea name="taskDescription" required></textarea></br> -->
+                </li>
+            </ul>
+            
+            <button type="submit" name="addTask" title="Ajouter une tache">ajouter</button>
+        </fieldset>
+        
+        <!-- <input type="submit" name="taskSubmit" value="valider">  -->
+    </form>
+</div>
 
-<!-- affichage des tâches -->
-<h2>Tâches à réaliser :</h2>
 
 <?php
 $content = ob_get_clean();

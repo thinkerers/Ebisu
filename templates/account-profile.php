@@ -7,7 +7,7 @@ ob_start();
   /* @import url(style.css); */
   @import url(form.css);
 </style>
-<form>
+<form  class="book">
   <fieldset>
   <legend>Modifier mes informations</legend>
     <label>

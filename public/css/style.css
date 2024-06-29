@@ -9,7 +9,7 @@
   
   font-size: clamp(1rem, 1vw + 0.75rem, 1.667rem);
   font-family: system-ui;
-  font-size: 18px;
+  /* font-size: 18px; */
   display: grid;
   place-content: center;
   place-items: center;
