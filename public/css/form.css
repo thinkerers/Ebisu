@@ -1,23 +1,12 @@
+/* fieldset{
 
-.taskDisplay{
-  .task{
-  display: grid;
-  grid-auto-flow: column;
-  align-content: center;
-  grid-template-columns: min-content 1fr min-content;
-  &:has(:checked) {
-    text-decoration: line-through;
-  }
-  [type="checkbox"]{
-    height: 2lh;
-    aspect-ratio: 1;
-    margin:0;
-  }
-}
-}
+  display: flex;
+  justify-content: center;
 
+} */
+
+/* form, */
 .book {
-  overflow-y: scroll;
   display: grid;
   grid-area: content;
   /* font-family: var(--font-family); */
@@ -35,8 +24,9 @@
   /* max-width: 656px; */
   /* max-height: 906px; */
 
-  height: 50vh;
+  max-height: 88vh;
   /* height: 88vh; */
+  min-height: fit-content;
 
   max-width: 45.5vw;
   width: 100%;
@@ -163,8 +153,14 @@ input,
 .task{
   border: 3px solid #A35647;
   background: rgba(226, 164, 117, 0.28);
+  /* margin: 1rem; */
+  margin-bottom: clamp(0.5rem, 3vw + 1rem, 1rem);
+  
 }
-/* small{
+small{
+  display: none;
+}
+footer.material-symbols-outlined{
   display: none;
 }
 
@@ -172,36 +168,59 @@ input,
 .taskDisplay{
   display: flex;
   flex-direction: column;
+  gap: 23px;
+  margin-bottom: 44px;
+  overflow-y: scroll;
+  height: 322px;
+}
+.createToDo{
+  li{
+    list-style: none;
+  }
+}
+.taskForm{
+  [type='submit']{
+    padding: clamp(0.833rem, 1vw, 2.333rem);
+  }
+}
 
-  .task{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    
-    margin: 0;
+fieldset#taskContainer{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  place-items: center;
+  button{
+    /* padding: clamp(0.833rem, 1vw, 2.333rem); */
+    height: min-content;
+    place-content: 1;
+    place-items: center;
+    aspect-ratio: 1;
   }
+}
+
+.task{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   
-  .task label{
-    display: inline-block;
-  }
-  input#task,
-  button.delete[type="submit"]{
-    margin: 10px;
-    padding: 0;
-  }
-  button.delete[type="submit"]{
-    background-color: transparent;
-    color: black;
-    border-style: none;
-  
-    font-size: 24px;
-    font-weight: 700;
-  
-    justify-self: flex-end ;
-  }
-  
-  .addTask{
-    display: flex;
-  
-  }
+  margin: 0;
+}
+
+.task label{
+  display: inline-block;
+}
+input#task,
+button.delete[type="submit"]{
+  margin: 10px;
+  padding: 0;
+}
+button.delete[type="submit"]{
+  background-color: transparent;
+  color: black;
+  border-style: none;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  justify-self: flex-end ;
 }
