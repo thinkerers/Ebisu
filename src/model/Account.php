@@ -2,7 +2,7 @@
 
 namespace src\model;
 
-use PHPMailer\PHPMailer\Exception;
+// use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
@@ -31,15 +31,144 @@ class Account
     public function create($email, $password)
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $verificationToken = bin2hex(random_bytes(16));
+        $tokenExpiry = date("Y-m-d H:i:s", strtotime('+60 minutes'));
 
         try {
-            $statement = $this->db->prepare('INSERT INTO users (email, hashedPassword) VALUES (:email, :hashedPassword)');
+            $statement = $this->db->prepare('INSERT INTO users (email, hashedPassword, verification_token, token_expiry) VALUES (:email, :hashedPassword, :verification_token, :token_expiry)');
             $statement->bindValue(':email', $email);
             $statement->bindValue(':hashedPassword', $hashedPassword);
-            return $statement->execute();
+            $statement->bindValue(':verification_token', $verificationToken);
+            $statement->bindValue(':token_expiry', $tokenExpiry);
+            $statement->execute();
+            $this->sendVerificationEmail($email, $verificationToken);
         } catch (\Exception $e) {
             error_log("Account creation error: " . $e->getMessage());
             throw new \Exception("Erreur lors de la création du compte.");
+        }
+    }    
+    /**
+     * Get the token linked to the email passed as argument
+     *
+     * @param  mixed $email
+     * @return string The token linked to the email passed as argument.
+     * @throws \Exception If an error occurs during token retrieval.
+     */
+    public function getToken($email){
+        try{
+            $statement = $this->db->prepare('SELECT verification_token FROM users WHERE email = :email');
+            $statement->bindValue(':email', $email);
+            $result = $statement->execute();
+            if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                return $row['verification_token'];
+            } else{
+                throw new \Exception("Utilisateur introuvable.");
+            }
+        } catch (\Exception $e) {
+            error_log("Account getToken error: " . $e->getMessage());
+            throw new \Exception("Erreur lors de la recupération du Token.");
+        }
+    }    
+    /**
+     * Reset the token and token expiry date to 10 minutes after the current time
+     *
+     * @param  mixed $email
+     * @return void
+     * @throws \Exception If an error occurs during token reset.
+     */
+    public function resetTokenExpiry($email){
+        $verificationToken = bin2hex(random_bytes(16));
+        $tokenExpiry = date("Y-m-d H:i:s", strtotime('+10 minutes'));
+        try{
+            $statement = $this->db->prepare('UPDATE users SET verification_token = :verification_token, token_expiry = :token_expiry, is_verified = :is_verified WHERE email = :email');
+            $statement->bindValue(':email', $email);
+            $statement->bindValue(':verification_token', $verificationToken);
+            $statement->bindValue(':token_expiry', $tokenExpiry);
+            $statement->bindValue(':is_verified', 0);
+            $result = $statement->execute();
+            
+        } catch (\Exception $e) {
+            error_log("Account resetTokenExpiry error: " . $e->getMessage());
+            throw new \Exception("Erreur lors de la création du Token.");
+        }
+    }
+    
+    /**
+     * Send a verification email to the user
+     *
+     * @param  mixed $email
+     * @param  mixed $verificationToken
+     * @return void
+     * @throws \Exception If an error occurs during email sending.
+     */
+    public function sendVerificationEmail($email, $verificationToken){
+        $verificationLink = "http://ebisu.test/?action=verify&token=$verificationToken";
+        $subject = "Vérification de votre adresse mail";
+        $message = "Pour valider votre adresse mail, veuillez cliquer sur <a href=" . $verificationLink .">Verifier mon compte</a>";
+        try{
+        $this->sendEmail($subject, $message, $email);
+        } catch (\Exception $e) {
+        error_log("Account sendVerificationEmail error: " . $e->getMessage());
+        throw new \Exception("Erreur lors de l'envoie du mail de vérification.");
+        }
+    }
+    
+    /**
+     * Verify the token passed as argument
+     *
+     * @param  mixed $token
+     * @return bool True if the token is valid, false otherwise
+     */
+    public function verify($token) {
+        try {
+            error_log("Verification start for token: " . $token);
+    
+            // Préparer et exécuter la requête SELECT
+            $statement = $this->db->prepare("SELECT email, token_expiry FROM users WHERE verification_token = :token AND is_verified = 0");
+            $statement->bindValue(':token', $token, SQLITE3_TEXT); // Spécifiez le type de données
+            $result = $statement->execute();
+            $row = $result->fetchArray(SQLITE3_ASSOC);
+    
+            if ($row) {
+                error_log("Token found: " . print_r($row, true));
+                $tokenExpiry = strtotime($row['token_expiry']);
+                $current_time = time();
+    
+                if ($current_time < $tokenExpiry) {
+                    error_log("Token not expired. Updating verification status.");
+    
+                    // Préparer et exécuter la requête UPDATE
+                    $updateStatement = $this->db->prepare("UPDATE users SET is_verified = 1 WHERE verification_token = :token");
+                    $updateStatement->bindValue(':token', $token, SQLITE3_TEXT); // Spécifiez le type de données
+                    $updateStatement->execute();
+                    return true;
+                } else {
+                    throw new \Exception("Token expired.");
+                    // Token expiré
+                }
+            } else {
+                throw new \Exception("No matching token found or already verified.");
+                // Aucun utilisateur trouvé avec ce token
+            }
+        } catch (\Exception $e) {
+            error_log("Account verification error: " . $e->getMessage());
+            throw new \Exception("Erreur lors de la vérification.");
+        }
+    }
+
+    public function is_verified($email){
+        try{
+            $statement = $this->db->prepare('SELECT is_verified FROM users WHERE email = :email');
+            $statement->bindValue(':email', $email);
+            $result = $statement->execute();
+            if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                return $row['is_verified'];
+            } else{
+                throw new \Exception("Utilisateur introuvable.");
+            }
+        } catch (\Exception $e) {
+            error_log("Account is_verified error: " . $e->getMessage());
+            throw new \Exception("Erreur lors de la recupération du Token.");
         }
     }
 
@@ -63,7 +192,14 @@ class Account
             }
         }
     }
-
+    
+    /**
+     * Edit the email of the account linked to the email passed as argument
+     *
+     * @param  mixed $email
+     * @return bool True if the email has been edited, false otherwise.
+     * @throws \Exception If an error occurs during email edition.
+     */
     public function editEmail($email)
     {        
         try{
@@ -72,11 +208,18 @@ class Account
             $statement->bindParam(':oldEmail', $_SESSION['user']);
             $statement->execute();
                 return true;  
-            }catch (\Exception $e) {
-                throw new \Exception("Le mail n'a pas pu être modifié.");
+            } catch (\Exception $e) {
+                error_log("Account editEmail error: " . $e->getMessage());
+                throw new \Exception("Erreur lors du changemant d'email.");
             }
     }
-    
+        
+    /**
+     * Edit the password of the email linked to the session
+     *
+     * @param  mixed $password
+     * @return bool True if the password has been edited, false otherwise.
+     */
     public function editPassword($password) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         try{
@@ -85,9 +228,9 @@ class Account
         $statement->bindParam(':email', $_SESSION['user']);
         $statement->execute();
             return true;   
-        }catch (\Exception $e) {
-            $errorMsg = "Aucun compte n'a été trouvé";
-            return false; 
+        } catch (\Exception $e) {
+            error_log("Account zditPassword error: " . $e->getMessage());
+            throw new \Exception("Erreur lors du changement de mot de passe.");
         }
     }
     
@@ -96,7 +239,7 @@ class Account
      * 
      * @return bool True if the email as been send, false otherwise.
     */
-    public function sendEmail($subject, $message){
+    public function sendEmail($subject, $message, $email){
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/Exception.php');
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/PHPMailer.php');
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/SMTP.php');
@@ -106,7 +249,7 @@ class Account
         try{
          //$mail->SMTPDebug = SMTP::DEBUG_SERVER;//Info for debugging
 
-         // Test avec MailHog    
+         //Avec MailHog    
          //$mail->SMTPDebug = PHPMailer::DEBUG_SERVER;
          $mail->isSMTP();
          $mail->Host = 'localhost';
@@ -116,7 +259,7 @@ class Account
          $mail->CharSet = 'UTF-8';
 
          //Destinataire
-         $mail->addAddress($_SESSION['user']);
+         $mail->addAddress($_SESSION['user'] ?? $email);
         
          //Expéditeur
          $mail->setFrom('no-replay@ebisu.be', 'Ebisu');
@@ -128,8 +271,8 @@ class Account
         
          $mail->send();
          return true;
-        }catch (Exception){
-            throw new Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        }catch ( \PHPMailer\PHPMailer\Exception){
+            throw new  \PHPMailer\PHPMailer\Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
             return false;
         }
     }

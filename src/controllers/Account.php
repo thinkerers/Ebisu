@@ -29,13 +29,35 @@ class Account
         if ((new \src\model\Account())->getUserHash($filtered_email)) {
             throw new \Exception("Cet email est déjà utilisé.");
         }
-
         // Validate input
         if($filtered_email && $filtered_password) {
             (new \src\model\Account())->create($filtered_email, $filtered_password);
             $this->login($filtered_email, $filtered_password); // Automatically log in the new user
         } else {
             throw new \Exception("Email ou mot de passe invalide."); 
+        }
+    }    
+    /**
+     * Verifies the token validity.
+     *
+     * @return bool true if the token is valid, false otherwise.
+     * @throws \Exception If the token is not set or the verification fails.
+     */
+    public function verify(){
+        $verificationToken = $_GET['token'];
+        if (isset($verificationToken)) {
+            if((new \src\model\Account())->verify($verificationToken)){
+                if($_GET['action'] == 'editPassword'){
+                    require_once('templates/account-edit-password.php');
+                }else if($_GET['action'] == 'verify'){
+                echo "Votre email a été vérifié.";
+                }
+                return true;
+            }else{
+                throw new \Exception("Erreur lors de la vérification du token.");
+            }
+        } else {
+            throw new \Exception("Erreur lors de la récupération du Token.");
         }
     }
 
@@ -127,6 +149,9 @@ class Account
             if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
+        if((new \src\model\Account())->is_verified($_SESSION['user']) == 0){
+            throw new \Exception("Votre email n'est pas vérifié, vous ne pouvez pas changer de mot de passe.");
+        }
             // If the new email is not submitted yet, show the form
             if (!isset($_POST['emailForPassword'])) {
             require_once('templates/account-request-password-edit.php');
@@ -153,11 +178,16 @@ class Account
         if(!isset($_POST['emailForPassword'])){
             require_once('templates/account-request-password-edit.php');
         }
+        //Reset and get newtoken
+        (new \src\model\Account())->resetTokenExpiry($_SESSION['user']);
+        $token = (new \src\model\Account())->getToken($_SESSION['user']);
+        //Prepare email
         $subjetEmail = 'Changer de mot de passe.';
-        $messageEmail = "Cliquez sur le lien pour changer votre mot de passe : <a href='http://ebisu.test/index.php?action=editPassword'>Changer votre mot de passe</a>";
+        $messageEmail = "Cliquez sur le lien pour changer votre mot de passe : <a href= http://ebisu.test/index.php?action=editPassword&token=$token>Changer votre mot de passe</a>";
         //Check if the email is set and the same as the session
         if($_POST['emailForPassword'] === $_SESSION['user']){
-            if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
+            $email = $_SESSION['user'];
+            if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail, $email)){
                 echo "Le mail a été envoyé.";
             }else{
                 throw new \Exception("Le mail n'a pas été envoyé.");
@@ -179,27 +209,30 @@ class Account
         if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
-
+        
         if(!isset($_POST['newPassword']) || !isset($_POST['newPassword2'])){
             require_once('templates/account-edit-password.php');
             throw new \Exception("Vous devez fournir un mot de passe.");
         }
+
         $subjetEmail = "Confirmation du changement de mot de passe.";
         $messageEmail = "Votre mot de passe a été modifié avec succes !";
         if(isset($_POST['newPassword']) && isset($_POST['newPassword2'])){
-            if ($_POST['newPassword'] === $_POST['newPassword2']) {
+            if (($_POST['newPassword'] === $_POST['newPassword2']) && $this->verify()) {
                 if((new \src\model\Account())->editPassword($_POST['newPassword'])){
                     //update session
                     $this->login($_SESSION['user'], $_POST['newPassword']); // Automatically log in the new user
+                    //send an email to confirm the change
+                    if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail, $_SESSION['user'])){
+                        echo "Votre mot de passe a été modifié avec succes !";
+                    }else{throw new \Exception("Le mail n'a pas été envoyé.");}
                     //redirect to home page
                     header('Location: /');
-                    //send an email to confirm the change
-                    if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail)){
-                        echo "Votre mot de passe a été modifié avec succes !";
-
-                    }else{throw new \Exception("Le mail n'a pas été envoyé.");}
-
-            }else{throw new \Exception("Les mots de passe ne correspondent pas.");}
+            }else{
+                require_once('templates/account-request-password-edit.php');
+                throw new \Exception("Les mots de passe ne correspondent pas.");
+                throw new \Exception("Vérifiez vos emails.");
+            }
 
         }else{require_once('templates/account-edit-password.php');}
     }
