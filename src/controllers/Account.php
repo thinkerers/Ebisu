@@ -160,7 +160,7 @@ class Account
                 throw new \Exception("Le mail n'a pas été envoyé.");
             }
         }else{
-            throw new Exception("L'email ne correspond pas.");
+            throw new \Exception("L'email ne correspond pas.");
         }
     }   
         
