@@ -1,6 +1,7 @@
 <?php 
 $title = 'Créer un compte';
 $style ='@import url(public/css/form.css);';
+$transition="start";
 ob_start(); 
 ?>
 <form method="post" class="book">

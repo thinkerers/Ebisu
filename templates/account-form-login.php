@@ -1,6 +1,8 @@
 <?php 
 $title = 'Login';
 $style ='@import url(public/css/form.css);';
+$transition="start";
+
 ob_start();
 ?>
 <form method="post"  class="book">

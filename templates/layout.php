@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-transition="<?= $transition ?? '' ?>">
 
 <head>
     <meta charset="UTF-8">

@@ -160,9 +160,6 @@ input,
 small{
   display: none;
 }
-footer.material-symbols-outlined{
-  display: none;
-}
 
 /* tasks */
 .taskDisplay{

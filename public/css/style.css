@@ -97,24 +97,28 @@ https://developer.chrome.com/docs/web-platform/view-transitions/
 
 */
 
-@view-transition {
-  navigation: auto;
-}
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 1s;
-}
 
-body {
-	view-transition-name: page;
-}
+:root:has([data-transition="start"]) {
 
-::view-transition-group(page) {
-	animation-duration: 0.7s;
-}
+  @view-transition {
+    navigation: auto;
+  }
+  
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 1s;
+  }
+  
+  body {
+    view-transition-name: page;
+  }
+  
+  ::view-transition-group(page) {
+    animation-duration: 0.7s;
+  }
 
-:root {
+  
 	&::view-transition-old(page) {
 		&::view-transition-old(page) {
 			animation-name: shrink;

@@ -2,6 +2,7 @@
 $title = 'Bienvenue !';
 $style = '@import url(public/css/pomodoro.css);';
 $pomodoro = new src\lib\Pomodoro();
+$transition="start";
 
 // Start pomodoro if not already started
 if (!isset($_SESSION['pomodoro-start'])) {
@@ -28,9 +29,7 @@ ob_start();
     navigation: auto;
 } */
 </style>
-<section>
-<h1>Bienvenue sur Ebisu !</h1> 
-
+<div class="book">
 <form 
   name="pomodoro"
   method="post"
