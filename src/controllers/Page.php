@@ -1,11 +1,19 @@
 <?php
 namespace src\controllers;
+
+use \src\model\dbConnect;
+use \src\model\Account;
+use \src\model\Fishes;
 class Page
 {
     public function __construct(
-        private $fishing = new \src\lib\Fishing()
-    )
-    {}
+        private ?Account $account = null,
+        private ?dbConnect $db = null
+    ) {
+        $this->account ??= new Account();
+        $this->db ??= $this->account->db;
+    }
+
 
     public function render()
     {
@@ -30,24 +38,25 @@ class Page
 
     public function goFishing()
     {
-
-        if (!isset($_SESSION['userId'])) {
-            $_SESSION['userId'] = (new \src\model\Account())->getUserId($_SESSION['user']);
+        if (!isset($_SESSION['user'])) {
+            header('Location: /');
+            throw new \Exception("Vous devez être connecté pour pêcher."); 
         }
+        $fishes = new Fishes(
+            userId: $this->account->getUserId($_SESSION['user']),
+            db: $this->db
+        );
+        
+        $_SESSION['discoveredFishes'] ??= $fishes->discovered;
 
-        if (!isset($_SESSION['discoveredFishes'])) {
-            $_SESSION['discoveredFishes'] = $this->fishing->discovered($_SESSION['userId']);
+        if (isset($_POST['getFish'])) {
+            $catch = $fishes->getRandomRarity();
+            $fishes->storeFish($catch);
+            $_SESSION['discoveredFishes'][$catch->fishId] = ($_SESSION['discoveredFishes'][$catch->fishId] ?? 0) + 1;
         }
-
-        $catch = $this->fishing->catch();
-        $this->fishing->save($catch,$_SESSION['userId']);
-
-        //update the discovered fish in the session
-        $_SESSION['discoveredFishes'][$catch->fishId] = ($_SESSION['discoveredFishes'][$catch->fishId] ?? 0) + 1;
-
-         // Prepare data for the template
+        
         $data = [
-            'fish' => $catch,
+            'fish' => $catch ?? null,
             'discoveredFishes' => $_SESSION['discoveredFishes']
         ];
 

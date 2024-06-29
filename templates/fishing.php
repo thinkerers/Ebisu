@@ -5,22 +5,8 @@ ob_start();
 ?>
 <main>
 <form method="post">
-  <fieldset>
-    <legend>Get Fish</legend>
-    <label>
-        <small id="emailHint">Clic to get a fish</small>
-    </label>
-    <input type="submit" name="getFish"/>
-  </fieldset>
+    <button type="submit" name="getFish">Pêcher un poisson</button>
 </form>
-
-<h2>Fish caught</h2>
-
-<ul>
-    <li><?= $data['fish']->fishId ?? '' ?></li>
-    <li><?= $data['fish']->variant ?? '' ?></li>
-    <li><?= $data['fish']->rarity ?? ''  ?></li>
-</ul>
 
 
 <table class="fishes">
@@ -29,8 +15,7 @@ ob_start();
       <tr>
         <?php for ($col = 0; $col < 9; $col++) {
           $cellFishId = $row * 10 + $col;
-          $caught = ($data['fish']->fishId === $cellFishId);
-          $discovered = isset($_SESSION['discoveredFishes'][$cellFishId]);
+          $caught = ($data['fish']->fishId ?? null) === $cellFishId;
         ?>
           <td
             class="<?= $caught ? 'caught' : ''; ?> <?= $discovered ? 'discovered' : ''; ?>"

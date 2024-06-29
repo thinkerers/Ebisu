@@ -1,3 +1,5 @@
+
+
 [data-fish-count]::after {
     content: attr(data-fish-count);
 }
@@ -5,26 +7,30 @@
 .fishes {
     border-collapse: collapse;
     width: 100%;
+    border: 7px solid #A35647;
+    background: #FEDAC1;
+    box-shadow: 4px 4px 79.1px 23px #E2A475 inset;
+    table-layout: fixed;
+    display: grid;
 }
 
 .fishes td {
     border: 1px solid black;
     padding: 8px;
     text-align: center;
+    aspect-ratio: 1;
 }
 
-.fishes tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.fishes tr:hover {
-    background-color: #f5f5f5;
-}
-
-.discovered {
-    color: green;
+.fishes [data-fish-count="0"]{
+    filter: grayscale(100%);
 }
 
 .caught {
-    background-color: red;
+    animation: highlight .5s infinite alternate;
+}
+
+@keyframes highlight {
+    to {
+        background-color: yellow;
+    }
 }

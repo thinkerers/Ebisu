@@ -25,10 +25,18 @@ namespace src\model;
  *
  * Represents a record in the "fishes" table.
  *
- * @property int $id The unique identifier of the fish record.
- * @property int $userId The ID of the user who caught the fish.
- * @property int $fishId The ID of the fish in the compendium.
- * @property string $caughtTime The time when the fish was caught.
+ * @package src\model
+ * @property int $id
+ * @property int $userId
+ * @property int $fishId
+ * @property string $caughtTime
+ * @property dbConnect $db
+ * @property array $rarities
+ * @property array $variants
+ * @method array getDiscovered(int $userId)
+ * @method void storeFish(object $fish, int $userId)
+ * @method object getRandomRarity()
+ * @method string weightedRandomChoice(array $choices)
  */
 class Fishes
 {
@@ -42,11 +50,12 @@ class Fishes
      * @param dbConnect|null $db
      */
     public function __construct(
-        public int $id, 
-        public int $userId, 
-        public int $fishId, 
-        public ?string $caughtTime,
-        private ?dbConnect $db,
+        public ?int $id = null, 
+        public ?int $userId = null, 
+        public ?int $fishId = null, 
+        public ?string $caughtTime = null,
+        public ?array $discovered = null,
+        private ?dbConnect $db = null,
         private array $rarities = [
             'normal' => 70,
             'rare' => 20,
@@ -65,9 +74,11 @@ class Fishes
             'i' => 1,
         ]
         )
-    {}
+    {
+        $this->discovered ??= $this->getDiscovered($userId); // Initialize the discovered fish array
+    }
 
-    public function getDiscovered($userId)
+    private function getDiscovered($userId):array
     {
         try {
             $statement = $this->db->prepare('SELECT fishId FROM fishes WHERE userId = :userId');
@@ -90,8 +101,10 @@ class Fishes
      * @param object $fish The fish data to store.
      * @param int $userId The ID of the user who caught the fish.
      */
-    public function storeFish($fish, $userId)
+    public function storeFish(object $fish, ?int $userId = null)
     {
+        $userId ??= $this->userId;
+
         try {
             $statement = $this->db->prepare('INSERT INTO fishes (fishId, userId) VALUES (:fishId, :userId)');
             $statement->bindValue(':fishId', $fish->fishId);
