@@ -18,9 +18,10 @@ ob_start();
           $caught = ($data['fish']->fishId ?? null) === $cellFishId;
         ?>
           <td
-            class="<?= $caught ? 'caught' : ''; ?> <?= $discovered ? 'discovered' : ''; ?>"
+            class="<?= $caught ? 'caught' : ''; ?>"
             title="<?= $cellFishId; ?>"
-            data-fish-count="<?= $_SESSION['discoveredFishes'][$cellFishId] ?? 0; ?>">🐟
+            data-fish-count="<?= $_SESSION['discoveredFishes'][$cellFishId] ?? 0; ?>">
+            <?= $caught ? '🎣<span class="shimmer"></span>' : '🐟'; ?>
           </td>
         <?php } ?>
       </tr>
