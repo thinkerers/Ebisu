@@ -118,6 +118,13 @@
     }
   }
 }
+.book a{
+  color: #321C2C;
+  text-decoration: none;
+}
+.book legend{
+  color: #a35647;
+}
 
 /* Animation */
 @keyframes horizontal-shaking {
