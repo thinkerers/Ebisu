@@ -2,7 +2,7 @@
 
 namespace src\controllers;
 use \src\model\dbConnect;
-use \src\model\Account as AccountModel;
+use \src\model\Users as UsersModel;
 
 
 /**
