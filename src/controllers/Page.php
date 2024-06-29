@@ -2,18 +2,17 @@
 namespace src\controllers;
 
 use \src\model\dbConnect;
-use \src\model\Account;
-use \src\model\Fishes;
+use \src\model\Account as AccountModel;
+use \src\model\Fishes as FishesModel;
 class Page
 {
     public function __construct(
-        private ?Account $account = null,
+        private ?AccountModel $accountModel = null,
         private ?dbConnect $db = null
     ) {
-        $this->account ??= new Account();
-        $this->db ??= $this->account->db;
+        $this->accountModel ??= new AccountModel();
+        $this->db ??= $this->accountModel->db;
     }
-
 
     public function render()
     {
@@ -42,8 +41,8 @@ class Page
             header('Location: /');
             throw new \Exception("Vous devez être connecté pour pêcher."); 
         }
-        $fishes = new Fishes(
-            userId: $this->account->getUserId($_SESSION['user']),
+        $fishes = new FishesModel(
+            userId: $this->accountModel->getUserId($_SESSION['user']),
             db: $this->db
         );
         

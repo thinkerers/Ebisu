@@ -1,6 +1,9 @@
 <?php
 
 namespace src\controllers;
+use \src\model\dbConnect;
+use \src\model\Account as AccountModel;
+use \src\model\Tasks as TasksModel;
 
 /**
  * Class Account
@@ -10,6 +13,14 @@ namespace src\controllers;
 class Account
 {
         
+    public function __construct(
+        private ?AccountModel $accountModel = null,
+        private ?dbConnect $db = null
+    ) {
+        $this->accountModel ??= new AccountModel();
+        $this->db ??= $this->accountModel->db;
+    }
+
     /**
      * Creates a new user account.
      *
@@ -282,19 +293,20 @@ class Account
         throw new \Exception("Vous n'êtes pas connecté.");
     }
 
-    // Instantiate the Account model once
-    $accountModel = new \src\model\Account();
-
+    // Instantiate the Tasks model once
+    $tasksModel  = new \src\model\Tasks(
+        db: $this->db
+    );
     // Handle form submission to add a new task
     if (isset($_POST['addTask'])) {
-        $accountModel->addTask($_POST['taskTitle']);
+        $tasksModel->addTask($_POST['taskTitle']);
     }
 
     if(isset($_POST['removeTask'])){
-        $accountModel->deleteTask($_POST['removeTask']);
+        $tasksModel->deleteTask($_POST['removeTask']);
     }
 
-    $_SESSION["tasks"] = $accountModel->getTasks();
+    $_SESSION["tasks"] = $tasksModel->getTasks();
 
     // Include the view template
     require_once("templates/vueToDo.php");

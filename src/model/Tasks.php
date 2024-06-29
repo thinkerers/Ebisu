@@ -18,27 +18,70 @@ namespace src\model;
  */
 class Tasks
 {
-    /**
-     * Constructor to initialize properties.
-     *
-     * @param int $id
-     * @param int $userId
-     * @param string $description
-     * @param string $name
-     * @param int $urgency
-     * @param int $priority
-     * @param int $state
-     * @param string $endTime
-     */
+
     public function __construct(
-       public int $id, 
-       public int $userId, 
-       public string $description, 
-       public string $name, 
-       public int $urgency, 
-       public int $priority, 
-       public int $state, 
-       public string $endTime
+        public ?int $id = null, 
+        public ?int $userId = null, 
+       public ?string $description = null, 
+       public ?string $name = null, 
+       public ?int $urgency = null, 
+       public ?int $priority = null, 
+       public ?int $state = null, 
+       public ?string $endTime = null, 
+       private ?dbConnect $db = null,
     )
     {}
+
+    public function addTask($taskTitle = null, $taskDescription = null)
+    {
+        try{
+            $statement = $this->db->prepare('
+            INSERT INTO tasks (description, userId, name)
+            VALUES (:description, (SELECT id FROM users WHERE email = :email), :name)
+            ');
+
+            $statement->bindValue(':email', $_SESSION["user"], SQLITE3_TEXT);
+            $statement->bindValue(':description', $taskDescription, SQLITE3_TEXT);
+            $statement->bindValue(':name', $taskTitle, SQLITE3_TEXT);
+           
+           $statement->execute();
+
+            return $_SESSION["tasks"]= $taskTitle;  
+            }catch (\Exception $e) {
+                throw new \Exception("La tâche n'a pas pu être ajoutée.");
+            }
+    }
+    public function getTasks()
+    {
+        try{
+            $statement = $this->db->prepare('SELECT name, id FROM tasks WHERE userId = (SELECT id FROM users WHERE email = :email)');
+            $statement->bindValue(':email', $_SESSION["user"], SQLITE3_TEXT);
+            $result = $statement->execute();
+            $tasks = [];
+            
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                $tasks[$row['id']] = $row['name'];
+            }
+            return $tasks;
+        } 
+
+        catch(\Exception $e){
+            error_log($e->getMessage("No tasks found."));
+            return [false];
+        }
+    }
+    public function deleteTask()
+    {
+        try{
+            unset($_SESSION["tasks"][$_POST['removeTask']]);
+            $statement = $this->db->prepare('DELETE FROM tasks WHERE id = :id');
+            $statement->bindParam(':id', $_POST['removeTask']);
+            $statement->execute();
+            return true;
+        }
+        catch (\Exception $e) {
+            error_log($e->getMessage("Task not deleted"));
+            return false; 
+        }
+    }
 }

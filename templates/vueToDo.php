@@ -1,11 +1,11 @@
 <?php
-$title = 'Créer un compte';
+$title = 'To-do list';
 $style ='@import url(public/css/form.css);';
 ob_start(); 
 ?>
 
 <form class="book taskDisplay" method="post">
-    <legend><h2>To-do list</h2></legend>
+    <legend><h2><?= $title ?></h2></legend>
     <label>
         <small>Nouvelle tâche</small><br>
         <input autofocus type="text" name="taskTitle" minlength="3">
