@@ -4,6 +4,7 @@
   display: grid;
   grid-auto-flow: column;
   align-content: center;
+  grid-template-columns: min-content 1fr min-content;
   &:has(:checked) {
     text-decoration: line-through;
   }
@@ -34,9 +35,8 @@
   /* max-width: 656px; */
   /* max-height: 906px; */
 
-  max-height: 88vh;
+  height: 50vh;
   /* height: 88vh; */
-  min-height: fit-content;
 
   max-width: 45.5vw;
   width: 100%;
@@ -163,9 +163,6 @@ input,
 .task{
   border: 3px solid #A35647;
   background: rgba(226, 164, 117, 0.28);
-  /* margin: 1rem; */
-  margin-bottom: clamp(0.5rem, 3vw + 1rem, 1rem);
-  
 }
 small{
   display: none;
@@ -175,32 +172,36 @@ small{
 .taskDisplay{
   display: flex;
   flex-direction: column;
-  gap: 23px;
-  margin-bottom: 44px;
-}
-.task{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+
+  .task{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    margin: 0;
+  }
   
-  margin: 0;
-}
-
-.task label{
-  display: inline-block;
-}
-input#task,
-button.delete[type="submit"]{
-  margin: 10px;
-  padding: 0;
-}
-button.delete[type="submit"]{
-  background-color: transparent;
-  color: black;
-  border-style: none;
-
-  font-size: 24px;
-  font-weight: 700;
-
-  justify-self: flex-end ;
+  .task label{
+    display: inline-block;
+  }
+  input#task,
+  button.delete[type="submit"]{
+    margin: 10px;
+    padding: 0;
+  }
+  button.delete[type="submit"]{
+    background-color: transparent;
+    color: black;
+    border-style: none;
+  
+    font-size: 24px;
+    font-weight: 700;
+  
+    justify-self: flex-end ;
+  }
+  
+  .addTask{
+    display: flex;
+  
+  }
 }
