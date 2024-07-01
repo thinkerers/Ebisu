@@ -16,8 +16,12 @@ ob_start();
                     <input type="checkbox" id="task" name="task"  />
                     <label for="task">' . htmlspecialchars($name) . '</label>
                 </div>
-                <button class="delete" type="submit" name="removeTask" title="Supprimer la tâche"
-                value='. htmlspecialchars($id) .'>X</button>
+                <div class="taskType">
+                    <input type="checkbox" name="urgent">
+                    <input type="checkbox" name="important">
+                    <button class="delete" type="submit" name="removeTask" title="Supprimer la tâche"
+                    value='. htmlspecialchars($id) .'>X</button>
+                </div>
             </div>
             ';
         }?>

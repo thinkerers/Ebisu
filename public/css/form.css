@@ -161,7 +161,7 @@ input,
   border: 3px solid #A35647;
   background: rgba(226, 164, 117, 0.28);
   /* margin: 1rem; */
-  margin-bottom: clamp(0.5rem, 3vw + 1rem, 1rem);
+  /* margin-bottom: clamp(0.5rem, 3vw + 1rem, 1rem); */
   
 }
 small{
@@ -205,28 +205,36 @@ fieldset#taskContainer{
   }
 }
 
+
 .task{
   display: flex;
   align-items: center;
   justify-content: space-between;
   
   margin: 0;
+  padding: 8px;
 }
-
+.taskType{
+  display: flex;
+  gap: 7px;
+}
 .task label{
   display: inline-block;
 }
 input#task,
 button.delete[type="submit"]{
-  margin: 10px;
+  margin-right: 10px;
   padding: 0;
+  accent-color: #a35647;
+  
+  
 }
 button.delete[type="submit"]{
   background-color: transparent;
   color: black;
   border-style: none;
 
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
 
   justify-self: flex-end ;
