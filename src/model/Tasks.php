@@ -22,13 +22,13 @@ class Tasks
     public function __construct(
         public ?int $id = null, 
         public ?int $userId = null, 
-       public ?string $description = null, 
-       public ?string $name = null, 
-       public ?int $urgency = null, 
-       public ?int $priority = null, 
-       public ?int $state = null, 
-       public ?string $endTime = null, 
-       private ?dbConnect $db = null,
+        public ?string $description = null, 
+        public ?string $name = null, 
+        public ?int $urgency = null, 
+        public ?int $priority = null, 
+        public ?int $state = null, 
+        public ?string $endTime = null, 
+        private ?dbConnect $db = null,
     )
     {}
 
