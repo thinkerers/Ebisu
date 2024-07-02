@@ -28,7 +28,7 @@ class Tasks
         public ?int $priority = null, 
         public ?int $state = null, 
         public ?string $endTime = null, 
-        private ?dbConnect $db = null,
+        private ?dbConnect $db = null
     )
     {}
 
