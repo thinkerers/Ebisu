@@ -15,12 +15,3 @@ class dbConnect extends \SQLite3 {
         }
     }
 }
-
-// $db = new dbConnect();
-
-// $db->exec('CREATE TABLE foo (bar STRING)');
-// $db->exec("INSERT INTO foo (bar) VALUES ('This is a test')");
-
-// $result = $db->query('SELECT bar FROM foo');
-// var_dump($result->fetchArray());
-
