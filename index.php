@@ -14,7 +14,7 @@ try {
         'editPassword'  => $account->editPassword(),
         'verify'        => $account->verify(),
         'startPomodoro' => $page->pomodoroTimer(), 
-        'handleTasks'       => $page->handleTasks(),
+        'handleTasks'   => $page->handleTasks(),
         'goFishing'     => $page->goFishing(),
         default         => throw new Exception("Action inconnue."),
     };

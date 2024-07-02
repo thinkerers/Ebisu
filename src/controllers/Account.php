@@ -2,7 +2,7 @@
 
 namespace src\controllers;
 use \src\model\dbConnect;
-use \src\model\Account as AccountModel;
+use \src\model\Users as UsersModel;
 
 
 /**
@@ -26,12 +26,12 @@ class Account
         $filtered_email = $this->getFilteredEmail();
         $filtered_password = $this->getFilteredPassword();
         //Check if email already exists
-        if ((new \src\model\Account())->getUserHash($filtered_email)) {
+        if ((new \src\model\Users())->getUserHash($filtered_email)) {
             throw new \Exception("Cet email est déjà utilisé.");
         }
         // Validate input
         if($filtered_email && $filtered_password) {
-            (new \src\model\Account())->create($filtered_email, $filtered_password);
+            (new \src\model\Users())->create($filtered_email, $filtered_password);
             $this->login($filtered_email, $filtered_password); // Automatically log in the new user
         } else {
             throw new \Exception("Email ou mot de passe invalide."); 
@@ -46,7 +46,7 @@ class Account
     public function verify(){
         $verificationToken = $_GET['token'];
         if (isset($verificationToken)) {
-            if((new \src\model\Account())->verify($verificationToken)){
+            if((new \src\model\Users())->verify($verificationToken)){
                 if($_GET['action'] == 'editPassword'){
                     require_once('templates/account-edit-password.php');
                 }else if($_GET['action'] == 'verify'){
@@ -82,7 +82,7 @@ class Account
 
         // Confirm the email and delete the account if it matches
         if (isset($_POST['emailConfirm']) && $_POST['emailConfirm'] === $_SESSION['user']) {
-            (new \src\model\Account())->delete($_SESSION['user']);
+            (new \src\model\Users())->delete($_SESSION['user']);
             $this->logout();
         } else {
             throw new \Exception("Le mail de confirmation ne correspond pas.");
@@ -117,13 +117,14 @@ class Account
             throw new \Exception("Vous devez fournir un email.");
         }
 
-        if (gettype((new \src\model\Account())->getUserHash($_POST['newEmail'])) === 'string'){
+        if (gettype((new \src\model\Users())->getUserHash($_POST['newEmail'])) === 'string'){
             //mail already exist
             throw new \Exception("Cet email est déjà utilisé.");
         }
         
         if ($_POST['newEmail']  == $_POST['newEmail2']) {
-            if((new \src\model\Account())->editEmail($_POST['newEmail'])){
+            if((new \src\model\Users())->editEmail($_POST['newEmail'])){
+                echo "Veullez vérifier vos email pour confirmer le changement.";
                 //update session
                 $_SESSION['user'] = $_POST['newEmail'];
                  //redirect to home page
@@ -149,7 +150,7 @@ class Account
             if (!isset($_SESSION['user'])) {
             throw new \Exception("Vous n'êtes pas connecté.");
         }
-        if((new \src\model\Account())->is_verified($_SESSION['user']) == 0){
+        if((new \src\model\Users())->is_verified($_SESSION['user']) == 0){
             throw new \Exception("Votre email n'est pas vérifié, vous ne pouvez pas changer de mot de passe.");
         }
             // If the new email is not submitted yet, show the form
@@ -179,15 +180,15 @@ class Account
             require_once('templates/account-request-password-edit.php');
         }
         //Reset and get newtoken
-        (new \src\model\Account())->resetTokenExpiry($_SESSION['user']);
-        $token = (new \src\model\Account())->getToken($_SESSION['user']);
+        (new \src\model\Users())->resetTokenExpiry($_SESSION['user']);
+        $token = (new \src\model\Users())->getToken($_SESSION['user']);
         //Prepare email
         $subjetEmail = 'Changer de mot de passe.';
         $messageEmail = "Cliquez sur le lien pour changer votre mot de passe : <a href= http://ebisu.test/index.php?action=editPassword&token=$token>Changer votre mot de passe</a>";
         //Check if the email is set and the same as the session
         if($_POST['emailForPassword'] === $_SESSION['user']){
             $email = $_SESSION['user'];
-            if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail, $email)){
+            if((new \src\model\Users())->sendEmail($subjetEmail, $messageEmail, $email)){
                 echo "Le mail a été envoyé.";
             }else{
                 throw new \Exception("Le mail n'a pas été envoyé.");
@@ -219,11 +220,11 @@ class Account
         $messageEmail = "Votre mot de passe a été modifié avec succes !";
         if(isset($_POST['newPassword']) && isset($_POST['newPassword2'])){
             if (($_POST['newPassword'] === $_POST['newPassword2']) && $this->verify()) {
-                if((new \src\model\Account())->editPassword($_POST['newPassword'])){
+                if((new \src\model\Users())->editPassword($_POST['newPassword'])){
                     //update session
                     $this->login($_SESSION['user'], $_POST['newPassword']); // Automatically log in the new user
                     //send an email to confirm the change
-                    if((new \src\model\Account())->sendEmail($subjetEmail, $messageEmail, $_SESSION['user'])){
+                    if((new \src\model\Users())->sendEmail($subjetEmail, $messageEmail, $_SESSION['user'])){
                         echo "Votre mot de passe a été modifié avec succes !";
                     }else{throw new \Exception("Le mail n'a pas été envoyé.");}
                     //redirect to home page
@@ -264,7 +265,7 @@ class Account
         }
 
         // Authenticate the user
-        if ((new \src\model\Account())->login($filtered_email, $filtered_password)) {
+        if ((new \src\model\Users())->login($filtered_email, $filtered_password)) {
             $_SESSION['user'] = $filtered_email;
             return http_response_code(200); // OK
         } else {
@@ -280,7 +281,7 @@ class Account
      */
     public function logout(): void
     {
-        (new \src\model\Account())->logout();
+        (new \src\model\Users())->logout();
     }
 
     /**
