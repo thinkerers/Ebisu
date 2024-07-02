@@ -191,6 +191,13 @@ footer.material-symbols-outlined{
   }
 }
 
+[name="urgent"]:after{content: "🚨";}
+[name="important"]:after{content: "‼️";}
+
+[type='checkbox']{
+  accent-color: #a35647;
+}
+
 fieldset#taskContainer{
   display: flex;
   align-content: center;
@@ -205,14 +212,34 @@ fieldset#taskContainer{
   }
 }
 
-
 .task{
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  
-  margin: 0;
-  padding: 8px;
+  justify-content: space-between; 
+  padding: 8px; 
+
+  input[name="urgent"],
+  input[name="important"] {
+  appearance: none;
+  padding: 0px;
+
+  border-radius: 3px;
+  outline: solid rgba(226, 164, 117, 0.44) 2px;
+  cursor: pointer;
+  display: inline-grid;
+  place-content:center;
+  position: relative;
+  &:after {
+      opacity:.38;
+      padding:5px;
+  }
+&:checked{
+  outline-color:rgba(226, 164, 117, 0.44);
+}
+  &:checked:after {
+      opacity:1;
+  }
+}
 }
 .taskType{
   display: flex;
@@ -224,15 +251,23 @@ fieldset#taskContainer{
 input#task,
 button.delete[type="submit"]{
   margin-right: 10px;
-  padding: 0;
-  accent-color: #a35647;
+  text-align: center;
+  align-self: center;
+
+  appearance: none;
   
-  
+  margin: 0;
+  padding: 8px;
+
+  border-radius: 3px;
+  outline: solid rgba(226, 164, 117, 0.44) 2px;
+
 }
 button.delete[type="submit"]{
   background-color: transparent;
   color: black;
   border-style: none;
+  outline: none;
 
   font-size: 18px;
   font-weight: 700;
