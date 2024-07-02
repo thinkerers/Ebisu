@@ -1,5 +1,11 @@
 <?php
 namespace src\model;
+
+/**
+ * Class dbConnect
+ *
+ * Represents a connection to the SQLite database.
+ */
 class dbConnect extends \SQLite3 {
     function __construct() {
         try {
