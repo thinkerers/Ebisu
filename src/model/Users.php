@@ -26,10 +26,10 @@ class Users
      * @param string $hashedPassword
      */
     public function __construct(
-        // public int $id, 
-        // public string $email, 
-        // public string $hashedPassword
-        public $db = new dbConnect()
+        public ?int $id = null,
+        public ?string $email = null,
+        public ?string $hashedPassword = null,
+        private ?dbConnect $db = null
     )
     {}
     /**
