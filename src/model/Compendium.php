@@ -25,11 +25,11 @@ class Compendium
      * @param string $img
      */
     public function __construct(
-        public int $id, 
-        public int $rank, 
-        public string $name, 
-        public string $description, 
-        public string $img
+        public ?int $id = null, 
+        public ?int $rank = null, 
+        public ?string $name = null, 
+        public ?string $description = null,  
+        public ?string $img = null
         )
     {}
 }
