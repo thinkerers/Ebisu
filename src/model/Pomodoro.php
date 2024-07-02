@@ -27,12 +27,13 @@ class Pomodoro
      * @param string $endTime
      */
     public function __construct(
-        public int $id, 
-        public int $userId, 
-        public string $focusTime, 
-        public string $breakTime, 
-        public string $startTime, 
-        public string $endTime
+        public ?int $id = null, 
+        public ?int $userId = null, 
+        public ?string $focusTime = null, 
+        public ?string $breakTime = null, 
+        public ?string $startTime = null, 
+        public ?string $endTime = null,
+        private ?dbConnect $db = null,
         )
     {}
 }
