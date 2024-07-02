@@ -114,9 +114,9 @@ class Users
      * @throws \Exception If an error occurs during email sending.
      */
     public function sendVerificationEmail($email, $verificationToken){
-        $verificationLink = "http://ebisu.test/?action=verify&token=$verificationToken";
         $subject = "Vérification de votre adresse mail";
-        $message = "Pour valider votre adresse mail, veuillez cliquer sur <a href=" . $verificationLink .">Verifier mon compte</a>";
+        $message = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/templates/email-template-validaccount.php');
+        $message = str_replace('{{token}}', $verificationToken, $message);
         try{
         $this->sendEmail($subject, $message, $email);
         } catch (\Exception $e) {
@@ -261,39 +261,52 @@ class Users
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/Exception.php');
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/PHPMailer.php');
         require_once($_SERVER['DOCUMENT_ROOT'].'/includes/PHPMailer/SMTP.php');
-
+    
         $mail = new PHPMailer(true);
-
+    
         try{
-         //$mail->SMTPDebug = SMTP::DEBUG_SERVER;//Info for debugging
+            //$mail->SMTPDebug = SMTP::DEBUG_SERVER; // Info for debugging
+    
+            // Configuration pour utiliser le serveur SMTP d'Outlook
+            $mail->isSMTP();
+            $mail->Host = 'smtp-mail.outlook.com'; // Serveur SMTP d'Outlook
+            $mail->SMTPAuth = true;
+            $mail->Username = 'scrumfishers@outlook.com'; // Votre adresse e-mail Outlook
+            $mail->Password = 'ebisu-ifapme2024'; // Votre mot de passe Outlook
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Sécurisation TLS
+            $mail->Port = 587; // Port SMTP pour TLS
+    
+            $mail->CharSet = 'UTF-8';
 
-         //Avec MailHog    
-         //$mail->SMTPDebug = PHPMailer::DEBUG_SERVER;
-         $mail->isSMTP();
-         $mail->Host = 'localhost';
-         $mail->Port = 1025; // Port par défaut de MailHog
-
-         $mail->CharSet = 'UTF-8';
-         $mail->CharSet = 'UTF-8';
-
-         //Destinataire
-         $mail->addAddress($_SESSION['user'] ?? $email);
-        
-         //Expéditeur
-         $mail->setFrom('no-replay@ebisu.be', 'Ebisu');
-
-         $mail->isHTML();
-        
-         $mail->Subject = $subject;
-         $mail->Body = $message;
-        
-         $mail->send();
-         return true;
-        }catch ( \PHPMailer\PHPMailer\Exception){
-            throw new  \PHPMailer\PHPMailer\Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
+    
+            // Destinataire
+            $mail->addAddress($_SESSION['user'] ?? $email);
+    
+            // Expéditeur no-reply@ebisu.be
+            $mail->setFrom('scrumfishers@outlook.com', 'Ebisu');
+    
+            $mail->isHTML(true);
+    
+            $mail->Subject = $subject;
+            $mail->Body = $message;
+    
+            $mail->send();
+            return true;
+        } catch (\PHPMailer\PHPMailer\Exception $e) {
+            throw new \PHPMailer\PHPMailer\Exception("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
             return false;
         }
     }
+    
+    
+    
 
     /**
      * Logs out the current user.

@@ -179,15 +179,16 @@ class Account
         if(!isset($_POST['emailForPassword'])){
             require_once('templates/account-request-password-edit.php');
         }
-        //Reset and get newtoken
-        (new \src\model\Users())->resetTokenExpiry($_SESSION['user']);
-        $token = (new \src\model\Users())->getToken($_SESSION['user']);
-        //Prepare email
-        $subjetEmail = 'Changer de mot de passe.';
-        $messageEmail = "Cliquez sur le lien pour changer votre mot de passe : <a href= http://ebisu.test/index.php?action=editPassword&token=$token>Changer votre mot de passe</a>";
         //Check if the email is set and the same as the session
         if($_POST['emailForPassword'] === $_SESSION['user']){
+            //Reset and get newtoken
+            (new \src\model\Users())->resetTokenExpiry($_SESSION['user']);
+            $token = (new \src\model\Users())->getToken($_SESSION['user']);
             $email = $_SESSION['user'];
+             //Prepare email
+            $subjetEmail = 'Changer de mot de passe.';
+            $messageEmail = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/templates/email-template-editpassword.php');
+            $messageEmail = str_replace('{{token}}', $token, $messageEmail);
             if((new \src\model\Users())->sendEmail($subjetEmail, $messageEmail, $email)){
                 echo "Le mail a été envoyé.";
             }else{
@@ -218,6 +219,7 @@ class Account
 
         $subjetEmail = "Confirmation du changement de mot de passe.";
         $messageEmail = "Votre mot de passe a été modifié avec succes !";
+
         if(isset($_POST['newPassword']) && isset($_POST['newPassword2'])){
             if (($_POST['newPassword'] === $_POST['newPassword2']) && $this->verify()) {
                 if((new \src\model\Users())->editPassword($_POST['newPassword'])){
