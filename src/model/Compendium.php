@@ -15,21 +15,13 @@ namespace src\model;
  */
 class Compendium
 {
-    /**
-     * Constructor to initialize properties.
-     *
-     * @param int $id
-     * @param int $rank
-     * @param string $name
-     * @param string $description
-     * @param string $img
-     */
     public function __construct(
         public ?int $id = null, 
         public ?int $rank = null, 
         public ?string $name = null, 
         public ?string $description = null,  
-        public ?string $img = null
+        public ?string $img = null,
+        private ?dbConnect $db = null
         )
     {}
 }

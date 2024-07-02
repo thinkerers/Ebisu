@@ -13,7 +13,7 @@ class Page
         private ?dbConnect $db = null
     ) {
         $this->usersModel ??= new UsersModel();
-        $this->db ??= $this->usersModel->db;
+        $this->db ??= new dbConnect();
     }
 
     public function render()

@@ -18,7 +18,6 @@ namespace src\model;
  */
 class Tasks
 {
-
     public function __construct(
         public ?int $id = null, 
         public ?int $userId = null, 

@@ -40,15 +40,6 @@ namespace src\model;
  */
 class Fishes
 {
-    /**
-     * Constructor to initialize properties.
-     *
-     * @param int $id
-     * @param int $userId
-     * @param int $fishId
-     * @param string|null $caughtTime
-     * @param dbConnect|null $db
-     */
     public function __construct(
         public ?int $id = null, 
         public ?int $userId = null, 

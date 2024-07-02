@@ -16,16 +16,6 @@ namespace src\model;
  */
 class Pomodoro
 {
-    /**
-     * Constructor to initialize properties.
-     *
-     * @param int $id
-     * @param int $userId
-     * @param string $focusTime
-     * @param string $breakTime
-     * @param string $startTime
-     * @param string $endTime
-     */
     public function __construct(
         public ?int $id = null, 
         public ?int $userId = null, 

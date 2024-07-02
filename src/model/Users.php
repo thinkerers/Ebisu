@@ -18,13 +18,6 @@ use PHPMailer\PHPMailer\SMTP;
  */
 class Users
 {
-    /**
-     * Constructor to initialize properties.
-     *
-     * @param int $id
-     * @param string $email
-     * @param string $hashedPassword
-     */
     public function __construct(
         public ?int $id = null,
         public ?string $email = null,
@@ -32,6 +25,7 @@ class Users
         private ?dbConnect $db = null
     )
     {}
+
     /**
      * Creates a new user account.
      *
