@@ -226,6 +226,7 @@ class Account
                     //update session
                     $this->login($_SESSION['user'], $_POST['newPassword']); // Automatically log in the new user
                     //send an email to confirm the change
+                    $messageEmail = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/templates/email-template-confirmPw.php');
                     if((new \src\model\Users())->sendEmail($subjetEmail, $messageEmail, $_SESSION['user'])){
                         echo "Votre mot de passe a été modifié avec succes !";
                     }else{throw new \Exception("Le mail n'a pas été envoyé.");}
