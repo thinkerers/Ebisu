@@ -196,6 +196,19 @@ footer.material-symbols-outlined{
 
 [type='checkbox']{
   accent-color: #a35647;
+  margin-left: 8px;
+  
+  &:checked:after{
+    content: '✓';
+    aspect-ratio: 1;
+    font-size: 18px;
+    font-weight: 800;
+    display: block;
+    line-height: normal;
+    position: absolute;
+    inset: 0;
+    top: -0.25em;
+  }
 }
 
 fieldset#taskContainer{
@@ -217,6 +230,16 @@ fieldset#taskContainer{
   align-items: center;
   justify-content: space-between; 
   padding: 8px; 
+
+  label{
+    height: 1lh;
+    display: flex;
+    gap: 10px;
+
+    span.taskSpan{
+      line-height: 1lh;
+    }
+  }
 
   input[name="urgent"],
   input[name="important"] {
@@ -245,18 +268,20 @@ fieldset#taskContainer{
   display: flex;
   gap: 7px;
 }
-.task label{
+/* .task label{
   display: inline-block;
-}
+} */
 input#task,
 button.delete[type="submit"]{
   margin-right: 10px;
   text-align: center;
   align-self: center;
+  position: relative;
 
   appearance: none;
   
   margin: 0;
+  
   padding: 8px;
 
   border-radius: 3px;

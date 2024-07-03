@@ -12,10 +12,11 @@ ob_start();
         <?php foreach ($data['tasks'] as $id => $name) {
             echo '
             <div class="task">
-                <div>
-                    <input type="checkbox" id="task" name="task"  />
-                    <label for="task">' . htmlspecialchars($name) . '</label>
-                </div>
+                <label for="task">
+                    <input type="checkbox" id="task" name="task" /> 
+                     <span class="taskSpan">'. htmlspecialchars($name) . '</span>
+                </label>
+                
                 <div class="taskType">
                     <input type="checkbox" name="urgent">
                     <input type="checkbox" name="important">
@@ -33,7 +34,7 @@ ob_start();
         <fieldset id="taskContainer">
             <ul class="createToDo">
                 <li>
-                    <!-- <small>Titre de la tâche</small>--></br> 
+                    <!-- <small>Titre de la tâche</small></br>  -->
                     <input autofocus minlength="3" type="text" name="taskTitle" required></br>
                 
                     <!-- <small>Description de la tâche</small></br>
