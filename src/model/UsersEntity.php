@@ -27,7 +27,17 @@ class UsersEntity
         public ?DateTime $tokenExpiry = null
     ) {}
 
-     // Setters (avoiding magic __set for IDE autocomplete)
+    public function fieldMap(): array
+    {
+        return [
+            'id' => SQLITE3_INTEGER,
+            'email' => SQLITE3_TEXT,
+            'hashedPassword' => SQLITE3_TEXT,
+            'verificationToken' => SQLITE3_TEXT,
+            'verified' => SQLITE3_INTEGER,
+            'tokenExpiry' => SQLITE3_TEXT,
+        ];
+    }
 
     /**
      * Sets the user's unique identifier.
@@ -130,7 +140,7 @@ class UsersEntity
      * Checks if the email and password are set.
      * @return bool
      */
-    public function hasCredentials(): bool
+    public function isValid(): bool
     {
         return !empty($this->email) && !empty($this->hashedPassword);
     }

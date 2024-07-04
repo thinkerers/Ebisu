@@ -1,0 +1,33 @@
+(WIP)
+
+```mermaid
+graph LR
+    A[Create Account] --> B(Send Verification Email)
+    C[Change Email] --> B
+
+    B --> D[Get Verification Token]
+
+    E[Verify Account] --> F{Token Matches?}
+    F -- Yes --> G[Account Verified]
+    F -- No --> H[Verification Failed]
+
+    I[Login] --> J{Password Matches?}
+    J -- Yes --> K[Login Successful]
+    J -- No --> L[Login Failed]
+
+    M[Change Password] --> N[Password Updated]
+
+    O[Delete Account] --> P[Account Deleted]
+
+    Q[Logout] --> R[Session Destroyed]
+
+    subgraph User Flow
+        A 
+        C
+        E
+        I
+        M
+        O
+        Q
+    end
+```

@@ -5,14 +5,8 @@ namespace src\model;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception as PHPMailerException;
-
-class LogLevels
-{
-    const DEBUG = 'debug';
-    const INFO = 'info';
-    const WARNING = 'warning';
-    const ERROR = 'error';
-}
+use src\lib\Logger;
+use src\lib\LogLevels;
 
 /**
  * Class UsersRepository
@@ -26,71 +20,36 @@ class UsersRepository
         public ?UsersEntity $user = null,
         public ?string $challengePassword = null,
         public ?string $challengeVerificationToken = null,
-        public ?bool $isDebugMode = false
+        public ?bool $isDebugMode = true,
+        private ?Logger $logger = new Logger()
     )
+    {}
+
+    private function logMessage(string $message, LogLevels $logLevel = LogLevels::INFO, ?object $dump = null): void
     {
-        // $this->isDebugMode = getenv('APP_ENV') === 'development';
-        $this->isDebugMode = true;
+        $dump ??= $this->user;
+
+        if (!$dump) {
+            throw new \Exception("Cannot log message without a valid Object.");
+        }
+
+        $this->logger->logMessage($message, $dump, $logLevel);
     }
 
-    public function logMessage(string $message, string $logLevel = LogLevels::INFO): void
-    {
-        if (!$this->user) {
-            throw new \Exception("Cannot log message without a valid UsersEntity.");
-        }
-
-        if (!$this->isDebugMode && $logLevel === LogLevels::DEBUG) {
-            return;
-        }
-
-        $logFilePath = 'UsersRepository.log';
-        $timestamp = date('Y-m-d H:i:s');
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-        $caller = $backtrace[1];
-
-        $logMessage = sprintf(
-            "[%s] [%s] User ID %s (%s): %s\n
-            Called from: %s on line %s in function %s\n
-            ------------------------------\n",
-            $timestamp,
-            $logLevel,
-            $this->user->id,
-            $this->user->email,
-            $message,
-            $caller['file'],
-            $caller['line'],
-            $caller['function']
-        );
-
-        if (!file_put_contents($logFilePath, $logMessage, FILE_APPEND)) {
-            error_log("Failed to write to log file: $logFilePath");
-        }
-    }
-
-   /**
-     * Executes a prepared statement and fetches a row from the database.
-     *
-     * @param string $sql The SQL query to execute.
-     * @param array|null $fieldsToBind The fields to bind to the prepared statement.
-     * @param int $resultMode The mode of result fetching (e.g., SQLITE3_ASSOC).
-     * @return array|false The row fetched from the database, or false if no row was found.
-     * @throws \Exception If the statement execution fails.
+    /**
+     * Executes a SQL statement on the database.
+     * 
+     * @param string $sql The SQL statement to execute.
+     * @param array|null $fieldsToBind The fields to bind to the statement (default to all).
+     * @return \SQLite3Result The result of the query.
+     * @throws \Exception If an error occurs during the database operation.
      */
-    private function executeStatement(string $sql, array $fieldsToBind = null, int $resultMode = SQLITE3_ASSOC): array|false
+    private function executeStatement(string $sql, array $fieldsToBind = null):\SQLite3Result
     {
         $statement = $this->db->prepare($sql);
-        
-        $fieldMap = [
-            'id' => SQLITE3_INTEGER,
-            'email' => SQLITE3_TEXT,
-            'hashedPassword' => SQLITE3_TEXT,
-            'verificationToken' => SQLITE3_TEXT,
-            'verified' => SQLITE3_INTEGER,
-            'tokenExpiry' => SQLITE3_TEXT,
-        ];
-
+        $fieldMap = $this->user->fieldMap();
         $fieldsToBind = $fieldsToBind ?? array_keys($fieldMap); 
-
+        
         foreach ($fieldsToBind as $field) {
             if (isset($fieldMap[$field])) {
                 // Explicitly check if the field exists on the object
@@ -102,15 +61,12 @@ class UsersRepository
             }
         }
 
-        $result = $statement->execute();
-        $row = $result->fetchArray($resultMode);
-
-        if (!$row) {
+        if (!$result = $statement->execute()) {
             $this->logMessage("Failed to execute statement", LogLevels::ERROR);
             throw new \Exception("Échec de l'exécution de la requête.");
         }
 
-        return $row;
+        return $result;
     }
 
     /**
@@ -121,7 +77,7 @@ class UsersRepository
      */
     public function getByID(): ?UsersEntity
     {
-        return $this->getUserBy('id', $this->user->id, SQLITE3_INTEGER);
+        return $this->getBy('id');
     }
 
     /**
@@ -132,7 +88,7 @@ class UsersRepository
      */
     public function getByEmail(): ?UsersEntity
     {
-        return $this->getUserBy('email', $this->user->email, SQLITE3_TEXT);
+        return $this->getBy('email');
     }
  
     /**
@@ -144,29 +100,32 @@ class UsersRepository
      * @return UsersEntity|null The user entity found, or null if no user is found.
      * @throws \Exception If an error occurs during the database query.
      */
-    private function getUserBy(string $field, int|string $value, int $type): ?UsersEntity
+    private function getBy(string $field): ?UsersEntity
     {
         $this->logMessage("Attempting to get user from database by $field", LogLevels::INFO);
         try {
-            $statement = $this->db->prepare("SELECT * FROM users WHERE $field = :value");
-            $statement->bindValue(':value', $value, $type);
-            $result = $statement->execute();
-            $row = $result->fetchArray(SQLITE3_ASSOC);
-
-            if (!$row) {
-                $this->logMessage("User not found by $field: $value", LogLevels::WARNING);
-                throw new \Exception("Utilisateur introuvable.");
+            $result = $this->executeStatement("SELECT * FROM users WHERE $field = :value", [$field]);
+    
+            if(!$result){
+                $this->logMessage("User not found by $field", LogLevels::WARNING);
+                return null;
             }
 
+            $row = $result->fetchArray(SQLITE3_ASSOC);
+
             $this->logMessage("User found: " . print_r($row, true), LogLevels::DEBUG);
-            return new UsersEntity(
-                id: $row['id'],
-                email: $row['email'],
-                hashedPassword: $row['hashedPassword'],
-                verified: $row['verified'],
-                verificationToken: $row['verification_token'],
-                tokenExpiry: new \DateTime($row['token_expiry'])
-            );
+
+            $user = new UsersEntity();
+            foreach ($this->user->fieldMap() as $field) {
+                if (!isset($row[$field])) {
+                    $this->logMessage("Field '$field' not found in user data", LogLevels::WARNING);
+                    continue;
+                }
+                $user->{$field} = $row[$field];
+            }
+
+            return $user;
+
         } catch (\Exception $e) {
             $this->logMessage("Error while fetching user data: " . $e->getMessage(), LogLevels::ERROR);
             throw new \Exception("Error retrieving user account data.");
@@ -189,14 +148,14 @@ class UsersRepository
      * @return UsersEntity The user entity created.
      * @throws \Exception If an error occurs during account creation.
      */
-    public function create(): UsersEntity
+    public function create(): ?UsersEntity
     {
         $this->logMessage("Attempting to create user", LogLevels::INFO); 
         if($this->user->isCreated()) {
             $this->logMessage("User already exist", LogLevels::ERROR); 
             throw new \Exception("L'utilisateur existe déjà.");
         }
-        if (!$this->user->hasCredentials()) {
+        if (!$this->user->isValid()) {
             $this->logMessage("Cannot create user without email and password", LogLevels::ERROR); 
             throw new \Exception("Email ou mot de passe manquant.");
         }
@@ -228,10 +187,19 @@ class UsersRepository
     public function insert():bool
     {
         $this->logMessage("Try to insert user", LogLevels::INFO);
-        return $this->executeStatement(
+        $result = $this->executeStatement(
             'INSERT INTO users (email, hashedPassword, verified, verification_token, token_expiry) 
              VALUES (:email, :hashedPassword, :verified, :verification_token, :token_expiry)'
         );
+
+        if(!$result){
+            $this->logMessage("Failed to insert user", LogLevels::ERROR);
+            throw new \Exception("L'utilisateur n'a pas pu être inséré.");
+        }
+
+        $userId = $this->db->lastInsertRowID();
+        $this->user->setId($userId);
+        return true;
     }
 
     /**
@@ -243,7 +211,7 @@ class UsersRepository
     public function update():bool
     {
         $this->logMessage("Try to update user", LogLevels::INFO);
-        return $this->executeStatement(
+        $result = $this->executeStatement(
            'UPDATE users 
              SET
                 email = :email, 
@@ -253,6 +221,13 @@ class UsersRepository
                 token_expiry = :token_expiry
              WHERE id = :id'
         );
+
+        if(!$result){
+            $this->logMessage("Failed to insert user", LogLevels::ERROR);
+            throw new \Exception("L'utilisateur n'a pas pu être inséré.");
+        }
+
+        return true;
     }
 
 
@@ -372,10 +347,15 @@ class UsersRepository
     public function delete(): bool
     {
         $this->logMessage("Try to delete user", LogLevels::INFO);
-        return $this->executeStatement(
+        $result = $this->executeStatement(
             'DELETE FROM users WHERE id = :id',
             ['id']
          );
+         if(!$result){
+            $this->logMessage("Failed to delete user", LogLevels::ERROR);
+            throw new \Exception("L'utilisateur n'a pas pu être supprimé.");
+         }
+        return true;
     }
 
     /**
@@ -396,10 +376,17 @@ class UsersRepository
                 $this->verify();
             }
 
-            return $this->executeStatement(
+            $result = $this->executeStatement(
                 'UPDATE users SET email = :email WHERE id = :id',
                 ['email', 'id']
              );
+
+             if(!$result){
+                $this->logMessage("Failed to update email", LogLevels::ERROR);
+                throw new \Exception("L'adresse mail n'a pas pu être mise à jour.");
+             }
+
+             return true;
              
             } catch (\Exception $e) {
                 $this->logMessage("Error updating email". $e->getMessage(), LogLevels::ERROR);
@@ -417,12 +404,20 @@ class UsersRepository
     {
         $this->logMessage("Try to update password", LogLevels::INFO);
         try{
-            return $this->executeStatement(
+            $result = $this->executeStatement(
                 'UPDATE users
                 SET hashedPassword = :hashedPassword
                 WHERE id = :id',
                ['hashedPassword', 'id']
              );
+
+             if(!$result){
+                $this->logMessage("Failed to update email", LogLevels::ERROR);
+                throw new \Exception("L'adresse mail n'a pas pu être mise à jour.");
+             }
+
+             return true;
+
         } catch (\Exception $e) {
             $this->logMessage("Error updating password". $e->getMessage(), LogLevels::ERROR);
             throw new \Exception("Erreur lors de la mise à jour du mot de passe.");

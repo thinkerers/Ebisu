@@ -1,6 +1,9 @@
 <?php
 require_once 'bootstrap.php';
 
+$account = new src\controllers\Account();
+$page = new src\controllers\Page();
+
 try {
     $action = match ($_GET['action'] ?? $_POST['action'] ?? '') {
         ''              => null,
@@ -9,8 +12,8 @@ try {
         'createAccount' => $account->create(),
         'deleteAccount' => $account->delete(),
         'editAccount'   => $account->editAccount(),
-        'editEmail'     => $account->editEmail(),       //Go to the profil page
-        'goToSendEmail' => $account->goToSendEmail(),   //Go to the page to send a request by email to change password
+        'editEmail'     => $account->editEmail(),
+        'goToSendEmail' => $account->goToSendEmail(),   
         'editPassword'  => $account->editPassword(),
         'verify'        => $account->verify(),
         'startPomodoro' => $page->pomodoroTimer(), 

@@ -2,14 +2,16 @@
 namespace src\controllers;
 
 use \src\model\dbConnect;
-use \src\model\Account as AccountModel;
-use \src\model\Users as UsersModel;
-use \src\model\Fishes as FishesModel;
-use \src\model\Tasks as TasksModel;
+use \src\model\UsersRepository as user;
+use \src\model\FishesRepository as fish;
+use \src\model\TasksRepository as task;
+use \src\model\PomodoroRepository as pomodoro;
+use \src\model\CompendiumRepository as compendium;
 class Page
 {
     public function __construct(
-        private ?UsersModel $usersModel = null,
+        private ?user $user = null,
+        private ?fish $fish = null,
         private ?dbConnect $db = null
     ) {
         $this->usersModel ??= new UsersModel();
