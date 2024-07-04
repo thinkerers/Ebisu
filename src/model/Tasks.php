@@ -54,13 +54,15 @@ class Tasks
     public function get()
     {
         try{
-            $statement = $this->db->prepare('SELECT name, id FROM tasks WHERE userId = (SELECT id FROM users WHERE email = :email)');
+            $statement = $this->db->prepare('SELECT * FROM tasks WHERE userId = (SELECT id FROM users WHERE email = :email)');
             $statement->bindValue(':email', $_SESSION["user"], SQLITE3_TEXT);
             $result = $statement->execute();
             $tasks = [];
             
             while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                $tasks[$row['id']] = $row['name'];
+                // $tasks[$row['id']] = $row['name'];
+                $tasks[$row['id']]['name'] = $row['name'];
+                $tasks[$row['id']]['state'] = $row['state'];
             }
             return $tasks;
         } 
@@ -83,5 +85,37 @@ class Tasks
             error_log($e->getMessage("Task not deleted"));
             return false; 
         }
+    }
+
+    public function toggle($_POST['toggleTask']){
+        echo $_POST['toggleTask'];
+        print_r($_SESSION['tasks']);
+
+        try{
+            $statement = $this->db->prepare('
+            INSERT INTO tasks (state)
+            VALUES (:state)
+            ');
+
+            $statement->bindValue(':state', $_POST['toggleTask'], SQLITE3_TEXT);
+           
+            $statement->execute();
+
+            return $_SESSION["tasks"]["state"]= $_POST['toggleTask'];  
+        }catch (\Exception $e) {
+            throw new \Exception("L'état de la tâche n'a pas pu être modifié.");
+        }
+
+        // try{
+        //     unset($_SESSION["tasks"][$_POST['removeTask']]);
+        //     $statement = $this->db->prepare('DELETE FROM tasks WHERE id = :id');
+        //     $statement->bindParam(':id', $_POST['removeTask']);
+        //     $statement->execute();
+        //     return true;
+        // }
+        // catch (\Exception $e) {
+        //     error_log($e->getMessage("Task not deleted"));
+        //     return false; 
+        // }
     }
 }

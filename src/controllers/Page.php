@@ -82,6 +82,9 @@ class Page
         if(isset($_POST['removeTask'])){
             $tasksModel->delete($_POST['removeTask']);
         }
+        if(isset($_POST['toggleTask'])){
+            $tasksModel->toggle($_POST['toggleTask']);
+        }
     
         $_SESSION["tasks"] = $tasksModel->get();
 

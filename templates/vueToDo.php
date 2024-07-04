@@ -2,18 +2,21 @@
 $title = 'To-do list';
 $style ='@import url(public/css/form.css);';
 ob_start(); 
-?>
+function taskID($id){ return htmlspecialchars($id); } ?>
 
 <div class="book">
 <h2><?= $title ?></h2>
     <form method="post" class="taskDisplay">
         
         <!-- affichage des tâches -->
-        <?php foreach ($data['tasks'] as $id => $name) {
+        <?php foreach ($data['tasks'] as $id => $keys) {
+            $name = $keys['name'];
+
             echo '
             <div class="task">
                 <label for="task">
-                    <input type="checkbox" id="task" name="task" /> 
+                    <input type="submit" id="task" name="toggleTask" value="'
+                    . taskID($id) .'" /> 
                      <span class="taskSpan">'. htmlspecialchars($name) . '</span>
                 </label>
                 
@@ -21,7 +24,7 @@ ob_start();
                     <input type="checkbox" name="urgent">
                     <input type="checkbox" name="important">
                     <button class="delete" type="submit" name="removeTask" title="Supprimer la tâche"
-                    value='. htmlspecialchars($id) .'>X</button>
+                    value='. taskID($id) .'>X</button>
                 </div>
             </div>
             ';
